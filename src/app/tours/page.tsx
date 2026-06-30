@@ -331,7 +331,7 @@ export default function ToursPage() {
             </Magnetic>
             <Magnetic>
               <a
-                href="https://wa.me/919900000000?text=Hi%20Mad.co%2C%20I'd%20like%2520to%20know%20more%20about%20your%20360%20tour%20packages."
+                href="https://wa.me/918762640420?text=Hi%20Mad.co%2C%20I'd%20like%20to%20know%20more%20about%20your%20360%20tour%20packages."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-6 py-4 bg-surface-2 hover:bg-surface-3 text-white text-xs font-mono tracking-widest uppercase transition-colors duration-300 rounded border border-white/5"

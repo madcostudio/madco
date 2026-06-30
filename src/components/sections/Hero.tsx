@@ -110,7 +110,7 @@ export function Hero() {
 
           <Magnetic>
             <a 
-              href="https://wa.me/919900000000?text=Hi%20Mad.co%20Studio%2C%20I'd%20like%20to%2520discuss%20improving%20my%20business%20digital%20presence."
+              href="https://wa.me/918762640420?text=Hi%20Mad.co%20Studio%2C%20I'd%20like%20to%20discuss%20improving%20my%20business%20digital%20presence."
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-6 py-4 bg-surface-2 hover:bg-surface-3 text-white text-sm font-mono tracking-widest uppercase transition-colors duration-300 rounded border border-white/5"

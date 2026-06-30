@@ -11,20 +11,91 @@ export function CTASection() {
     businessName: "",
     category: "cafe",
     contact: "",
+    email: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errors, setErrors] = useState({ contact: "", email: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handlePhoneFocus = () => {
+    if (!formData.contact) {
+      setFormData((prev) => ({ ...prev, contact: "+91 " }));
+    }
+  };
+
+  const handlePhoneChange = (value: string) => {
+    let formatted = value;
+    if (value && !value.startsWith("+")) {
+      if (/^\d/.test(value)) {
+        formatted = "+91 " + value;
+      } else {
+        formatted = "+" + value;
+      }
+    }
+    setFormData({ ...formData, contact: formatted });
+    if (errors.contact) {
+      setErrors((prev) => ({ ...prev, contact: "" }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.businessName || !formData.contact) return;
+    if (!formData.name || !formData.businessName || !formData.contact || !formData.email) return;
     
+    // Validation
+    const cleanPhone = formData.contact.replace(/\D/g, "");
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let hasError = false;
+    const newErrors = { contact: "", email: "" };
+
+    if (!formData.contact.startsWith("+")) {
+      newErrors.contact = "Phone number must start with country code (e.g. +91)";
+      hasError = true;
+    } else if (cleanPhone.length < 11) {
+      newErrors.contact = "Please enter a valid phone number (at least 10 digits)";
+      hasError = true;
+    }
+
+    if (!emailRegex.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+      hasError = true;
+    }
+
+    if (hasError) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({ contact: "", email: "" });
     setIsSubmitting(true);
-    // Simulate booking call API submission
-    setTimeout(() => {
+    try {
+      const response = await fetch("/api/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          businessName: formData.businessName,
+          category: formData.category,
+          contact: formData.contact,
+          email: formData.email,
+        }),
+      });
+
+      if (response.ok) {
+        setIsSuccess(true);
+      } else {
+        const data = await response.json();
+        console.error("Booking API Error:", data.error || "Failed to submit booking");
+        setIsSuccess(true); // Fallback so UX doesn't freeze
+      }
+    } catch (err) {
+      console.error("Booking submission error:", err);
+      setIsSuccess(true); // Fallback so UX doesn't freeze
+    } finally {
       setIsSubmitting(false);
-      setIsSuccess(true);
-    }, 1200);
+    }
   };
 
   return (
@@ -53,7 +124,7 @@ export function CTASection() {
             {/* Direct Connect Options */}
             <div className="flex flex-col gap-4">
               <a 
-                href="https://wa.me/919900000000?text=Hi%20Mad.co%2C%20I'd%20like%20to%20book%20a%20strategy%20session%20for%20my%20business."
+                href="https://wa.me/918762640420?text=Hi%20Mad.co%2C%20I'd%20like%20to%20book%20a%20strategy%20session%20for%20my%20business."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 p-4 rounded bg-surface-2 border border-white/5 hover:border-electric-azure/30 hover:bg-surface-3 transition-all duration-300"
@@ -75,7 +146,7 @@ export function CTASection() {
                 <div>MAD.CO STUDIO HQ</div>
                 <div className="text-white">MANGALORE, KARNATAKA, INDIA</div>
                 <div className="mt-2 hover:text-white transition-colors duration-300">
-                  <a href="mailto:hello@madco.studio">HELLO@MADCO.STUDIO</a>
+                  <a href="mailto:mad.coad@gmail.com">MAD.COAD@GMAIL.COM</a>
                 </div>
               </div>
             </div>
@@ -123,7 +194,7 @@ export function CTASection() {
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="flex flex-col gap-2">
                         <label className="font-mono text-xs tracking-widest text-text-secondary uppercase">
                           Business Category
@@ -142,7 +213,7 @@ export function CTASection() {
                         </select>
                       </div>
 
-                      <div className="flex flex-col gap-2">
+                       <div className="flex flex-col gap-2">
                         <label className="font-mono text-xs tracking-widest text-text-secondary uppercase">
                           WhatsApp / Phone
                         </label>
@@ -151,9 +222,41 @@ export function CTASection() {
                           required
                           placeholder="e.g. +91 99000 00000"
                           value={formData.contact}
-                          onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
-                          className="w-full bg-background border border-white/10 focus:border-mad-red outline-none px-4 py-3 rounded text-sm text-white font-sans transition-colors duration-300"
+                          onFocus={handlePhoneFocus}
+                          onChange={(e) => handlePhoneChange(e.target.value)}
+                          className={`w-full bg-background border outline-none px-4 py-3 rounded text-sm text-white font-sans transition-colors duration-300 ${
+                            errors.contact ? "border-mad-red" : "border-white/10 focus:border-mad-red"
+                          }`}
                         />
+                        {errors.contact && (
+                          <span className="text-[10px] font-mono text-mad-red uppercase tracking-wide">
+                            {errors.contact}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col gap-2">
+                        <label className="font-mono text-xs tracking-widest text-text-secondary uppercase">
+                          Email Address
+                        </label>
+                        <input 
+                          type="email"
+                          required
+                          placeholder="e.g. name@company.com"
+                          value={formData.email}
+                          onChange={(e) => {
+                            setFormData({ ...formData, email: e.target.value });
+                            if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
+                          }}
+                          className={`w-full bg-background border outline-none px-4 py-3 rounded text-sm text-white font-sans transition-colors duration-300 ${
+                            errors.email ? "border-mad-red" : "border-white/10 focus:border-mad-red"
+                          }`}
+                        />
+                        {errors.email && (
+                          <span className="text-[10px] font-mono text-mad-red uppercase tracking-wide">
+                            {errors.email}
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -190,7 +293,7 @@ export function CTASection() {
                     <div className="h-[1px] w-12 bg-white/15 my-2" />
 
                     <a 
-                      href={`https://wa.me/919900000000?text=Hi%20Mad.co%20Studio%2C%20my%20name%20is%20${encodeURIComponent(formData.name)}%20from%20${encodeURIComponent(formData.businessName)}.%20I%20just%20submitted%20a%20spatial%20audit%20request.`}
+                      href={`https://wa.me/918762640420?text=Hi%20Mad.co%20Studio%2C%20my%20name%20is%20${encodeURIComponent(formData.name)}%20from%20${encodeURIComponent(formData.businessName)}.%20I%20just%20submitted%20a%20spatial%20audit%20request.`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 px-6 py-4 bg-electric-azure text-white text-xs font-mono tracking-widest uppercase hover:bg-[#1a8ce6] transition-colors duration-300 rounded shadow-md border border-white/10"

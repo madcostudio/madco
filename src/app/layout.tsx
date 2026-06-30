@@ -133,11 +133,11 @@ export default function RootLayout({
 
               <div className="flex flex-col gap-3 col-span-2 md:col-span-1">
                 <h5 className="text-white uppercase font-bold text-[10px] tracking-widest opacity-60">// COMMUNICATE</h5>
-                <a href="mailto:hello@madco.studio" className="text-text-secondary hover:text-white transition-colors duration-300">
-                  hello@madco.studio
+                <a href="mailto:mad.coad@gmail.com" className="text-text-secondary hover:text-white transition-colors duration-300">
+                  mad.coad@gmail.com
                 </a>
                 <a 
-                  href="https://wa.me/919900000000" 
+                  href="https://wa.me/918762640420" 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="text-text-secondary hover:text-white transition-colors duration-300"

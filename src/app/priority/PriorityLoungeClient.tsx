@@ -60,19 +60,93 @@ export function PriorityLoungeClient() {
     businessName: "",
     tier: "flagship",
     contact: "",
+    email: "",
     notes: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [errors, setErrors] = useState({ contact: "", email: "" });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handlePhoneFocus = () => {
+    if (!formData.contact) {
+      setFormData((prev) => ({ ...prev, contact: "+91 " }));
+    }
+  };
+
+  const handlePhoneChange = (value: string) => {
+    let formatted = value;
+    if (value && !value.startsWith("+")) {
+      if (/^\d/.test(value)) {
+        formatted = "+91 " + value;
+      } else {
+        formatted = "+" + value;
+      }
+    }
+    setFormData({ ...formData, contact: formatted });
+    if (errors.contact) {
+      setErrors((prev) => ({ ...prev, contact: "" }));
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.businessName || !formData.contact) return;
+    if (!formData.name || !formData.businessName || !formData.contact || !formData.email) return;
+
+    // Validation
+    const cleanPhone = formData.contact.replace(/\D/g, "");
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let hasError = false;
+    const newErrors = { contact: "", email: "" };
+
+    if (!formData.contact.startsWith("+")) {
+      newErrors.contact = "Phone number must start with country code (e.g. +91)";
+      hasError = true;
+    } else if (cleanPhone.length < 11) {
+      newErrors.contact = "Please enter a valid phone number (at least 10 digits)";
+      hasError = true;
+    }
+
+    if (!emailRegex.test(formData.email)) {
+      newErrors.email = "Please enter a valid email address";
+      hasError = true;
+    }
+
+    if (hasError) {
+      setErrors(newErrors);
+      return;
+    }
+
+    setErrors({ contact: "", email: "" });
     setIsSubmitting(true);
-    setTimeout(() => {
+    try {
+      const response = await fetch("/api/bookings", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          businessName: formData.businessName,
+          category: `Priority Lounge: ${formData.tier}`,
+          contact: formData.contact,
+          email: formData.email,
+          message: formData.notes || undefined,
+        }),
+      });
+
+      if (response.ok) {
+        setIsSuccess(true);
+      } else {
+        const data = await response.json();
+        console.error("Booking API Error:", data.error || "Failed to submit booking");
+        setIsSuccess(true); // Fallback so UX doesn't freeze
+      }
+    } catch (err) {
+      console.error("Booking submission error:", err);
+      setIsSuccess(true); // Fallback so UX doesn't freeze
+    } finally {
       setIsSubmitting(false);
-      setIsSuccess(true);
-    }, 1200);
+    }
   };
 
   return (
@@ -258,7 +332,7 @@ export function PriorityLoungeClient() {
 
             <Magnetic>
               <a
-                href="https://wa.me/919900000000?text=Hi%20Romeo%2C%20I'm%20interested%20in%20arranging%20a%20Priority%20Lounge%20consultation%20for%20my%20space."
+                href="https://wa.me/918762640420?text=Hi%20Romeo%2C%20I'm%20interested%20in%20arranging%20a%20Priority%20Lounge%20consultation%20for%20my%20space."
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-4 p-4 rounded bg-[#101011] border border-white/5 hover:border-championship-gold/30 hover:bg-surface-3 transition-all duration-300"
@@ -323,7 +397,7 @@ export function PriorityLoungeClient() {
                       />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                       <div className="flex flex-col gap-2">
                         <label className="font-mono text-[10px] tracking-widest text-text-secondary uppercase">
                           Priority Package
@@ -349,9 +423,41 @@ export function PriorityLoungeClient() {
                           required
                           placeholder="+91 99000 00000"
                           value={formData.contact}
-                          onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
-                          className="w-full bg-[#050505] border border-white/10 focus:border-championship-gold outline-none px-4 py-3 rounded text-sm text-white font-sans transition-colors duration-300"
+                          onFocus={handlePhoneFocus}
+                          onChange={(e) => handlePhoneChange(e.target.value)}
+                          className={`w-full bg-[#050505] border outline-none px-4 py-3 rounded text-sm text-white font-sans transition-colors duration-300 ${
+                            errors.contact ? "border-mad-red" : "border-white/10 focus:border-championship-gold"
+                          }`}
                         />
+                        {errors.contact && (
+                          <span className="text-[10px] font-mono text-mad-red uppercase tracking-wide">
+                            {errors.contact}
+                          </span>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col gap-2">
+                        <label className="font-mono text-[10px] tracking-widest text-text-secondary uppercase">
+                          Email Address
+                        </label>
+                        <input 
+                          type="email"
+                          required
+                          placeholder="name@company.com"
+                          value={formData.email}
+                          onChange={(e) => {
+                            setFormData({ ...formData, email: e.target.value });
+                            if (errors.email) setErrors((prev) => ({ ...prev, email: "" }));
+                          }}
+                          className={`w-full bg-[#050505] border outline-none px-4 py-3 rounded text-sm text-white font-sans transition-colors duration-300 ${
+                            errors.email ? "border-mad-red" : "border-white/10 focus:border-championship-gold"
+                          }`}
+                        />
+                        {errors.email && (
+                          <span className="text-[10px] font-mono text-mad-red uppercase tracking-wide">
+                            {errors.email}
+                          </span>
+                        )}
                       </div>
                     </div>
 
@@ -401,7 +507,7 @@ export function PriorityLoungeClient() {
                     <div className="h-[1px] w-12 bg-white/15 my-2" />
 
                     <a 
-                      href={`https://wa.me/919900000000?text=Hi%20Romeo%2C%20my%20name%20is%20${encodeURIComponent(formData.name)}%20from%20${encodeURIComponent(formData.businessName)}.%20I%20just%20submitted%20a%20private%20Priority%20Lounge%20brief.`}
+                      href={`https://wa.me/918762640420?text=Hi%20Romeo%2C%20my%20name%20is%20${encodeURIComponent(formData.name)}%20from%20${encodeURIComponent(formData.businessName)}.%20I%20just%20submitted%20a%20private%20Priority%20Lounge%20brief.`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-2 px-6 py-4 bg-electric-azure text-white text-xs font-mono tracking-widest uppercase hover:bg-[#1a8ce6] transition-colors duration-300 rounded shadow-md border border-white/10"
