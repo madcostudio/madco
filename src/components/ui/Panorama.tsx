@@ -109,8 +109,9 @@ export function Panorama({ src, hotspots = [] }: PanoramaProps) {
       const clientX = event.clientX;
       const clientY = event.clientY;
 
-      // Sensitivity factor
-      const factor = camera.fov / 500;
+      // Boost sensitivity for touch/mobile devices for effortless swiping
+      const isTouch = event.pointerType === "touch";
+      const factor = (camera.fov / 500) * (isTouch ? 2.8 : 1.5);
 
       lon = (onPointerDownPointerX - clientX) * factor + onPointerDownLon;
       lat = (clientY - onPointerDownPointerY) * factor + onPointerDownLat;

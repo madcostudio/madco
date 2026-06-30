@@ -37,6 +37,7 @@ import {
   getCrewAction,
   getOverviewStatsAction,
   assignClientAction,
+  getBookingsAction,
 } from "./actions";
 import { SessionData } from "@/lib/auth";
 import { PKG_MAP, makeChecklist, progressOf, currentStep, ADD_ONS } from "@/lib/checklist";
@@ -156,6 +157,9 @@ export default function StudioPage() {
   const [openHow, setOpenHow] = useState<Record<string, boolean>>({});
   const [clientSearch, setClientSearch] = useState("");
 
+  const [bookings, setBookings] = useState<any[]>([]);
+  const [prefill, setPrefill] = useState<any>(null);
+
   // Modals state
   const [modal, setModal] = useState<any>(null);
 
@@ -190,6 +194,11 @@ export default function StudioPage() {
       const statsRes = await getOverviewStatsAction();
       if (statsRes.success && statsRes.stats) {
         setStats(statsRes.stats);
+      }
+
+      const bookingsRes = await getBookingsAction();
+      if (bookingsRes.success && bookingsRes.bookings) {
+        setBookings(bookingsRes.bookings);
       }
     }
   };
@@ -882,50 +891,102 @@ export default function StudioPage() {
                   ))}
                 </div>
 
-                {/* Crew Workload list */}
-                <div className="glass-morphism p-6 rounded-xl">
-                  <h2 className="font-mono text-xs uppercase font-bold tracking-widest text-text-secondary mb-4">
-                    // CREW WORKLOAD & PROGRESS
-                  </h2>
-                  <div className="divide-y divide-white/5">
-                    {crew.map((u) => {
-                      const userClients = clients.filter((c) => c.assignedTo === u.id);
-                      const avgPct =
-                        userClients.length > 0
-                          ? Math.round(
-                              userClients.reduce((sum, c) => sum + progressOf(c).pct, 0) /
-                                userClients.length
-                            )
-                          : 0;
+                <div className="grid lg:grid-cols-2 gap-6">
+                  {/* Crew Workload list */}
+                  <div className="glass-morphism p-6 rounded-xl">
+                    <h2 className="font-mono text-xs uppercase font-bold tracking-widest text-text-secondary mb-4">
+                      // CREW WORKLOAD & PROGRESS
+                    </h2>
+                    <div className="divide-y divide-white/5">
+                      {crew.map((u) => {
+                        const userClients = clients.filter((c) => c.assignedTo === u.id);
+                        const avgPct =
+                          userClients.length > 0
+                            ? Math.round(
+                                userClients.reduce((sum, c) => sum + progressOf(c).pct, 0) /
+                                  userClients.length
+                              )
+                            : 0;
 
-                      return (
-                        <div key={u.id} className="py-4 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
-                          <div className="flex items-center gap-3">
-                            <div className="h-9 w-9 rounded bg-white/5 border border-white/10 flex items-center justify-center font-sans font-black text-xs text-white">
-                              {u.name[0]}
-                            </div>
-                            <div>
-                              <div className="font-sans font-bold text-sm text-white">{u.name}</div>
-                              <div className="font-mono text-[9px] text-text-secondary tracking-widest uppercase">
-                                @{u.username} · {userClients.length} job{userClients.length !== 1 ? "s" : ""} assigned
+                        return (
+                          <div key={u.id} className="py-4 first:pt-0 last:pb-0 flex items-center justify-between gap-4">
+                            <div className="flex items-center gap-3">
+                              <div className="h-9 w-9 rounded bg-white/5 border border-white/10 flex items-center justify-center font-sans font-black text-xs text-white">
+                                {u.name[0]}
+                              </div>
+                              <div>
+                                <div className="font-sans font-bold text-sm text-white">{u.name}</div>
+                                <div className="font-mono text-[9px] text-text-secondary tracking-widest uppercase">
+                                  @{u.username} · {userClients.length} job{userClients.length !== 1 ? "s" : ""} assigned
+                                </div>
                               </div>
                             </div>
+                            <div className="flex items-center gap-3">
+                              <span className="font-mono text-[10px] text-text-secondary hidden sm:inline">
+                                AVG. PROGRESS
+                              </span>
+                              <ProgressRing pct={avgPct} size={42} stroke={4} />
+                            </div>
                           </div>
-                          <div className="flex items-center gap-3">
-                            <span className="font-mono text-[10px] text-text-secondary hidden sm:inline">
-                              AVG. PROGRESS
-                            </span>
-                            <ProgressRing pct={avgPct} size={42} stroke={4} />
+                        );
+                      })}
+
+                      {crew.length === 0 && (
+                        <div className="text-center py-6 text-xs text-text-secondary font-mono">
+                          // NO CREW CREATED YET
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Booking Inquiries (Leads) */}
+                  <div className="glass-morphism p-6 rounded-xl">
+                    <h2 className="font-mono text-xs uppercase font-bold tracking-widest text-text-secondary mb-4">
+                      // RECENT STRATEGY CALL LEADS
+                    </h2>
+                    <div className="divide-y divide-white/5 max-h-[350px] overflow-y-auto pr-2">
+                      {bookings.map((b) => (
+                        <div key={b.id} className="py-4 first:pt-0 last:pb-0 flex flex-col gap-2">
+                          <div className="flex justify-between items-start gap-3">
+                            <div className="min-w-0">
+                              <div className="font-sans font-bold text-sm text-white truncate">{b.businessName}</div>
+                              <div className="font-mono text-[9px] text-text-secondary uppercase tracking-wider truncate">
+                                Contact: {b.name} · {b.contact}
+                              </div>
+                            </div>
+                            <button
+                              onClick={() => {
+                                setPrefill({
+                                  bizName: b.businessName,
+                                  conName: b.name,
+                                  phone: b.contact,
+                                  package: b.category || "starter",
+                                  notes: b.message ? `Strategy Call Request: ${b.message}` : "From public booking form.",
+                                });
+                                setModal({ type: "addClient" });
+                              }}
+                              className="bg-mad-red/10 border border-mad-red/30 hover:bg-mad-red text-white font-mono text-[9px] uppercase tracking-wider px-2 py-1 rounded transition-all cursor-pointer flex-shrink-0"
+                            >
+                              CONVERT
+                            </button>
+                          </div>
+                          {b.message && (
+                            <div className="text-[10px] text-text-secondary bg-black/20 p-2.5 rounded border border-white/5 leading-normal">
+                              "{b.message}"
+                            </div>
+                          )}
+                          <div className="text-[8px] font-mono text-text-secondary self-end">
+                            {new Date(b.createdAt).toLocaleDateString()} · {new Date(b.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                           </div>
                         </div>
-                      );
-                    })}
+                      ))}
 
-                    {crew.length === 0 && (
-                      <div className="text-center py-6 text-xs text-text-secondary font-mono">
-                        // NO CREW CREATED YET
-                      </div>
-                    )}
+                      {bookings.length === 0 && (
+                        <div className="text-center py-10 text-xs text-text-secondary font-mono">
+                          // NO PUBLIC INQUIRIES SUBMITTED YET
+                        </div>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1530,7 +1591,10 @@ Please review everything and reply to confirm you've received it. Thank you for 
               <h3 className="font-sans font-black text-xl uppercase text-white mb-4">
                 Add Client Job
               </h3>
-              <form onSubmit={handleAddClient} className="flex flex-col gap-4 max-h-[80vh] overflow-y-auto pr-2">
+              <form onSubmit={async (e) => {
+                await handleAddClient(e);
+                setPrefill(null);
+              }} className="flex flex-col gap-4 max-h-[80vh] overflow-y-auto pr-2">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-[9px] font-mono tracking-wider text-text-secondary uppercase mb-1.5">
@@ -1540,6 +1604,7 @@ Please review everything and reply to confirm you've received it. Thank you for 
                       name="bizName"
                       type="text"
                       required
+                      defaultValue={prefill ? prefill.bizName : ""}
                       placeholder="Coastal Brew Cafe"
                       className="w-full bg-[#151515] border border-white/10 text-white rounded p-2.5 text-xs focus:border-mad-red focus:outline-none"
                     />
@@ -1552,6 +1617,7 @@ Please review everything and reply to confirm you've received it. Thank you for 
                       name="conName"
                       type="text"
                       required
+                      defaultValue={prefill ? prefill.conName : ""}
                       placeholder="Roy Fernandes"
                       className="w-full bg-[#151515] border border-white/10 text-white rounded p-2.5 text-xs focus:border-mad-red focus:outline-none"
                     />
@@ -1567,6 +1633,7 @@ Please review everything and reply to confirm you've received it. Thank you for 
                       name="phone"
                       type="text"
                       required
+                      defaultValue={prefill ? prefill.phone : ""}
                       placeholder="+91 9876543210"
                       className="w-full bg-[#151515] border border-white/10 text-white rounded p-2.5 text-xs focus:border-mad-red focus:outline-none"
                     />
@@ -1579,6 +1646,7 @@ Please review everything and reply to confirm you've received it. Thank you for 
                       name="area"
                       type="text"
                       required
+                      defaultValue={prefill ? prefill.area : ""}
                       placeholder="Balmatta, Mangalore"
                       className="w-full bg-[#151515] border border-white/10 text-white rounded p-2.5 text-xs focus:border-mad-red focus:outline-none"
                     />
@@ -1592,6 +1660,7 @@ Please review everything and reply to confirm you've received it. Thank you for 
                     </label>
                     <select
                       name="package"
+                      defaultValue={prefill ? prefill.package : "starter"}
                       className="w-full bg-[#151515] border border-white/10 text-white rounded p-2.5 text-xs focus:border-mad-red focus:outline-none"
                     >
                       {Object.values(PKG_MAP).map((p) => (
@@ -1626,6 +1695,7 @@ Please review everything and reply to confirm you've received it. Thank you for 
                   <textarea
                     name="notes"
                     rows={3}
+                    defaultValue={prefill ? prefill.notes : ""}
                     placeholder="Enter any custom landmarks, specific shoot times, or client requirements..."
                     className="w-full bg-[#151515] border border-white/10 text-white rounded p-2.5 text-xs focus:border-mad-red focus:outline-none resize-none font-sans"
                   />
@@ -1634,7 +1704,10 @@ Please review everything and reply to confirm you've received it. Thank you for 
                 <div className="flex gap-2 justify-end mt-2">
                   <button
                     type="button"
-                    onClick={() => setModal(null)}
+                    onClick={() => {
+                      setModal(null);
+                      setPrefill(null);
+                    }}
                     className="border border-white/10 hover:bg-white/5 text-text-secondary px-4 py-2 rounded font-mono text-[10px] tracking-wider uppercase transition-colors"
                   >
                     Cancel

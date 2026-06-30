@@ -556,3 +556,29 @@ export async function getOverviewStatsAction(): Promise<{
     return { success: false, error: "Failed to fetch overview metrics." };
   }
 }
+
+/**
+ * Retrieves recent public booking inquiries. (Admin Only)
+ */
+export async function getBookingsAction(): Promise<{ success: boolean; bookings?: any[]; error?: string }> {
+  const session = await getSession();
+  if (!session || session.role !== "admin") {
+    return { success: false, error: "Access denied." };
+  }
+
+  try {
+    const bookingsRef = collection(db, "bookings");
+    const q = query(bookingsRef);
+    const snapshot = await getDocs(q);
+    
+    const bookings = snapshot.docs
+      .map((d) => ({ id: d.id, ...d.data() }))
+      .filter((b: any) => !b.type)
+      .sort((a: any, b: any) => b.createdAt.localeCompare(a.createdAt));
+      
+    return { success: true, bookings };
+  } catch (err) {
+    console.error("Get Bookings Error:", err);
+    return { success: false, error: "Failed to fetch bookings." };
+  }
+}
