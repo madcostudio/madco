@@ -154,7 +154,7 @@ export function CTASection() {
                 <div>MAD.CO STUDIO HQ</div>
                 <div className="text-white">MANGALORE, KARNATAKA, INDIA</div>
                 <div className="mt-2 hover:text-white transition-colors duration-300">
-                  <a href="mailto:mad.coad@gmail.com">MAD.COAD@GMAIL.COM</a>
+                  <a href="mailto:admin@madco.in">ADMIN@MADCO.IN</a>
                 </div>
               </div>
             </div>

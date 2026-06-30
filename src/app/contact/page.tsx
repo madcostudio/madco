@@ -324,8 +324,8 @@ export default function ContactPage() {
               </div>
               <div>
                 <h4 className="font-mono text-[10px] tracking-widest text-text-secondary uppercase">Email Dispatch</h4>
-                <a href="mailto:mad.coad@gmail.com" className="text-sm font-sans text-white hover:text-mad-red transition-colors">
-                  mad.coad@gmail.com
+                <a href="mailto:admin@madco.in" className="text-sm font-sans text-white hover:text-mad-red transition-colors">
+                  admin@madco.in
                 </a>
               </div>
             </div>

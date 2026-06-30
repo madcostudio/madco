@@ -44,7 +44,7 @@ export async function POST(request: Request) {
     
     const smtpHost = process.env.SMTP_HOST;
     const smtpPort = process.env.SMTP_PORT;
-    const smtpUser = process.env.SMTP_USER; // mad.coad@gmail.com
+    const smtpUser = process.env.SMTP_USER; // admin@madco.in
     const smtpPass = process.env.SMTP_PASSWORD; // App Password
 
     if (smtpHost && smtpUser && smtpPass) {
