@@ -1,13 +1,21 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 import Lenis from "lenis";
 
 export function ScrollSetup() {
+  const pathname = usePathname();
+
   useEffect(() => {
     // Respect system reduced-motion settings
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (mediaQuery.matches) return;
+
+    // Disable Lenis smooth scrolling inside /studio route
+    if (pathname?.startsWith("/studio")) {
+      return;
+    }
 
     const lenis = new Lenis({
       duration: 1.2,
@@ -31,7 +39,7 @@ export function ScrollSetup() {
       cancelAnimationFrame(rafId);
       lenis.destroy();
     };
-  }, []);
+  }, [pathname]);
 
   return null;
 }
