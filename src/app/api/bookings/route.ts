@@ -51,6 +51,7 @@ export async function POST(request: Request) {
       try {
         const isSecure = smtpPort === "465" || (!smtpPort && smtpHost.includes("gmail"));
         const transporter = nodemailer.createTransport({
+          pool: true, // Reuse the same SMTP connection for multiple emails
           host: smtpHost,
           port: parseInt(smtpPort || "465"),
           secure: isSecure,
@@ -170,13 +171,17 @@ export async function POST(request: Request) {
             </div>
           `;
 
-          await transporter.sendMail({
-            from: `"MAD.CO Studio" <${smtpUser}>`,
-            to: email,
-            subject: `📋 Booking Confirmed: Spatial Strategy Audit for ${businessName}`,
-            html: clientEmailHtml,
-          });
-          clientConfirmSent = true;
+          try {
+            await transporter.sendMail({
+              from: `"MAD.CO Studio" <${smtpUser}>`,
+              to: email,
+              subject: `📋 Booking Confirmed: Spatial Strategy Audit for ${businessName}`,
+              html: clientEmailHtml,
+            });
+            clientConfirmSent = true;
+          } catch (clientEmailErr) {
+            console.error("Client confirmation email delivery failed:", clientEmailErr);
+          }
         }
       } catch (err) {
         console.error("SMTP Email Error:", err);

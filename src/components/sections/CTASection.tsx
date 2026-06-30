@@ -48,11 +48,19 @@ export function CTASection() {
     let hasError = false;
     const newErrors = { contact: "", email: "" };
 
+    let numberPart = cleanPhone;
+    if (cleanPhone.startsWith("91")) {
+      numberPart = cleanPhone.slice(2);
+    }
+
     if (!formData.contact.startsWith("+")) {
       newErrors.contact = "Phone number must start with country code (e.g. +91)";
       hasError = true;
-    } else if (cleanPhone.length < 11) {
-      newErrors.contact = "Please enter a valid phone number (at least 10 digits)";
+    } else if (cleanPhone.startsWith("91") && numberPart.length !== 10) {
+      newErrors.contact = "Indian mobile numbers must be exactly 10 digits";
+      hasError = true;
+    } else if (cleanPhone.length < 11 || cleanPhone.length > 15) {
+      newErrors.contact = "Please enter a valid phone number";
       hasError = true;
     }
 
