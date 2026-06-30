@@ -113,10 +113,12 @@ export async function POST(request: Request) {
           </div>
         `;
 
+        const adminEmail = process.env.ADMIN_EMAIL || smtpUser;
+
         // Send alert to admin (you)
         await transporter.sendMail({
           from: `"MAD.CO Booking System" <${smtpUser}>`,
-          to: "mad.coad@gmail.com",
+          to: adminEmail,
           subject: `🚨 New Audit Request: ${businessName} (${name})`,
           html: adminEmailHtml,
         });
@@ -162,7 +164,7 @@ export async function POST(request: Request) {
               <hr style="border: 0; border-top: 1px solid #e5e7eb; margin: 25px 0;" />
 
               <p style="font-size: 12px; color: #6b7280; line-height: 1.5; text-align: center;">
-                Need to make changes to your booking? Simply reply to this email or write to us at <a href="mailto:mad.coad@gmail.com" style="color: #2563eb; text-decoration: none;">mad.coad@gmail.com</a>.
+                Need to make changes to your booking? Simply reply to this email or write to us at <a href="mailto:${adminEmail}" style="color: #2563eb; text-decoration: none;">${adminEmail}</a>.
               </p>
               
               <div style="font-size: 10px; color: #9ca3af; text-align: center; margin-top: 15px; font-family: monospace;">
