@@ -339,14 +339,11 @@ export function Panorama({ src, hotspots = [] }: PanoramaProps) {
 
       {/* Fullscreen Toggle Button */}
       <button
-        onClick={(e) => {
+        onPointerDown={(e) => {
           e.stopPropagation();
           setIsFullscreen(!isFullscreen);
         }}
-        onPointerDown={(e) => {
-          e.stopPropagation();
-        }}
-        className="absolute bottom-6 right-6 z-30 p-2 rounded-full cursor-pointer bg-transparent hover:bg-white/10 active:scale-95 transition-all text-white"
+        className="absolute bottom-6 right-6 z-30 p-2 rounded-full cursor-pointer bg-transparent hover:bg-white/15 active:scale-90 transition-all"
         title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
       >
         {isFullscreen ? (
