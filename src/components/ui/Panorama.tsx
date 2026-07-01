@@ -237,7 +237,7 @@ export function Panorama({ src, hotspots = [] }: PanoramaProps) {
       if (texture) texture.dispose();
       renderer.dispose();
     };
-  }, [src, hotspots]);
+  }, [src, hotspots, isFullscreen]);
 
   const content = (
     <div 
@@ -341,14 +341,14 @@ export function Panorama({ src, hotspots = [] }: PanoramaProps) {
         title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
       >
         {isFullscreen ? (
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="square" className="h-5 w-5 text-black drop-shadow-[0_1.5px_1.5px_rgba(255,255,255,0.9)]">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="square" className="h-5 w-5 text-black">
             {/* Top Right L-line pointing inward */}
             <path d="M20 9h-5V4" />
             {/* Bottom Left L-line pointing inward */}
             <path d="M4 15h5v5" />
           </svg>
         ) : (
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="square" className="h-5 w-5 text-black drop-shadow-[0_1.5px_1.5px_rgba(255,255,255,0.9)]">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="square" className="h-5 w-5 text-black">
             {/* Top Right L-line pointing outward */}
             <path d="M15 4h5v5" />
             {/* Bottom Left L-line pointing outward */}
