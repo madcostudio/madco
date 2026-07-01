@@ -2,7 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import * as THREE from "three";
-import { Info, Move, X } from "lucide-react";
+import { Info, Move, X, Maximize, Minimize } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Hotspot {
@@ -23,6 +23,19 @@ export function Panorama({ src, hotspots = [] }: PanoramaProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [activeHotspot, setActiveHotspot] = useState<Hotspot | null>(null);
   const [showGuide, setShowGuide] = useState(true);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  // Lock body scroll when in fullscreen preview
+  useEffect(() => {
+    if (isFullscreen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isFullscreen]);
   
   // Track computed screen positions of hotspots
   const [hotspotPositions, setHotspotPositions] = useState<{
@@ -110,8 +123,8 @@ export function Panorama({ src, hotspots = [] }: PanoramaProps) {
       const clientY = event.clientY;
 
       // Boost sensitivity for touch/mobile devices for effortless swiping
-      const isTouch = event.pointerType === "touch";
-      const factor = (camera.fov / 500) * (isTouch ? 2.8 : 1.5);
+      const isTouch = event.pointerType === "touch" || (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches);
+      const factor = (camera.fov / 500) * (isTouch ? 5.5 : 1.5);
 
       lon = (onPointerDownPointerX - clientX) * factor + onPointerDownLon;
       lat = (clientY - onPointerDownPointerY) * factor + onPointerDownLat;
@@ -223,9 +236,13 @@ export function Panorama({ src, hotspots = [] }: PanoramaProps) {
   return (
     <div 
       ref={mountRef}
-      className="relative h-[480px] md:h-[600px] w-full overflow-hidden rounded-xl border border-white/8 bg-surface-1 cursor-grab active:cursor-grabbing select-none"
+      className={`${
+        isFullscreen 
+          ? "fixed inset-0 w-screen h-screen z-50 rounded-none border-0 bg-black" 
+          : "relative h-[480px] md:h-[600px] w-full rounded-xl border border-white/8"
+      } overflow-hidden bg-surface-1 cursor-grab active:cursor-grabbing select-none touch-none transition-all duration-300`}
       style={{
-        boxShadow: "inset 0 1px 0 rgba(255,255,255,0.06), 0 20px 60px rgba(0,0,0,0.5)"
+        boxShadow: isFullscreen ? "none" : "inset 0 1px 0 rgba(255,255,255,0.06), 0 20px 60px rgba(0,0,0,0.5)"
       }}
     >
       {/* WebGL Canvas */}
@@ -307,6 +324,18 @@ export function Panorama({ src, hotspots = [] }: PanoramaProps) {
 
       {/* Cinematic Vignette Overlay */}
       <div className="pointer-events-none absolute inset-0 z-10 shadow-[inset_0_0_80px_rgba(0,0,0,0.75)]" />
+
+      {/* Fullscreen Toggle Button */}
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setIsFullscreen(!isFullscreen);
+        }}
+        className="absolute bottom-6 right-6 z-30 h-9 w-9 rounded-full bg-black/60 hover:bg-black/85 text-white border border-white/10 flex items-center justify-center cursor-pointer transition-colors shadow-lg backdrop-blur-md"
+        title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
+      >
+        {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
+      </button>
     </div>
   );
 }
