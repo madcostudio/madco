@@ -272,6 +272,9 @@ export function Panorama({ src, hotspots = [] }: PanoramaProps) {
               e.stopPropagation();
               setActiveHotspot(spot);
             }}
+            onPointerDown={(e) => {
+              e.stopPropagation();
+            }}
           >
             {/* Glowing heartbeat pulse ring */}
             <span className="absolute -inset-1.5 animate-ping rounded-full bg-mad-red/40" />
@@ -316,6 +319,9 @@ export function Panorama({ src, hotspots = [] }: PanoramaProps) {
               </h4>
               <button 
                 onClick={() => setActiveHotspot(null)}
+                onPointerDown={(e) => {
+                  e.stopPropagation();
+                }}
                 className="rounded-full p-1 text-white/50 hover:bg-white/10 hover:text-white transition-colors cursor-pointer"
               >
                 <X className="h-3.5 w-3.5" />
@@ -337,11 +343,14 @@ export function Panorama({ src, hotspots = [] }: PanoramaProps) {
           e.stopPropagation();
           setIsFullscreen(!isFullscreen);
         }}
+        onPointerDown={(e) => {
+          e.stopPropagation();
+        }}
         className="absolute bottom-6 right-6 z-30 p-2 rounded-full cursor-pointer bg-transparent hover:bg-white/10 active:scale-95 transition-all text-white"
         title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
       >
         {isFullscreen ? (
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="square" className="h-5 w-5 text-black">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="square" className="h-5 w-5 text-white">
             {/* Top Right L-line pointing inward */}
             <path d="M20 9h-5V4" />
             {/* Bottom Left L-line pointing inward */}
