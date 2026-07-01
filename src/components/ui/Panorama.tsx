@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import * as THREE from "three";
 import { Info, Move, X, Maximize, Minimize } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -24,6 +25,11 @@ export function Panorama({ src, hotspots = [] }: PanoramaProps) {
   const [activeHotspot, setActiveHotspot] = useState<Hotspot | null>(null);
   const [showGuide, setShowGuide] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Lock body scroll when in fullscreen preview
   useEffect(() => {
@@ -124,7 +130,7 @@ export function Panorama({ src, hotspots = [] }: PanoramaProps) {
 
       // Boost sensitivity for touch/mobile devices for effortless swiping
       const isTouch = event.pointerType === "touch" || (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches);
-      const factor = (camera.fov / 500) * (isTouch ? 5.5 : 1.5);
+      const factor = (camera.fov / 500) * (isTouch ? 4.1 : 1.5);
 
       lon = (onPointerDownPointerX - clientX) * factor + onPointerDownLon;
       lat = (clientY - onPointerDownPointerY) * factor + onPointerDownLat;
@@ -233,14 +239,14 @@ export function Panorama({ src, hotspots = [] }: PanoramaProps) {
     };
   }, [src, hotspots]);
 
-  return (
+  const content = (
     <div 
       ref={mountRef}
       className={`${
         isFullscreen 
-          ? "fixed inset-0 w-screen h-screen z-50 rounded-none border-0 bg-black" 
-          : "relative h-[480px] md:h-[600px] w-full rounded-xl border border-white/8"
-      } overflow-hidden bg-surface-1 cursor-grab active:cursor-grabbing select-none touch-none transition-all duration-300`}
+          ? "fixed inset-0 w-screen h-screen z-[9999] rounded-none border-0 bg-black touch-none" 
+          : "relative h-[480px] md:h-[600px] w-full rounded-xl border border-white/8 touch-none"
+      } overflow-hidden bg-surface-1 cursor-grab active:cursor-grabbing select-none transition-all duration-300`}
       style={{
         boxShadow: isFullscreen ? "none" : "inset 0 1px 0 rgba(255,255,255,0.06), 0 20px 60px rgba(0,0,0,0.5)"
       }}
@@ -331,11 +337,31 @@ export function Panorama({ src, hotspots = [] }: PanoramaProps) {
           e.stopPropagation();
           setIsFullscreen(!isFullscreen);
         }}
-        className="absolute bottom-6 right-6 z-30 h-9 w-9 rounded-full bg-black/60 hover:bg-black/85 text-white border border-white/10 flex items-center justify-center cursor-pointer transition-colors shadow-lg backdrop-blur-md"
+        className="absolute bottom-6 right-6 z-30 p-2 rounded-full cursor-pointer bg-transparent hover:bg-white/10 active:scale-95 transition-all text-white"
         title={isFullscreen ? "Exit Fullscreen" : "Enter Fullscreen"}
       >
-        {isFullscreen ? <Minimize className="h-4 w-4" /> : <Maximize className="h-4 w-4" />}
+        {isFullscreen ? (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="square" className="h-5 w-5 text-black drop-shadow-[0_1.5px_1.5px_rgba(255,255,255,0.9)]">
+            {/* Top Right L-line pointing inward */}
+            <path d="M20 9h-5V4" />
+            {/* Bottom Left L-line pointing inward */}
+            <path d="M4 15h5v5" />
+          </svg>
+        ) : (
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="square" className="h-5 w-5 text-black drop-shadow-[0_1.5px_1.5px_rgba(255,255,255,0.9)]">
+            {/* Top Right L-line pointing outward */}
+            <path d="M15 4h5v5" />
+            {/* Bottom Left L-line pointing outward */}
+            <path d="M9 20H4v-5" />
+          </svg>
+        )}
       </button>
     </div>
   );
+
+  if (isFullscreen && mounted) {
+    return createPortal(content, document.body);
+  }
+
+  return content;
 }
