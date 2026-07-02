@@ -582,3 +582,21 @@ export async function getBookingsAction(): Promise<{ success: boolean; bookings?
     return { success: false, error: "Failed to fetch bookings." };
   }
 }
+
+/**
+ * Deletes a booking inquiry. (Admin Only)
+ */
+export async function deleteBookingAction(bookingId: string): Promise<{ success: boolean; error?: string }> {
+  const session = await getSession();
+  if (!session || session.role !== "admin") {
+    return { success: false, error: "Access denied." };
+  }
+
+  try {
+    await deleteDoc(doc(db, "bookings", bookingId));
+    return { success: true };
+  } catch (err) {
+    console.error("Delete Booking Error:", err);
+    return { success: false, error: "Failed to delete booking inquiry." };
+  }
+}

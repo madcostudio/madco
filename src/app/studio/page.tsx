@@ -38,6 +38,7 @@ import {
   getOverviewStatsAction,
   assignClientAction,
   getBookingsAction,
+  deleteBookingAction,
 } from "./actions";
 import { SessionData } from "@/lib/auth";
 import { PKG_MAP, makeChecklist, progressOf, currentStep, ADD_ONS } from "@/lib/checklist";
@@ -954,21 +955,40 @@ export default function StudioPage() {
                                 Contact: {b.name} · {b.contact}
                               </div>
                             </div>
-                            <button
-                              onClick={() => {
-                                setPrefill({
-                                  bizName: b.businessName,
-                                  conName: b.name,
-                                  phone: b.contact,
-                                  package: b.category || "starter",
-                                  notes: b.message ? `Strategy Call Request: ${b.message}` : "From public booking form.",
-                                });
-                                setModal({ type: "addClient" });
-                              }}
-                              className="bg-mad-red/10 border border-mad-red/30 hover:bg-mad-red text-white font-mono text-[9px] uppercase tracking-wider px-2 py-1 rounded transition-all cursor-pointer flex-shrink-0"
-                            >
-                              CONVERT
-                            </button>
+                            <div className="flex gap-1.5 flex-shrink-0">
+                              <button
+                                onClick={() => {
+                                  setPrefill({
+                                    bizName: b.businessName,
+                                    conName: b.name,
+                                    phone: b.contact,
+                                    package: b.category || "starter",
+                                    notes: b.message ? `Strategy Call Request: ${b.message}` : "From public booking form.",
+                                  });
+                                  setModal({ type: "addClient" });
+                                }}
+                                className="bg-mad-red/10 border border-mad-red/30 hover:bg-mad-red text-white font-mono text-[9px] uppercase tracking-wider px-2 py-1 rounded transition-all cursor-pointer"
+                              >
+                                CONVERT
+                              </button>
+                              <button
+                                onClick={async () => {
+                                  const conf = confirm(`Are you sure you want to delete the booking inquiry for "${b.businessName}"?`);
+                                  if (!conf) return;
+
+                                  // Optimistically update state
+                                  setBookings((prev) => prev.filter((item) => item.id !== b.id));
+                                  const res = await deleteBookingAction(b.id);
+                                  if (!res.success) {
+                                    alert(res.error || "Failed to delete booking inquiry.");
+                                    refreshData();
+                                  }
+                                }}
+                                className="border border-white/10 hover:border-mad-red/40 hover:bg-mad-red/20 text-text-secondary hover:text-white font-mono text-[9px] uppercase tracking-wider px-2 py-1 rounded transition-all cursor-pointer"
+                              >
+                                REMOVE
+                              </button>
+                            </div>
                           </div>
                           {b.message && (
                             <div className="text-[10px] text-text-secondary bg-black/20 p-2.5 rounded border border-white/5 leading-normal">
