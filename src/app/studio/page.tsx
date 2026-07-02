@@ -6,6 +6,7 @@ import {
   LogOut,
   Users,
   ClipboardList,
+  ClipboardCheck,
   Tag,
   BookOpen,
   Plus,
@@ -160,6 +161,9 @@ export default function StudioPage() {
 
   const [bookings, setBookings] = useState<any[]>([]);
   const [prefill, setPrefill] = useState<any>(null);
+  const [checklistPackage, setChecklistPackage] = useState("starter");
+  const [masterChecked, setMasterChecked] = useState<Record<string, boolean>>({});
+  const [masterOpenHow, setMasterOpenHow] = useState<Record<string, boolean>>({});
 
   // Modals state
   const [modal, setModal] = useState<any>(null);
@@ -601,6 +605,7 @@ export default function StudioPage() {
         ["clients", "Client Jobs", Camera],
         ["pricing", "Prices & Scope", Tag],
         ["guide", "Field SOP", BookOpen],
+        ["checklist", "Master Checklist", ClipboardCheck],
       ]
     : [
         ["jobs", "My Assigned Jobs", Camera],
@@ -1381,6 +1386,134 @@ export default function StudioPage() {
                       ))}
                     </div>
                   </div>
+                </div>
+              </div>
+            )}
+
+            {/* VIEW: MASTER CHECKLIST */}
+            {view === "checklist" && (
+              <div>
+                <div className="flex items-center gap-2 mb-6">
+                  <ClipboardCheck className="text-mad-red" size={18} />
+                  <h1 className="font-mono text-xs uppercase font-bold tracking-widest text-text-secondary">
+                    // MASTER DELIVERY CHECKLISTS
+                  </h1>
+                </div>
+
+                <div className="flex flex-wrap gap-2 mb-6 border-b border-white/5 pb-4">
+                  {Object.values(PKG_MAP).map((p) => (
+                    <button
+                      key={p.key}
+                      onClick={() => {
+                        setChecklistPackage(p.key);
+                        setMasterChecked({});
+                        setMasterOpenHow({});
+                      }}
+                      className={`px-4 py-2.5 rounded font-mono text-[10px] tracking-wider uppercase transition-all duration-300 cursor-pointer ${
+                        checklistPackage === p.key
+                          ? "bg-mad-red text-white font-bold"
+                          : "glass-morphism text-text-secondary hover:text-white"
+                      }`}
+                    >
+                      {p.name}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="space-y-10">
+                  {makeChecklist(checklistPackage).map((phase: any, phaseIndex: number) => (
+                    <div key={phase.name} className="relative">
+                      {/* Section Header Eyebrow */}
+                      <div className="flex items-center gap-2 mb-4 select-none">
+                        <span className="font-mono text-mad-red text-xs font-bold tracking-widest">
+                          //{String(phaseIndex + 1).padStart(2, "0")}
+                        </span>
+                        <h3 className="font-mono font-bold text-xs uppercase tracking-widest text-text-secondary">
+                          {phase.name}
+                        </h3>
+                      </div>
+
+                      {/* List items */}
+                      <div className="space-y-2">
+                        {phase.items.map((item: any) => {
+                          const isChecked = !!masterChecked[item.id];
+                          const isOpen = !!masterOpenHow[item.id];
+
+                          return (
+                            <div
+                              key={item.id}
+                              className={`glass-morphism rounded-lg overflow-hidden transition-all duration-300 ${
+                                isChecked ? "border-emerald-500/20 bg-emerald-500/[0.02]" : ""
+                              }`}
+                            >
+                              <div className="flex items-center gap-4 p-4 min-h-[48px]">
+                                {/* Custom Checkbox */}
+                                <button
+                                  onClick={() =>
+                                    setMasterChecked((prev) => ({
+                                      ...prev,
+                                      [item.id]: !prev[item.id],
+                                    }))
+                                  }
+                                  className={`h-5 w-5 rounded border flex items-center justify-center transition-all cursor-pointer ${
+                                    isChecked
+                                      ? "bg-emerald-500 border-emerald-500 text-[#090909]"
+                                      : "border-white/20 hover:border-mad-red bg-transparent text-transparent"
+                                  }`}
+                                >
+                                  <Check size={14} strokeWidth={3} />
+                                </button>
+
+                                {/* Step Text */}
+                                <span
+                                  className={`flex-grow text-xs leading-relaxed transition-all cursor-pointer select-none ${
+                                    isChecked
+                                      ? "text-text-secondary line-through"
+                                      : "text-white font-medium"
+                                  }`}
+                                  onClick={() =>
+                                    setMasterChecked((prev) => ({
+                                      ...prev,
+                                      [item.id]: !prev[item.id],
+                                    }))
+                                  }
+                                >
+                                  {item.text}
+                                </span>
+
+                                {/* Info Toggle Button */}
+                                <button
+                                  onClick={() =>
+                                    setMasterOpenHow((prev) => ({
+                                      ...prev,
+                                      [item.id]: !prev[item.id],
+                                    }))
+                                  }
+                                  className={`h-7 w-7 rounded border flex items-center justify-center transition-colors cursor-pointer ${
+                                    isOpen
+                                      ? "border-mad-red/40 bg-mad-red/10 text-mad-red"
+                                      : "border-white/5 hover:border-white/10 text-text-secondary hover:text-white"
+                                  }`}
+                                >
+                                  <Info size={13} />
+                                </button>
+                              </div>
+
+                              {/* Expanded detailed instructions info box */}
+                              {isOpen && (
+                                <div className="px-5 pb-4 pt-3 border-t border-white/5 bg-black/40 text-text-secondary text-[11px] leading-relaxed whitespace-pre-line font-sans">
+                                  <span className="font-mono text-[9px] text-white tracking-wider block mb-1">
+                                    // TECHNICAL METHOD:
+                                  </span>
+                                  {item.how}
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
