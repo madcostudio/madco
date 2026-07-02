@@ -186,7 +186,17 @@ export function makeChecklist(packageKey: string): ChecklistPhase[] {
       {
         id: "pre5",
         text: "Get Business Profile access or a coordination contact",
-        how: "Ask the owner to add the company Google account as a Manager at business.google.com → Users. This lets you publish cleanly.",
+        how: `To publish the 360 virtual tour directly to the client's listing, ask them to add MAD.CO's Google account as a Manager:
+
+1. CLIENT STEPS:
+   - Search the business name on Google Search or Maps (while logged in with their listing owner account).
+   - Click the three-dot menu icon (top right of the business edit panel) and select "Business Profile settings".
+   - Click "People and access" → select "Add" (+).
+   - Enter MAD.CO's email: admin@madco.in and select the "Manager" role, then click "Invite".
+   
+2. NO ACCESS / DELAY FALLBACK:
+   - If they cannot grant access immediately, secure a direct coordination contact (name/phone/email of the manager on-site).
+   - You can still publish the tour using PanoCool's Street View Publisher to link to the place ID, but Manager access is highly recommended to set the "Interior" cover photo and display the "See Inside" badge.`,
       },
       ...(p.optimize
         ? [
