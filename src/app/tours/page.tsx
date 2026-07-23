@@ -5,19 +5,22 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Check, HelpCircle, ArrowRight, MessageSquare, ShieldCheck, Map, Smartphone } from "lucide-react";
 import { Magnetic } from "@/components/ui/Magnetic";
 import Link from "next/link";
+import { config } from "@/lib/config";
 
 const packages = [
   {
     name: "Starter Scan",
     standardPrice: "₹9,999",
     foundingPrice: "₹4,999",
-    target: "Boutiques, Salons, Small Cafes",
+    target: "Boutiques · Salons · Small Cafés",
     features: [
-      "Standard HDR 360 Capture (up to 8 points)",
-      "Basic Color Grading & Stitching",
-      "Direct Google Maps Street View Integration",
-      "Standard iframe Website Embed Link",
-      "2-Year Cloud Hosting & Maintenance Plan",
+      "360° capture of 5 points inside your space",
+      "3 professionally edited still photos",
+      "Published to your Google Business Profile",
+      "Shareable tour link",
+      "Website embed link",
+      "7-day delivery",
+      "1 year hosting included"
     ],
     cta: "Request Starter Scan",
     accentColor: "border-white/5",
@@ -27,33 +30,39 @@ const packages = [
     name: "Immersive Pro",
     standardPrice: "₹19,999",
     foundingPrice: "₹9,999",
-    target: "Restaurants, Gyms, Clinics, Showrooms",
+    target: "Restaurants · Gyms · Clinics · Showrooms",
     features: [
-      "Cinematic Ultra-HDR Scan (up to 20 points)",
-      "Bespoke Color Grading & Polish",
-      "Google Street View Sync & Verification",
-      "Interactive Virtual Tour Player UI",
-      "Up to 5 Customized Hotspots (Menus, Links)",
-      "Performance-Optimized Embed Code",
-      "3-Year Cloud Hosting & Care Plan",
+      "360° capture of 8–10 points inside your space",
+      "8 professionally edited still photos",
+      "Published & verified on Google Maps and Search",
+      "Google Business Profile optimisation (category, hours, contact info, cover images)",
+      "Printable QR code for your entrance & menus",
+      "Up to 5 clickable hotspots inside the tour (menu, booking link, contact)",
+      "Shareable link + performance-optimised website embed",
+      "5-day delivery",
+      "1 year hosting included"
     ],
     cta: "Request Immersive Pro",
     accentColor: "border-mad-red/40",
     badge: "RECOMMENDED"
   },
   {
-    name: "Signature / Enterprise",
+    name: "Signature",
     standardPrice: "₹39,999",
     foundingPrice: "₹19,999",
-    target: "Luxury Venues, Hotels, Multi-Location",
+    target: "Premium Restaurants · Hotels · Showrooms · Multi-Room Venues",
     features: [
-      "Unlimited Cinematic Scan Points",
-      "Bespoke 3D Walkthrough Interface",
-      "Custom Interactive UI (Logo, Navigation Panels)",
-      "Advanced Hotspot Integration (Reservations, Sheets)",
-      "Google Maps Optimization & Search Setup",
-      "5-Year Cloud Hosting & Support Plan",
-      "Custom Spatial Landing Page Design",
+      "360° capture of 15–20 points inside your space",
+      "15 professionally edited still photos",
+      "1 short vertical reel for social media",
+      "Published & verified on Google Maps and Search",
+      "Full Google Business Profile optimisation",
+      "Printable QR code",
+      "Custom hotspots inside the tour",
+      "Tour player styled with your logo and colours",
+      "Website embed support (we coordinate with your developer)",
+      "Priority 3–5 day delivery",
+      "1 year hosting included"
     ],
     cta: "Connect for Consultation",
     accentColor: "border-championship-gold/40",
@@ -141,9 +150,21 @@ export default function ToursPage() {
           <div className="flex flex-col items-start gap-3 mb-12">
             <span className="font-mono text-xs tracking-widest text-mad-red uppercase">// TOUR CONFIGURATIONS</span>
             <h2 className="font-sans font-black text-3xl md:text-5xl uppercase tracking-tighter text-white">CHOOSE YOUR SCALE</h2>
-            <span className="font-mono text-[10px] tracking-widest text-mad-red bg-mad-red/10 border border-mad-red/20 px-3 py-1 rounded inline-block uppercase font-bold mt-1">
-              Founding rates limited to our first 10 Mangalore venues
-            </span>
+            <div className="mt-4 flex flex-col w-full max-w-2xl bg-white/5 border-l-4 border-championship-gold backdrop-blur-sm rounded-r-md p-4">
+              <div className="flex items-center gap-3 mb-2">
+                <span className="h-2 w-2 rounded-full bg-mad-red animate-pulse" />
+                <span className="font-mono text-xs tracking-widest font-bold text-white">
+                  FOUNDING RATE — LIVE NOW
+                </span>
+              </div>
+              <p className="text-sm text-text-secondary font-sans mb-3">
+                Up to 50% off standard pricing for our first 10 Mangalore venues.
+              </p>
+              <div className="flex items-center justify-between text-xs font-mono border-t border-white/10 pt-3">
+                <span className="text-championship-gold">[ {config.FOUNDING_SLOTS_LEFT} of 10 remaining ]</span>
+                <span className="text-text-secondary opacity-70">Founding pricing closes once filled.</span>
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
@@ -187,6 +208,9 @@ export default function ToursPage() {
                       {pkg.foundingPrice !== "Custom" && <span className="font-mono text-xs text-text-secondary uppercase">/ Setup</span>}
                     </div>
                   </div>
+                  <p className="font-mono text-[10px] text-text-secondary uppercase mb-4">
+                    Pairs with Growth Care — ₹2,999/month.
+                  </p>
 
                   <ul className="flex flex-col gap-4 mb-8">
                     {pkg.features.map((feature) => (
@@ -219,7 +243,7 @@ export default function ToursPage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mt-12 p-8 bg-surface-2 border border-electric-azure/20 hover:border-electric-azure/40 rounded-xl transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6"
+            className="mt-12 p-8 bg-surface-2 border border-championship-gold/40 hover:border-championship-gold/80 rounded-xl transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6"
             style={{
               background: "rgba(15, 15, 16, 0.7)",
               backdropFilter: "blur(20px) saturate(120%)",
@@ -228,34 +252,88 @@ export default function ToursPage() {
           >
             <div className="max-w-2xl text-left">
               <div className="flex items-center gap-2 mb-2">
-                <span className="h-1.5 w-1.5 rounded-full bg-electric-azure" />
-                <span className="font-mono text-[10px] tracking-widest text-electric-azure uppercase font-bold">
-                  RECURRING SPATIAL RETAINER
+                <span className="h-1.5 w-1.5 rounded-full bg-championship-gold" />
+                <span className="font-mono text-[10px] tracking-widest text-championship-gold uppercase font-bold">
+                  GROWTH CARE — MONTHLY PLAN
                 </span>
               </div>
               <h3 className="font-sans font-black text-2xl uppercase tracking-tight text-white mb-2">
-                GROWTH CARE PLAN
+                ₹2,999 / MONTH
               </h3>
-              <p className="text-sm text-text-secondary leading-relaxed font-sans">
-                Keep your digital presence active. We manage your Google Business profile updates, post fresh photos, optimize search keywords, and perform virtual tour upkeep every single month.
+              <p className="text-sm text-text-secondary leading-relaxed font-sans mb-4">
+                The tour is the start. This is what keeps it working.
               </p>
+              <ul className="flex flex-col gap-2 mb-4">
+                <li className="flex items-start gap-3">
+                  <Check className="h-4 w-4 text-mad-red shrink-0 mt-0.5" />
+                  <span className="text-sm text-text-secondary font-sans leading-tight">Fresh photos posted to your Google profile every month</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="h-4 w-4 text-mad-red shrink-0 mt-0.5" />
+                  <span className="text-sm text-text-secondary font-sans leading-tight">Business info, hours and seasonal updates kept current</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="h-4 w-4 text-mad-red shrink-0 mt-0.5" />
+                  <span className="text-sm text-text-secondary font-sans leading-tight">Google Posts published for offers and events</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="h-4 w-4 text-mad-red shrink-0 mt-0.5" />
+                  <span className="text-sm text-text-secondary font-sans leading-tight">Search keyword optimisation</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="h-4 w-4 text-mad-red shrink-0 mt-0.5" />
+                  <span className="text-sm text-text-secondary font-sans leading-tight">Tour hosting, upkeep and link monitoring</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="h-4 w-4 text-mad-red shrink-0 mt-0.5" />
+                  <span className="text-sm text-text-secondary font-sans leading-tight">Monthly performance snapshot (views, direction requests, calls)</span>
+                </li>
+              </ul>
+              <p className="text-xs text-text-secondary italic">Cancel anytime. Hosting continues for as long as you&apos;re on the plan.</p>
             </div>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 shrink-0">
-              <div className="text-left md:text-right">
-                <span className="font-mono text-xs text-text-secondary uppercase">Monthly Upkeep</span>
-                <div className="font-sans font-black text-3xl text-white mt-1">₹2,999<span className="text-xs text-text-secondary">/month</span></div>
-              </div>
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 shrink-0 mt-6 md:mt-0">
               <Magnetic>
                 <Link
                   href="/contact?package=growth-care"
-                  className="flex items-center gap-2 px-5 py-3 bg-electric-azure hover:bg-sky-500 text-white text-xs font-mono tracking-widest uppercase transition-colors duration-300 rounded"
+                  className="flex items-center gap-2 px-5 py-3 bg-background hover:bg-championship-gold/20 hover:border-championship-gold text-white text-xs font-mono tracking-widest uppercase transition-all duration-300 rounded border border-white/10"
                 >
-                  <span>Attach Growth Care</span>
+                  <span>Add Growth Care</span>
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </Magnetic>
             </div>
           </motion.div>
+
+          {/* Add-ons */}
+          <div className="mt-8 p-8 bg-surface-2 border border-white/5 rounded-xl">
+            <div className="flex items-center gap-2 mb-6 border-b border-white/5 pb-4">
+              <span className="font-mono text-xs tracking-widest text-text-secondary uppercase">
+                // ADD-ONS
+              </span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex justify-between items-center py-2 border-b border-white/5">
+                <span className="text-sm text-text-secondary font-sans">Extra 360° point</span>
+                <span className="font-mono text-xs text-white">₹750 each</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-white/5">
+                <span className="text-sm text-text-secondary font-sans">5 extra edited photos</span>
+                <span className="font-mono text-xs text-white">₹1,500</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-white/5">
+                <span className="text-sm text-text-secondary font-sans">Short vertical reel</span>
+                <span className="font-mono text-xs text-white">₹3,000</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-white/5">
+                <span className="text-sm text-text-secondary font-sans">Standalone website embed</span>
+                <span className="font-mono text-xs text-white">₹2,000</span>
+              </div>
+              <div className="flex justify-between items-center py-2 border-b border-white/5 md:col-span-2">
+                <span className="text-sm text-text-secondary font-sans">Additional branch / location</span>
+                <span className="font-mono text-xs text-white">Quoted separately</span>
+              </div>
+            </div>
+          </div>
 
         </div>
       </section>

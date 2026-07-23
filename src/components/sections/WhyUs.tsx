@@ -6,19 +6,19 @@ import { CheckCircle2 } from "lucide-react";
 
 const metrics = [
   {
-    value: "2x",
+    value: "↑",
     label: "Customer Interest",
-    desc: "According to Google Maps consumer surveys, listings featuring complete virtual media generate double the click interest."
+    desc: "Listings with 360° imagery consistently see higher engagement than photo-only listings."
   },
   {
-    value: "62%",
+    value: "+",
     label: "Higher Bookings",
-    desc: "Local search research indicates that complete business listings with 360 views see an increase in conversion metrics."
+    desc: "Complete business listings with 360 views see a meaningful increase in conversion metrics."
   },
   {
-    value: "360px",
-    label: "Responsive Design",
-    desc: "Every concept VR tour is engineered to load in milliseconds and scale fluidly down to phone viewports."
+    value: "24/7",
+    label: "Always On",
+    desc: "Your space selling itself, every hour. Engineered to load in milliseconds on any device."
   }
 ];
 

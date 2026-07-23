@@ -12,7 +12,7 @@ const steps = [
   {
     phase: "PHASE 02",
     title: "Cinematic HDR Scan",
-    desc: "Our team captures your venue at peak environment hours using industry-leading spatial sensors. We compile, stitch, and colour-grade the panoramic imagery with zero distortion."
+    desc: "Our team captures your venue at peak environment hours using professional 360° cameras. We deliver panoramic imagery that is cleanly stitched and colour-corrected."
   },
   {
     phase: "PHASE 03",
@@ -21,8 +21,8 @@ const steps = [
   },
   {
     phase: "PHASE 04",
-    title: "Maps Sync & Ad Blast",
-    desc: "We publish the tour to Google Street View to double your map traffic, embed it into a custom speed-optimized web presence, and launch hyper-targeted local walk-in campaigns."
+    title: "Maps Sync & Web Presence",
+    desc: "We publish your tour so it appears directly on Google Maps and Search, and embed it into a custom speed-optimized web presence."
   }
 ];
 

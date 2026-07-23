@@ -66,8 +66,8 @@ export default function RootLayout({
                 <Link href="/tours" className="hover:text-white transition-colors duration-300">
                   360 Tours
                 </Link>
-                <Link href="/#work" className="hover:text-white transition-colors duration-300">
-                  Core Work
+                <Link href="/work" className="hover:text-white transition-colors duration-300">
+                  Work
                 </Link>
                 <Link href="/#services" className="hover:text-white transition-colors duration-300">
                   Competencies
@@ -102,7 +102,7 @@ export default function RootLayout({
                     <span className="h-2 w-2 rounded-full bg-mad-red animate-breathe" />
                   </Link>
                   <p className="max-w-xs text-xs text-text-secondary leading-relaxed font-sans">
-                    We design attention-led virtual scans and custom software. Making spaces impossible to ignore since 2026.
+                    We design attention-led virtual scans and digital presence for experience-led businesses. Making spaces impossible to ignore since 2026.
                   </p>
                 </div>
 
@@ -112,8 +112,8 @@ export default function RootLayout({
                     <Link href="/tours" className="text-text-secondary hover:text-white transition-colors duration-300">
                       360 Tours
                     </Link>
-                    <Link href="/#work" className="text-text-secondary hover:text-white transition-colors duration-300">
-                      Core Work
+                    <Link href="/work" className="text-text-secondary hover:text-white transition-colors duration-300">
+                      Work
                     </Link>
                     <Link href="/#services" className="text-text-secondary hover:text-white transition-colors duration-300">
                       Competencies

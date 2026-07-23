@@ -225,6 +225,11 @@ export function makeChecklist(packageKey: string): ChecklistPhase[] {
     name: "Shoot",
     items: [
       {
+        id: "sh4",
+        text: "Make sure the venue is clean and tidy first",
+        how: "Remove clutter, bags, and stray people from view. A messy shot means a re-shoot, which costs us money.",
+      },
+      {
         id: "sh1",
         text: "Shoot the exterior / front entrance",
         how: "Stand a few steps back so the whole entrance and signboard are visible. This becomes the entry point of the tour.",
@@ -238,11 +243,6 @@ export function makeChecklist(packageKey: string): ChecklistPhase[] {
         id: "sh3",
         text: `Shoot ${p.stills} still photos of key spots`,
         how: 'Capture the spots that make a customer think "I want to go there" — best corners, products, and overall ambience.',
-      },
-      {
-        id: "sh4",
-        text: "Make sure the venue is clean and tidy first",
-        how: "Remove clutter, bags, and stray people from view. A messy shot means a re-shoot, which costs us money.",
       },
       {
         id: "sh5",
