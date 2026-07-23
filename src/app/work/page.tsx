@@ -7,34 +7,9 @@ import Link from "next/link";
 import { Magnetic } from "@/components/ui/Magnetic";
 import { BeforeAfter } from "@/components/ui/BeforeAfter";
 import { CompletenessMeter, CustomerDecisionMoment, HotspotDemo, DeliveryKit } from "@/components/ui/WorkVisuals";
+import { DemoViewer } from "@/components/ui/DemoViewer";
 
-// Concept Tours Data
-const conceptTours = [
-  {
-    id: "cafe-esthetique",
-    name: "Café Esthétique",
-    type: "Café — high-retention social layout",
-    details: "9 points, menu hotspots",
-    image: "/restaurant_360.png",
-    color: "border-championship-gold/20"
-  },
-  {
-    id: "iron-forge-gym",
-    name: "The Iron Forge Gym",
-    type: "Fitness Facility — spatial trust",
-    details: "12 points, equipment tags",
-    image: "/restaurant_360.png",
-    color: "border-electric-azure/20"
-  },
-  {
-    id: "aura-dining",
-    name: "Aura Dining Room",
-    type: "Premium Restaurant — atmosphere",
-    details: "15 points, reservation links",
-    image: "/restaurant_360.png",
-    color: "border-mad-red/20"
-  }
-];
+
 
 export default function WorkPage() {
   return (
@@ -72,33 +47,9 @@ export default function WorkPage() {
             <p className="text-text-secondary text-sm">Interactive panoramas. Look around.</p>
           </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
-            {conceptTours.map((tour, idx) => (
-              <motion.div 
-                key={tour.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className={`bg-surface-2 border ${tour.color} hover:border-white/20 rounded-xl overflow-hidden transition-colors flex flex-col`}
-              >
-                <div className="relative h-64 w-full">
-                  <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md text-white font-mono text-[10px] tracking-widest px-2 py-1 rounded uppercase border border-white/10 z-10">
-                    CONCEPT
-                  </div>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={tour.image} alt={tour.name} className="absolute inset-0 w-full h-full object-cover filter brightness-[0.7] saturate-[1.2]" />
-                  <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-                    <span className="font-mono text-xs uppercase text-white/50 border border-white/20 bg-black/40 px-3 py-1 rounded backdrop-blur-sm">Drag to Look</span>
-                  </div>
-                </div>
-                <div className="p-6 flex flex-col grow">
-                  <h3 className="font-sans font-bold text-xl text-white uppercase tracking-tight mb-1">{tour.name}</h3>
-                  <p className="text-text-secondary text-xs mb-3">{tour.type}</p>
-                  <p className="text-mad-red text-[10px] font-mono tracking-widest uppercase mt-auto">{tour.details}</p>
-                </div>
-              </motion.div>
-            ))}
+          <DemoViewer />
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-12">
             
             {/* 5. "Your venue here" slot */}
             <motion.div 
