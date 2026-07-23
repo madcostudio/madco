@@ -21,32 +21,13 @@ type NodeLink = {
   label: string;
 };
 
-type NodeFeature = {
-  t: "window" | "door" | "mirror" | "shelf" | "menuboard" | "panelwall" | "counter" | "tables" | "machines" | "plant";
-  at: number; // 0-1 across panorama width
-  w: number; // width fraction
-};
-
 type TourNode = {
   id: string;
   label: string;
   pano: string;
-  map: { x: number; y: number };
-  features: NodeFeature[];
   links: NodeLink[];
   hotspots: Hotspot[];
-  _tex?: THREE.CanvasTexture;
-};
-
-type TourPalette = {
-  floor: string;
-  ceil: string;
-  wall: string;
-  panel: string;
-  glass: string;
-  lamp: string;
-  accent: string;
-  bounce: string;
+  _tex?: THREE.Texture; // Cached texture
 };
 
 type TourData = {
@@ -54,7 +35,6 @@ type TourData = {
   name: string;
   sub: string;
   spec: string;
-  palette: TourPalette;
   nodes: TourNode[];
 };
 
@@ -66,31 +46,26 @@ const TOURS: TourData[] = [
     name: "Café Esthétique",
     sub: "Café — high-retention social layout",
     spec: "4 positions · menu hotspots",
-    palette: { floor: "#2a1e12", ceil: "#2c221a", wall: "#4a3320", panel: "#3a2515", glass: "#ff9933", lamp: "#ffffff", accent: "#ff2e2e", bounce: "#ffb84d20" },
     nodes: [
       {
-        id: "entrance", label: "Entrance", pano: "generated", map: { x: 50, y: 160 },
-        features: [{ t: "door", at: 0.5, w: 0.15 }, { t: "window", at: 0.25, w: 0.1 }, { t: "window", at: 0.75, w: 0.1 }, { t: "plant", at: 0.1, w: 0.05 }],
+        id: "entrance", label: "Entrance", pano: "/tours/cafe/01-art_studio.jpg",
         links: [{ to: "counter", yaw: 0, label: "To the counter" }],
-        hotspots: [{ yaw: 45, pitch: -5, kind: "Welcome", title: "Open Layout", text: "Bright, airy entrance designed to draw foot traffic." }]
+        hotspots: [{ yaw: 0.8, pitch: -0.1, kind: "Welcome", title: "Open Layout", text: "Bright, airy entrance designed to draw foot traffic." }]
       },
       {
-        id: "counter", label: "Counter", pano: "generated", map: { x: 50, y: 100 },
-        features: [{ t: "counter", at: 0.5, w: 0.3 }, { t: "menuboard", at: 0.5, w: 0.2 }, { t: "shelf", at: 0.8, w: 0.15 }],
-        links: [{ to: "entrance", yaw: 180, label: "Back to entrance" }, { to: "seating", yaw: 90, label: "To seating area" }],
+        id: "counter", label: "Counter", pano: "/tours/cafe/02-ballroom.jpg",
+        links: [{ to: "entrance", yaw: 3.14, label: "Back to entrance" }, { to: "seating", yaw: 1.5, label: "To seating area" }],
         hotspots: [{ yaw: 0, pitch: 0, kind: "Menu", title: "Today's menu", text: "View our current offerings and specials." }]
       },
       {
-        id: "seating", label: "Seating", pano: "generated", map: { x: 120, y: 100 },
-        features: [{ t: "tables", at: 0.3, w: 0.4 }, { t: "panelwall", at: 0.8, w: 0.2 }],
-        links: [{ to: "counter", yaw: -90, label: "Back to counter" }, { to: "window", yaw: 0, label: "To window seats" }],
-        hotspots: [{ yaw: 30, pitch: -10, kind: "Booking", title: "Reserve a table", text: "Direct integration with your reservation system." }]
+        id: "seating", label: "Seating", pano: "/tours/cafe/03-billiard_hall.jpg",
+        links: [{ to: "counter", yaw: -1.5, label: "Back to counter" }, { to: "window", yaw: 0, label: "To window seats" }],
+        hotspots: [{ yaw: 0.5, pitch: -0.2, kind: "Booking", title: "Reserve a table", text: "Direct integration with your reservation system." }]
       },
       {
-        id: "window", label: "Window Seats", pano: "generated", map: { x: 120, y: 40 },
-        features: [{ t: "window", at: 0.5, w: 0.4 }, { t: "tables", at: 0.5, w: 0.3 }],
-        links: [{ to: "seating", yaw: 180, label: "Back to seating" }],
-        hotspots: [{ yaw: 0, pitch: -5, kind: "Highlight", title: "The corner seat", text: "Our most requested spot for remote work." }]
+        id: "window", label: "Window Seats", pano: "/tours/cafe/04-artist_workshop.jpg",
+        links: [{ to: "seating", yaw: 3.14, label: "Back to seating" }],
+        hotspots: [{ yaw: 0, pitch: -0.1, kind: "Highlight", title: "The corner seat", text: "Our most requested spot for remote work." }]
       }
     ]
   },
@@ -99,31 +74,26 @@ const TOURS: TourData[] = [
     name: "The Iron Forge Gym",
     sub: "Fitness facility — spatial trust",
     spec: "4 positions · equipment tags",
-    palette: { floor: "#16181a", ceil: "#1a1c1e", wall: "#2a2d32", panel: "#202326", glass: "#4a5568", lamp: "#e2e8f0", accent: "#ff2e2e", bounce: "#4a556810" },
     nodes: [
       {
-        id: "reception", label: "Reception", pano: "generated", map: { x: 100, y: 180 },
-        features: [{ t: "door", at: 0.5, w: 0.12 }, { t: "counter", at: 0.2, w: 0.2 }],
-        links: [{ to: "weights", yaw: -45, label: "Free weights zone" }],
+        id: "reception", label: "Reception", pano: "/tours/gym/01-abandoned_bakery.jpg",
+        links: [{ to: "weights", yaw: -0.8, label: "Free weights zone" }],
         hotspots: [{ yaw: 0, pitch: 0, kind: "Trial", title: "Trial session", text: "Book a one-day pass to test the facility." }]
       },
       {
-        id: "weights", label: "Free Weights", pano: "generated", map: { x: 40, y: 120 },
-        features: [{ t: "mirror", at: 0.5, w: 0.4 }, { t: "machines", at: 0.5, w: 0.3 }],
-        links: [{ to: "reception", yaw: 135, label: "Back to reception" }, { to: "cardio", yaw: 0, label: "Cardio floor" }],
-        hotspots: [{ yaw: 0, pitch: -5, kind: "Zone", title: "Free weights zone", text: "Premium rogue equipment ready to use." }]
+        id: "weights", label: "Free Weights", pano: "/tours/gym/02-aerodynamics_workshop.jpg",
+        links: [{ to: "reception", yaw: 2.3, label: "Back to reception" }, { to: "cardio", yaw: 0, label: "Cardio floor" }],
+        hotspots: [{ yaw: 0, pitch: -0.1, kind: "Zone", title: "Free weights zone", text: "Premium rogue equipment ready to use." }]
       },
       {
-        id: "cardio", label: "Cardio Floor", pano: "generated", map: { x: 40, y: 60 },
-        features: [{ t: "machines", at: 0.3, w: 0.4 }, { t: "window", at: 0.8, w: 0.2 }],
-        links: [{ to: "weights", yaw: 180, label: "Back to free weights" }, { to: "studio", yaw: 90, label: "To studio" }],
-        hotspots: [{ yaw: -30, pitch: -5, kind: "Highlight", title: "Never crowded", text: "Spacious layout with state-of-the-art machines." }]
+        id: "cardio", label: "Cardio Floor", pano: "/tours/gym/03-autoshop_01.jpg",
+        links: [{ to: "weights", yaw: 3.14, label: "Back to free weights" }, { to: "studio", yaw: 1.5, label: "To studio" }],
+        hotspots: [{ yaw: -0.5, pitch: -0.1, kind: "Highlight", title: "Never crowded", text: "Spacious layout with state-of-the-art machines." }]
       },
       {
-        id: "studio", label: "Studio", pano: "generated", map: { x: 120, y: 60 },
-        features: [{ t: "mirror", at: 0.5, w: 0.5 }, { t: "panelwall", at: 0.1, w: 0.2 }],
-        links: [{ to: "cardio", yaw: -90, label: "Back to cardio" }],
-        hotspots: [{ yaw: 0, pitch: 5, kind: "Classes", title: "Group Classes", text: "Yoga, HIIT, and spinning held daily." }]
+        id: "studio", label: "Studio", pano: "/tours/gym/04-basement_boxing_ring.jpg",
+        links: [{ to: "cardio", yaw: -1.5, label: "Back to cardio" }],
+        hotspots: [{ yaw: 0, pitch: 0.1, kind: "Classes", title: "Group Classes", text: "Yoga, HIIT, and spinning held daily." }]
       }
     ]
   },
@@ -132,199 +102,47 @@ const TOURS: TourData[] = [
     name: "Aura Dining Room",
     sub: "Premium restaurant — atmosphere",
     spec: "4 positions · reservation links",
-    palette: { floor: "#0a0604", ceil: "#120a06", wall: "#1f110a", panel: "#140a05", glass: "#ff9933", lamp: "#ffcc88", accent: "#c8a24d", bounce: "#c8a24d15" },
     nodes: [
       {
-        id: "foyer", label: "Foyer", pano: "generated", map: { x: 100, y: 160 },
-        features: [{ t: "door", at: 0.5, w: 0.1 }, { t: "plant", at: 0.7, w: 0.05 }, { t: "panelwall", at: 0.3, w: 0.2 }],
+        id: "foyer", label: "Foyer", pano: "/tours/restaurant/01-abandoned_games_room_01.jpg",
         links: [{ to: "dining", yaw: 0, label: "Into the dining room" }],
-        hotspots: [{ yaw: 45, pitch: 0, kind: "Welcome", title: "Coat check & Host", text: "A warm welcome to Aura." }]
+        hotspots: [{ yaw: 0.8, pitch: 0, kind: "Welcome", title: "Coat check & Host", text: "A warm welcome to Aura." }]
       },
       {
-        id: "dining", label: "Dining Room", pano: "generated", map: { x: 100, y: 100 },
-        features: [{ t: "tables", at: 0.5, w: 0.6 }, { t: "window", at: 0.1, w: 0.15 }, { t: "window", at: 0.9, w: 0.15 }],
-        links: [{ to: "foyer", yaw: 180, label: "Back to foyer" }, { to: "bar", yaw: -90, label: "To the bar" }, { to: "private", yaw: 90, label: "Private dining" }],
-        hotspots: [{ yaw: 0, pitch: -10, kind: "Reservation", title: "Book this table", text: "Secure the best view in the house." }]
+        id: "dining", label: "Dining Room", pano: "/tours/restaurant/02-abandoned_games_room_02.jpg",
+        links: [{ to: "foyer", yaw: 3.14, label: "Back to foyer" }, { to: "bar", yaw: -1.5, label: "To the bar" }, { to: "private", yaw: 1.5, label: "Private dining" }],
+        hotspots: [{ yaw: 0, pitch: -0.2, kind: "Reservation", title: "Book this table", text: "Secure the best view in the house." }]
       },
       {
-        id: "bar", label: "Bar", pano: "generated", map: { x: 40, y: 100 },
-        features: [{ t: "counter", at: 0.5, w: 0.4 }, { t: "shelf", at: 0.5, w: 0.3 }],
-        links: [{ to: "dining", yaw: 90, label: "Back to dining room" }],
+        id: "bar", label: "Bar", pano: "/tours/restaurant/03-abandoned_workshop_02.jpg",
+        links: [{ to: "dining", yaw: 1.5, label: "Back to dining room" }],
         hotspots: [{ yaw: 0, pitch: 0, kind: "Menu", title: "The bar list", text: "Award-winning mixology and rare spirits." }]
       },
       {
-        id: "private", label: "Private Dining", pano: "generated", map: { x: 160, y: 100 },
-        features: [{ t: "tables", at: 0.5, w: 0.2 }, { t: "panelwall", at: 0.5, w: 0.8 }],
-        links: [{ to: "dining", yaw: -90, label: "Back to dining room" }],
-        hotspots: [{ yaw: 0, pitch: -5, kind: "Room", title: "Private dining", text: "An exclusive space for up to 12 guests." }]
+        id: "private", label: "Private Dining", pano: "/tours/restaurant/04-bank_vault.jpg",
+        links: [{ to: "dining", yaw: -1.5, label: "Back to dining room" }],
+        hotspots: [{ yaw: 0, pitch: -0.1, kind: "Room", title: "Private dining", text: "An exclusive space for up to 12 guests." }]
       }
     ]
   }
 ];
 
-// --- Procedural Generation ---
-
-function generatePanoramaTexture(node: TourNode, palette: TourPalette): THREE.CanvasTexture {
-  // To swap for real images, one would just define: pano: '/tours/banyan/01-entrance.jpg'
-  // and load it directly via THREE.TextureLoader.
-  
-  const canvas = document.createElement("canvas");
-  canvas.width = 3072;
-  canvas.height = 1536;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) return new THREE.CanvasTexture(canvas);
-
-  const w = canvas.width;
-  const h = canvas.height;
-  const ceilY = h * 0.3;
-  const floorY = h * 0.66;
-  const horizonY = h * 0.5;
-
-  // Base fills
-  ctx.fillStyle = palette.ceil; ctx.fillRect(0, 0, w, ceilY);
-  ctx.fillStyle = palette.floor; ctx.fillRect(0, floorY, w, h - floorY);
-  ctx.fillStyle = palette.wall; ctx.fillRect(0, ceilY, w, floorY - ceilY);
-
-  // Soften poles
-  const gradTop = ctx.createLinearGradient(0, 0, 0, ceilY * 0.5);
-  gradTop.addColorStop(0, "#000000"); gradTop.addColorStop(1, "transparent");
-  ctx.fillStyle = gradTop; ctx.fillRect(0, 0, w, ceilY * 0.5);
-  const gradBot = ctx.createLinearGradient(0, h, 0, h - (h - floorY) * 0.5);
-  gradBot.addColorStop(0, "#000000"); gradBot.addColorStop(1, "transparent");
-  ctx.fillStyle = gradBot; ctx.fillRect(0, h - (h - floorY) * 0.5, w, (h - floorY) * 0.5);
-
-  // Accent strip
-  ctx.fillStyle = palette.accent;
-  ctx.fillRect(0, floorY - 15, w, 8);
-
-  // Features
-  node.features.forEach(f => {
-    const fx = (f.at * w) - (f.w * w) / 2;
-    const fw = f.w * w;
-    
-    switch(f.t) {
-      case "window":
-        const wy = ceilY + 50; const wh = floorY - wy - 20;
-        const wg = ctx.createLinearGradient(0, wy, 0, wy + wh);
-        wg.addColorStop(0, palette.glass); wg.addColorStop(1, palette.wall);
-        ctx.fillStyle = wg; ctx.fillRect(fx, wy, fw, wh);
-        ctx.fillStyle = "#111"; ctx.fillRect(fx + fw/2 - 5, wy, 10, wh); // mullion
-        ctx.fillStyle = palette.bounce; ctx.fillRect(fx - fw/2, floorY, fw*2, 400); // spill
-        break;
-      case "door":
-        const dy = ceilY + 100; const dh = floorY - dy;
-        ctx.fillStyle = palette.glass; ctx.fillRect(fx, dy, fw, dh);
-        ctx.strokeStyle = "#111"; ctx.lineWidth = 20; ctx.strokeRect(fx, dy, fw, dh);
-        ctx.fillStyle = palette.bounce; ctx.fillRect(fx - fw, floorY, fw*3, 600);
-        break;
-      case "mirror":
-        const my = ceilY + 80; const mh = floorY - my - 50;
-        const mg = ctx.createLinearGradient(fx, my, fx+fw, my+mh);
-        mg.addColorStop(0, palette.panel); mg.addColorStop(0.5, palette.glass); mg.addColorStop(1, palette.panel);
-        ctx.fillStyle = mg; ctx.fillRect(fx, my, fw, mh);
-        ctx.strokeStyle = "#000"; ctx.lineWidth = 10; ctx.strokeRect(fx, my, fw, mh);
-        break;
-      case "shelf":
-        ctx.fillStyle = "#111";
-        ctx.fillRect(fx, ceilY + 100, fw, 15);
-        ctx.fillRect(fx, ceilY + 200, fw, 15);
-        ctx.fillRect(fx, ceilY + 300, fw, 15);
-        ctx.fillStyle = palette.glass;
-        for(let i=0; i<3; i++) {
-          ctx.beginPath(); ctx.arc(fx + fw/4, ceilY + 90 + i*100, 10, 0, 7); ctx.fill();
-          ctx.beginPath(); ctx.arc(fx + (fw*3)/4, ceilY + 90 + i*100, 10, 0, 7); ctx.fill();
-        }
-        break;
-      case "menuboard":
-        const mby = ceilY + 50; const mbh = 200;
-        ctx.fillStyle = "#111"; ctx.fillRect(fx, mby, fw, mbh);
-        ctx.strokeStyle = palette.lamp; ctx.lineWidth = 5; ctx.strokeRect(fx, mby, fw, mbh);
-        ctx.fillStyle = "#333"; ctx.fillRect(fx + 20, mby + 40, fw - 40, 10);
-        ctx.fillRect(fx + 20, mby + 80, fw - 40, 10);
-        break;
-      case "panelwall":
-        ctx.fillStyle = palette.panel; ctx.fillRect(fx, ceilY, fw, floorY - ceilY);
-        ctx.fillStyle = "#000";
-        for(let i=0; i<5; i++) {
-          ctx.fillRect(fx + (i+1)*(fw/6), ceilY, 5, floorY - ceilY);
-        }
-        break;
-      case "counter":
-        ctx.fillStyle = "#151515"; ctx.fillRect(fx, horizonY, fw, h - horizonY);
-        ctx.fillStyle = palette.lamp; ctx.fillRect(fx, horizonY, fw, 5); // lit top edge
-        ctx.fillStyle = palette.bounce; ctx.fillRect(fx, floorY, fw, 150); // glow pool
-        break;
-      case "tables":
-        for(let i=0; i<5; i++) {
-          const tx = fx + (fw/5)*i + (Math.random()*40 - 20);
-          const ty = floorY + 50 + (i%3)*50;
-          ctx.fillStyle = "#1a1a1a"; ctx.beginPath(); ctx.ellipse(tx, ty, 60, 20, 0, 0, 7); ctx.fill();
-          ctx.fillStyle = palette.lamp; ctx.beginPath(); ctx.arc(tx, ty-10, 5, 0, 7); ctx.fill();
-        }
-        break;
-      case "machines":
-        ctx.fillStyle = "#111";
-        for(let i=0; i<4; i++) {
-          const mx = fx + (fw/4)*i;
-          ctx.fillRect(mx + 20, horizonY - 50, 20, floorY - horizonY + 50); // upright
-          ctx.fillStyle = palette.accent; ctx.fillRect(mx + 20, horizonY, 20, 10); // red accent
-          ctx.fillStyle = "#111"; ctx.fillRect(mx, floorY - 20, 60, 40); // base
-        }
-        break;
-      case "plant":
-        ctx.fillStyle = "#0a0a0a"; ctx.fillRect(fx + fw/2 - 20, floorY - 50, 40, 80); // pot
-        ctx.fillStyle = "#1f2e1f";
-        for(let i=0; i<8; i++) {
-          ctx.beginPath(); ctx.ellipse(fx + fw/2, floorY - 80, 15, 60, (i*Math.PI)/4, 0, 7); ctx.fill();
-        }
-        break;
-    }
+// Load texture helper
+const textureLoader = new THREE.TextureLoader();
+function loadPanoTexture(url: string): Promise<THREE.Texture> {
+  return new Promise((resolve, reject) => {
+    textureLoader.load(
+      url,
+      (tex) => {
+        tex.colorSpace = THREE.SRGBColorSpace;
+        tex.minFilter = THREE.LinearFilter;
+        resolve(tex);
+      },
+      undefined,
+      reject
+    );
   });
-
-  // Pendant lamps (global)
-  for(let i=0; i<10; i++) {
-    const lx = (w/10) * i + (w/20);
-    const ly = ceilY - 100;
-    ctx.fillStyle = palette.lamp; ctx.beginPath(); ctx.arc(lx, ly, 15, 0, 7); ctx.fill();
-    const glow = ctx.createRadialGradient(lx, ly, 15, lx, ly, 150);
-    glow.addColorStop(0, palette.lamp+"60"); glow.addColorStop(1, "transparent");
-    ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(lx, ly, 150, 0, 7); ctx.fill();
-  }
-
-  // Film grain
-  const idata = ctx.getImageData(0, 0, w, h);
-  const data = idata.data;
-  for (let i = 0; i < data.length; i += 4) {
-    const val = (Math.random() - 0.5) * 12;
-    data[i] = Math.max(0, Math.min(255, data[i] + val));
-    data[i+1] = Math.max(0, Math.min(255, data[i+1] + val));
-    data[i+2] = Math.max(0, Math.min(255, data[i+2] + val));
-  }
-  ctx.putImageData(idata, 0, 0);
-
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.colorSpace = THREE.SRGBColorSpace;
-  return texture;
 }
-
-// Generate thumbnail for grid
-const thumbnailCache: Record<string, string> = {};
-function getThumbnail(tour: TourData): string {
-  if (thumbnailCache[tour.id]) return thumbnailCache[tour.id];
-  const tex = generatePanoramaTexture(tour.nodes[0], tour.palette);
-  const source = tex.image as HTMLCanvasElement;
-  const canvas = document.createElement("canvas");
-  canvas.width = 400; canvas.height = 225; // 16:9
-  const ctx = canvas.getContext("2d");
-  if (ctx) {
-    // Crop centerish
-    ctx.drawImage(source, source.width*0.25, source.height*0.3, source.width*0.5, source.height*0.4, 0, 0, 400, 225);
-    thumbnailCache[tour.id] = canvas.toDataURL("image/jpeg", 0.7);
-  }
-  tex.dispose();
-  return thumbnailCache[tour.id] || "";
-}
-
 
 // --- Viewer Component ---
 
@@ -338,7 +156,8 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
   const [openTooltip, setOpenTooltip] = useState<number | null>(null);
   
   // Transition veil
-  const [veilOpacity, setVeilOpacity] = useState(0);
+  const [veilOpacity, setVeilOpacity] = useState(1); // Start veiled while loading
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   // Markers mapped to DOM
   const [hotspotDOMs, setHotspotDOMs] = useState<({id:number, x:number, y:number, visible:boolean, leftSide:boolean} & Hotspot)[]>([]);
@@ -389,15 +208,7 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
     const geometry = new THREE.SphereGeometry(500, 64, 40);
     geometry.scale(-1, 1, 1);
     
-    // Load texture
-    if (!nodeRef.current._tex) {
-      if (nodeRef.current.pano === "generated") {
-        nodeRef.current._tex = generatePanoramaTexture(nodeRef.current, tour.palette);
-      } else {
-        nodeRef.current._tex = new THREE.TextureLoader().load(nodeRef.current.pano) as any;
-      }
-    }
-    const material = new THREE.MeshBasicMaterial({ map: nodeRef.current._tex });
+    const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
     materialRef.current = material;
 
     scene.add(new THREE.Mesh(geometry, material));
@@ -429,49 +240,56 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
       renderer.render(scene, camera);
 
       // DOM Projections
-      if (containerRef.current) {
+      if (containerRef.current && !isTransitioning) {
         const cw = containerRef.current.clientWidth;
         const ch = containerRef.current.clientHeight;
-        const hw = cw / 2; const hh = ch / 2;
         const camDir = new THREE.Vector3().subVectors(targetVec, camera.position).normalize();
 
         // Links (Floor arrows)
         const lDOMs = nodeRef.current.links.map((lk, i) => {
-          // pitch roughly -24 deg (-0.42 rad) on the floor
-          const lPhi = THREE.MathUtils.degToRad(90 - (-24));
-          const lTheta = THREE.MathUtils.degToRad(lk.yaw);
-          const v = new THREE.Vector3(
-            430 * Math.sin(lPhi) * Math.cos(lTheta),
-            430 * Math.cos(lPhi),
-            430 * Math.sin(lPhi) * Math.sin(lTheta)
-          );
-          const dot = camDir.dot(v.clone().normalize());
+          const r = 430;
+          const pitch = -0.42; // on the floor
+          const yaw = lk.yaw;
           
-          // distance to scale marker down as it approaches horizon
+          const pos = new THREE.Vector3(
+            r * Math.cos(pitch) * Math.sin(yaw),
+            r * Math.sin(pitch),
+            r * Math.cos(pitch) * Math.cos(yaw)
+          );
+          
+          const dot = camDir.dot(pos.clone().normalize());
           const scale = Math.max(0.4, Math.min(1, dot * 1.5));
           
-          v.project(camera);
-          const x = (v.x * hw) + hw;
-          const y = -(v.y * hh) + hh;
-          const visible = dot > 0 && x > -100 && x < cw + 100 && y > -100 && y < ch + 100;
+          const v = pos.clone().project(camera);
+          const behind = v.z > 1;
+          
+          const x = ((v.x + 1) / 2) * cw;
+          const y = ((-v.y + 1) / 2) * ch;
+          
+          const visible = !behind && x > -100 && x < cw + 100 && y > -100 && y < ch + 100;
           return { id: i, ...lk, x, y, visible, scale };
         });
         setLinkDOMs(lDOMs);
 
         // Hotspots (Info markers)
         const hDOMs = nodeRef.current.hotspots.map((hs, i) => {
-          const hPhi = THREE.MathUtils.degToRad(90 - hs.pitch);
-          const hTheta = THREE.MathUtils.degToRad(hs.yaw);
-          const v = new THREE.Vector3(
-            420 * Math.sin(hPhi) * Math.cos(hTheta),
-            420 * Math.cos(hPhi),
-            420 * Math.sin(hPhi) * Math.sin(hTheta)
+          const r = 420;
+          const pitch = hs.pitch;
+          const yaw = hs.yaw;
+          
+          const pos = new THREE.Vector3(
+            r * Math.cos(pitch) * Math.sin(yaw),
+            r * Math.sin(pitch),
+            r * Math.cos(pitch) * Math.cos(yaw)
           );
-          const dot = camDir.dot(v.clone().normalize());
-          v.project(camera);
-          const x = (v.x * hw) + hw;
-          const y = -(v.y * hh) + hh;
-          const visible = dot > 0 && x > -50 && x < cw + 50 && y > -50 && y < ch + 50;
+          
+          const v = pos.clone().project(camera);
+          const behind = v.z > 1;
+          
+          const x = ((v.x + 1) / 2) * cw;
+          const y = ((-v.y + 1) / 2) * ch;
+          
+          const visible = !behind && x > -50 && x < cw + 50 && y > -50 && y < ch + 50;
           const leftSide = x > cw - 280;
           return { id: i, ...hs, x, y, visible, leftSide };
         });
@@ -498,24 +316,58 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
       renderer.dispose();
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tour.id]); // Re-init on tour change
+  }, []); // Init once
 
-  // Handle Node Swap
+  // Handle Node Swap (Initial or Navigation)
   useEffect(() => {
-    if (!materialRef.current) return;
-    
-    if (!node._tex) {
-      if (node.pano === "generated") node._tex = generatePanoramaTexture(node, tour.palette);
-      else node._tex = new THREE.TextureLoader().load(node.pano) as any;
-    }
-    
-    materialRef.current.map = node._tex || null;
-    materialRef.current.needsUpdate = true;
-    setOpenTooltip(null);
-  }, [node, tour.palette]);
+    let active = true;
 
-  // Transition handler
+    async function loadNodeTexture() {
+      if (!materialRef.current) return;
+      
+      setVeilOpacity(1);
+      setIsTransitioning(true);
+      setOpenTooltip(null);
+      setLinkDOMs([]);
+      setHotspotDOMs([]);
+
+      if (!node._tex) {
+        try {
+          node._tex = await loadPanoTexture(node.pano);
+        } catch (e) {
+          console.error("Failed to load pano:", node.pano);
+        }
+      }
+      
+      if (!active) return;
+
+      const oldTex = materialRef.current.map;
+      materialRef.current.map = node._tex || null;
+      materialRef.current.needsUpdate = true;
+      
+      // Clean up old texture if it belongs to a different node, but caching means we keep them.
+      // We will just keep them in memory for instant traversal.
+
+      // Reset pitch and target FOV upon load
+      camState.current.targetLat = 0;
+      camState.current.targetFov = 75;
+
+      // Small delay to let texture upload to GPU
+      setTimeout(() => {
+        if (!active) return;
+        setVeilOpacity(0);
+        setIsTransitioning(false);
+      }, 50);
+    }
+
+    loadNodeTexture();
+
+    return () => { active = false; };
+  }, [node]);
+
+  // Transition handler for clicks
   const handleLinkClick = (targetNodeId: string) => {
+    if (isTransitioning) return;
     const targetIdx = tour.nodes.findIndex(n => n.id === targetNodeId);
     if (targetIdx === -1) return;
     
@@ -528,14 +380,13 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
     }
 
     // Dolly & Veil Transition
+    setIsTransitioning(true);
     camState.current.targetFov -= 10;
     setVeilOpacity(1);
     
     setTimeout(() => {
-      onNodeChange(targetIdx);
-      camState.current.targetFov += 10;
-      setVeilOpacity(0);
-    }, 150); // Midpoint swap
+      onNodeChange(targetIdx); // This triggers the useEffect above
+    }, 280);
   };
 
   const handleInteract = () => {
@@ -604,7 +455,7 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
   };
 
   return (
-    <div className="w-full flex flex-col font-sans">
+    <div className="w-full flex flex-col font-sans relative">
       
       {/* 360 Viewer */}
       <div 
@@ -621,21 +472,21 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
         onWheel={handleWheel}
         onKeyDown={handleKeyDown}
       >
-        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full touch-none" />
+        <canvas ref={canvasRef} className="absolute inset-0 w-full h-full touch-none" style={{ zIndex: 0 }} />
 
         {/* Transition Veil */}
         <div 
-          className="absolute inset-0 bg-black pointer-events-none z-40 transition-opacity duration-[140ms] ease-in-out"
+          className="absolute inset-0 bg-black pointer-events-none z-10 transition-opacity duration-[280ms] ease-in-out"
           style={{ opacity: veilOpacity }}
         />
 
         {/* Chrome Badges */}
-        <div className="absolute top-4 md:top-6 left-4 md:left-6 flex gap-3 z-10 pointer-events-none">
+        <div className="absolute top-4 md:top-6 left-4 md:left-6 flex gap-3 z-[11] pointer-events-none">
           <div className="bg-black/60 backdrop-blur-md text-white font-mono text-[10px] tracking-widest px-3 py-1.5 rounded-full uppercase border border-white/10">
             CONCEPT
           </div>
         </div>
-        <div className="absolute top-4 md:top-6 right-4 md:right-6 z-10 pointer-events-none">
+        <div className="absolute top-4 md:top-6 right-4 md:right-6 z-[11] pointer-events-none">
           <div className="flex items-center gap-2 bg-electric-azure/10 border border-electric-azure/30 backdrop-blur-md text-electric-azure font-mono text-[10px] tracking-widest px-3 py-1.5 rounded-full uppercase font-bold shadow-[0_0_15px_rgba(41,163,255,0.15)]">
             <span className="w-1.5 h-1.5 rounded-full bg-electric-azure animate-pulse" />
             360° LIVE
@@ -647,7 +498,7 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
           {!hasInteracted && (
             <motion.div 
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-              className="absolute inset-0 flex items-center justify-center pointer-events-none z-10"
+              className="absolute inset-0 flex items-center justify-center pointer-events-none z-[12]"
             >
               <div className="bg-black/50 backdrop-blur-sm border border-white/10 text-white font-mono text-xs uppercase tracking-widest px-6 py-3 rounded-full animate-bounce shadow-xl">
                 Drag to Look
@@ -660,7 +511,7 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
         {hotspotDOMs.map(hs => (
           <div 
             key={`hs-${hs.id}`}
-            className="absolute z-20 transition-opacity duration-200"
+            className="absolute z-[8] transition-opacity duration-200"
             style={{ left: `${hs.x}px`, top: `${hs.y}px`, opacity: hs.visible ? 1 : 0, pointerEvents: hs.visible ? "auto" : "none" }}
           >
             <button
@@ -676,7 +527,7 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9, x: hs.leftSide ? -20 : 20 }}
                   animate={{ opacity: 1, scale: 1, x: 0 }} exit={{ opacity: 0, scale: 0.9 }}
-                  className={`absolute top-1/2 -translate-y-1/2 w-48 md:w-56 p-4 rounded-xl shadow-2xl z-30 ${hs.leftSide ? 'right-full mr-6' : 'left-full ml-6'}`}
+                  className={`absolute top-1/2 -translate-y-1/2 w-48 md:w-56 p-4 rounded-xl shadow-2xl z-[9] ${hs.leftSide ? 'right-full mr-6' : 'left-full ml-6'}`}
                   style={{ backgroundColor: "rgba(18,18,20,0.82)", backdropFilter: "blur(20px)", border: "1px solid rgba(255,255,255,0.1)" }}
                   onClick={e => e.stopPropagation()}
                 >
@@ -698,7 +549,7 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
         {linkDOMs.map(lk => (
           <div 
             key={`lk-${lk.id}`}
-            className="absolute z-20 transition-all duration-100 group/link"
+            className="absolute z-[4] transition-all duration-100 group/link"
             style={{ 
               left: `${lk.x}px`, top: `${lk.y}px`, 
               opacity: lk.visible ? 1 : 0, 
@@ -713,7 +564,7 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
                 background: "radial-gradient(circle, rgba(255,46,46,0.6) 0%, rgba(255,46,46,0) 70%)",
                 boxShadow: "0 0 30px rgba(255,46,46,0.4)"
               }}
-              aria-label={`Move to ${lk.label}`}
+              aria-label={lk.label}
             >
               <div className="w-12 h-12 rounded-full border border-mad-red/50 flex items-center justify-center backdrop-blur-sm bg-black/20 group-hover/link:bg-mad-red/40 group-hover/link:border-mad-red transition-colors">
                 <ChevronUp className="w-6 h-6 text-white" />
@@ -725,47 +576,11 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
           </div>
         ))}
 
-        {/* Minimap Overlay (Desktop only) */}
-        <div className="absolute bottom-28 left-6 hidden md:block bg-black/40 backdrop-blur-md border border-white/10 rounded-xl p-4 w-48 z-10 pointer-events-none">
-          <div className="font-mono text-[9px] text-text-secondary tracking-widest uppercase mb-3">Floor Plan</div>
-          <div className="relative w-full aspect-square">
-            <svg viewBox="0 0 200 200" className="w-full h-full overflow-visible">
-              {/* Draw connections */}
-              {tour.nodes.map(n => 
-                n.links.map(lk => {
-                  const target = tour.nodes.find(tn => tn.id === lk.to);
-                  if(!target) return null;
-                  return (
-                    <line 
-                      key={`${n.id}-${target.id}`} 
-                      x1={n.map.x} y1={n.map.y} 
-                      x2={target.map.x} y2={target.map.y} 
-                      stroke="rgba(255,255,255,0.2)" strokeWidth="2" 
-                    />
-                  );
-                })
-              )}
-              {/* Draw nodes */}
-              {tour.nodes.map((n, i) => {
-                const isActive = i === activeNodeIdx;
-                return (
-                  <g key={n.id}>
-                    {isActive && <circle cx={n.map.x} cy={n.map.y} r="8" stroke="#ff2e2e" strokeWidth="1" fill="none" className="animate-ping" />}
-                    <circle 
-                      cx={n.map.x} cy={n.map.y} 
-                      r={isActive ? "5" : "4"} 
-                      fill={isActive ? "#ff2e2e" : "rgba(255,255,255,0.5)"} 
-                    />
-                  </g>
-                );
-              })}
-            </svg>
-          </div>
-        </div>
-
-        {/* Controls Bar */}
-        <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-black/90 to-transparent pointer-events-none" />
-        <div className="absolute bottom-0 inset-x-0 p-4 md:p-6 flex justify-between items-end z-10 pointer-events-none">
+        {/* Controls Bar Background */}
+        <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-black/90 to-transparent pointer-events-none z-[11]" />
+        
+        {/* Controls */}
+        <div className="absolute bottom-0 inset-x-0 p-4 md:p-6 flex justify-between items-end z-[12] pointer-events-none">
           
           <div className="flex flex-col gap-1 pointer-events-auto bg-black/40 backdrop-blur-md border border-white/10 px-4 py-2 rounded-lg">
             <div className="font-sans text-sm text-white font-bold">{node.label}</div>
@@ -818,11 +633,7 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
 // --- Main Showcase Component ---
 
 function TourCard({ tour, isActive, onClick }: { tour: TourData, isActive: boolean, onClick: () => void }) {
-  const [thumbUrl, setThumbUrl] = useState("");
-
-  useEffect(() => {
-    setThumbUrl(getThumbnail(tour));
-  }, [tour]);
+  const thumbUrl = `/tours/thumbs/${tour.id}.jpg`;
 
   return (
     <button
@@ -839,10 +650,8 @@ function TourCard({ tour, isActive, onClick }: { tour: TourData, isActive: boole
         <div className="absolute bottom-3 left-3 bg-white/90 text-black font-mono text-[9px] tracking-widest px-2 py-1 rounded uppercase font-bold z-10">
           4 POSITIONS
         </div>
-        {thumbUrl && (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={thumbUrl} alt={tour.name} className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity saturate-[1.2]" />
-        )}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={thumbUrl} alt={tour.name} className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity saturate-[1.2]" />
       </div>
       <div className="p-5 flex flex-col grow">
         <h4 className="font-sans font-bold text-base text-white uppercase tracking-tight mb-1">{tour.name}</h4>
@@ -908,6 +717,11 @@ export function SpatialDemonstrations() {
             <p className="text-text-secondary text-xs max-w-[150px]">This space is reserved for our first founding venue.</p>
           </div>
         </div>
+
+        {/* Disclaimer */}
+        <p className="mt-8 text-center text-xs text-text-secondary/70 max-w-lg mx-auto font-sans">
+          Demonstration spaces shown using stock interiors. Client tours coming soon.
+        </p>
 
       </div>
     </section>
