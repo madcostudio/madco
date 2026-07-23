@@ -556,7 +556,29 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
 // --- Main Showcase Component ---
 
 function TourCard({ tour, isActive, onClick }: { tour: TourData, isActive: boolean, onClick: () => void }) {
-  const thumbUrl = `/tours/thumbs/${tour.id}.jpg`;
+  const [thumbUrl, setThumbUrl] = useState("");
+
+  useEffect(() => {
+    const img = new window.Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = 400;
+      canvas.height = 225; // 16:9
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        // Crop the horizon: draw the middle section of the panorama
+        const srcW = img.width * 0.3; // 30% of width
+        const srcH = srcW * (225 / 400); // matching aspect ratio
+        const srcX = (img.width - srcW) / 2;
+        const srcY = (img.height - srcH) / 2;
+        
+        ctx.drawImage(img, srcX, srcY, srcW, srcH, 0, 0, 400, 225);
+        setThumbUrl(canvas.toDataURL("image/jpeg", 0.7));
+      }
+    };
+    img.src = tour.nodes[0].pano;
+  }, [tour]);
 
   return (
     <button
@@ -571,10 +593,12 @@ function TourCard({ tour, isActive, onClick }: { tour: TourData, isActive: boole
           CONCEPT
         </div>
         <div className="absolute bottom-3 left-3 bg-white/90 text-black font-mono text-[9px] tracking-widest px-2 py-1 rounded uppercase font-bold z-10">
-          4 POSITIONS
+          {tour.nodes.length} POSITIONS
         </div>
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={thumbUrl} alt={tour.name} className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity saturate-[1.2]" />
+        {thumbUrl && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={thumbUrl} alt={tour.name} className="absolute inset-0 w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity saturate-[1.2]" />
+        )}
       </div>
       <div className="p-5 flex flex-col grow">
         <h4 className="font-sans font-bold text-base text-white uppercase tracking-tight mb-1">{tour.name}</h4>
@@ -731,6 +755,11 @@ export function SpatialDemonstrations() {
             <p className="text-text-secondary text-xs max-w-[150px]">This space is reserved for our first founding venue.</p>
           </div>
         </div>
+
+        {/* Disclaimer */}
+        <p className="mt-8 text-center text-xs text-text-secondary/70 max-w-lg mx-auto font-sans">
+          Demonstration tours built with AI-generated interiors to show exactly how a Mad.co tour works. Client tours coming soon.
+        </p>
 
       </div>
     </section>
