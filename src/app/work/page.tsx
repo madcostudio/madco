@@ -7,7 +7,7 @@ import Link from "next/link";
 import { Magnetic } from "@/components/ui/Magnetic";
 import { BeforeAfter } from "@/components/ui/BeforeAfter";
 import { CompletenessMeter, CustomerDecisionMoment, HotspotDemo, DeliveryKit } from "@/components/ui/WorkVisuals";
-import { DemoViewer } from "@/components/ui/DemoViewer";
+import { SpatialDemonstrations } from "@/components/ui/DemoViewer";
 
 
 
@@ -39,38 +39,8 @@ export default function WorkPage() {
         </div>
       </section>
 
-      {/* 2. Concept Tours Array */}
-      <section className="px-6 md:px-12 xl:px-24 py-16 bg-surface-1 border-t border-white/5">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col gap-2 mb-12">
-            <h2 className="font-sans font-black text-3xl uppercase tracking-tight text-white">Spatial Demonstrations</h2>
-            <p className="text-text-secondary text-sm">Interactive panoramas. Look around.</p>
-          </div>
-          
-          <DemoViewer />
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 mt-12">
-            
-            {/* 5. "Your venue here" slot */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="bg-background border-2 border-dashed border-championship-gold/40 hover:border-championship-gold rounded-xl overflow-hidden transition-colors flex flex-col justify-center items-center text-center p-8 min-h-[350px] group cursor-pointer"
-            >
-              <div className="w-12 h-12 rounded-full border border-championship-gold/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <MapPin className="h-5 w-5 text-championship-gold" />
-              </div>
-              <h3 className="font-sans font-bold text-xl text-championship-gold uppercase tracking-tight mb-2">Reserved</h3>
-              <p className="text-text-secondary text-sm max-w-[200px]">This space is reserved for our first founding venue.</p>
-              <Link href="/contact" className="mt-6 font-mono text-xs text-white bg-white/5 hover:bg-white/10 px-4 py-2 rounded uppercase tracking-widest border border-white/10 transition-colors">
-                Claim Slot
-              </Link>
-            </motion.div>
-          </div>
-        </div>
-      </section>
+      {/* 2. Concept Tours Walkable Viewer & Grid */}
+      <SpatialDemonstrations />
 
       {/* 3. The Google Business Profile Transformation */}
       <section className="px-6 md:px-12 xl:px-24 py-24 bg-background border-t border-white/5">
