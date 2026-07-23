@@ -68,62 +68,6 @@ const TOURS: TourData[] = [
         hotspots: [{ yaw: 0, pitch: -0.1, kind: "Highlight", title: "The corner seat", text: "Our most requested spot for remote work." }]
       }
     ]
-  },
-  {
-    id: "gym",
-    name: "The Iron Forge Gym",
-    sub: "Fitness facility — spatial trust",
-    spec: "4 positions · equipment tags",
-    nodes: [
-      {
-        id: "reception", label: "Reception", pano: "/tours/gym/01-abandoned_bakery.jpg",
-        links: [{ to: "weights", yaw: -0.8, label: "Free weights zone" }],
-        hotspots: [{ yaw: 0, pitch: 0, kind: "Trial", title: "Trial session", text: "Book a one-day pass to test the facility." }]
-      },
-      {
-        id: "weights", label: "Free Weights", pano: "/tours/gym/02-aerodynamics_workshop.jpg",
-        links: [{ to: "reception", yaw: 2.3, label: "Back to reception" }, { to: "cardio", yaw: 0, label: "Cardio floor" }],
-        hotspots: [{ yaw: 0, pitch: -0.1, kind: "Zone", title: "Free weights zone", text: "Premium rogue equipment ready to use." }]
-      },
-      {
-        id: "cardio", label: "Cardio Floor", pano: "/tours/gym/03-autoshop_01.jpg",
-        links: [{ to: "weights", yaw: 3.14, label: "Back to free weights" }, { to: "studio", yaw: 1.5, label: "To studio" }],
-        hotspots: [{ yaw: -0.5, pitch: -0.1, kind: "Highlight", title: "Never crowded", text: "Spacious layout with state-of-the-art machines." }]
-      },
-      {
-        id: "studio", label: "Studio", pano: "/tours/gym/04-basement_boxing_ring.jpg",
-        links: [{ to: "cardio", yaw: -1.5, label: "Back to cardio" }],
-        hotspots: [{ yaw: 0, pitch: 0.1, kind: "Classes", title: "Group Classes", text: "Yoga, HIIT, and spinning held daily." }]
-      }
-    ]
-  },
-  {
-    id: "restaurant",
-    name: "Aura Dining Room",
-    sub: "Premium restaurant — atmosphere",
-    spec: "4 positions · reservation links",
-    nodes: [
-      {
-        id: "foyer", label: "Foyer", pano: "/tours/restaurant/01-abandoned_games_room_01.jpg",
-        links: [{ to: "dining", yaw: 0, label: "Into the dining room" }],
-        hotspots: [{ yaw: 0.8, pitch: 0, kind: "Welcome", title: "Coat check & Host", text: "A warm welcome to Aura." }]
-      },
-      {
-        id: "dining", label: "Dining Room", pano: "/tours/restaurant/02-abandoned_games_room_02.jpg",
-        links: [{ to: "foyer", yaw: 3.14, label: "Back to foyer" }, { to: "bar", yaw: -1.5, label: "To the bar" }, { to: "private", yaw: 1.5, label: "Private dining" }],
-        hotspots: [{ yaw: 0, pitch: -0.2, kind: "Reservation", title: "Book this table", text: "Secure the best view in the house." }]
-      },
-      {
-        id: "bar", label: "Bar", pano: "/tours/restaurant/03-abandoned_workshop_02.jpg",
-        links: [{ to: "dining", yaw: 1.5, label: "Back to dining room" }],
-        hotspots: [{ yaw: 0, pitch: 0, kind: "Menu", title: "The bar list", text: "Award-winning mixology and rare spirits." }]
-      },
-      {
-        id: "private", label: "Private Dining", pano: "/tours/restaurant/04-bank_vault.jpg",
-        links: [{ to: "dining", yaw: -1.5, label: "Back to dining room" }],
-        hotspots: [{ yaw: 0, pitch: -0.1, kind: "Room", title: "Private dining", text: "An exclusive space for up to 12 guests." }]
-      }
-    ]
   }
 ];
 
@@ -152,7 +96,7 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
   
   const [autoRotate, setAutoRotate] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [hasInteracted, setHasInteracted] = useState(false);
+  const userEngaged = useRef(false);
   const [openTooltip, setOpenTooltip] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -218,7 +162,7 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
     const animate = () => {
       camState.current.frameId = requestAnimationFrame(animate);
 
-      if (autoRotate && !camState.current.isUserInteracting) {
+      if (autoRotate && !userEngaged.current && !camState.current.isUserInteracting) {
         camState.current.targetLon += 0.05;
       }
 
@@ -402,8 +346,8 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
   };
 
   const handleInteract = () => {
-    if (!hasInteracted) {
-      setHasInteracted(true);
+    if (!userEngaged.current) {
+      userEngaged.current = true;
       setAutoRotate(false);
     }
   };
@@ -539,12 +483,12 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
 
         {/* Drag Hint */}
         <AnimatePresence>
-          {!hasInteracted && (
+          {!userEngaged.current && (
             <motion.div 
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               className="absolute inset-0 flex items-center justify-center pointer-events-none z-[12]"
             >
-              <div className="bg-black/50 backdrop-blur-sm border border-white/10 text-white font-mono text-xs uppercase tracking-widest px-6 py-3 rounded-full animate-bounce shadow-xl">
+              <div className="bg-black/50 backdrop-blur-sm border border-white/10 text-white font-mono text-xs uppercase tracking-widest px-6 py-3 rounded-full animate-bounce shadow-xl motion-reduce:animate-none">
                 Drag to Look
               </div>
             </motion.div>
@@ -603,15 +547,16 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
           >
             <button
               onClick={(e) => { e.stopPropagation(); handleLinkClick(lk.to); }}
-              className="absolute -translate-x-1/2 -translate-y-1/2 w-[62px] h-[62px] rounded-full flex flex-col items-center justify-center focus:outline-none focus:ring-2 focus:ring-white transition-transform hover:-translate-y-3 duration-[2.4s] ease-in-out"
+              className="absolute -translate-x-1/2 -translate-y-1/2 w-[62px] h-[62px] rounded-full flex flex-col items-center justify-center focus:outline-none focus:ring-2 focus:ring-white transition-transform motion-safe:hover:-translate-y-1 duration-300 ease-in-out"
               style={{
                 background: "radial-gradient(circle, rgba(255,46,46,0.6) 0%, rgba(255,46,46,0) 70%)",
                 boxShadow: "0 0 30px rgba(255,46,46,0.4)"
               }}
               aria-label={lk.label}
             >
-              <div className="w-12 h-12 rounded-full border border-mad-red/50 flex items-center justify-center backdrop-blur-sm bg-black/20 group-hover/link:bg-mad-red/40 group-hover/link:border-mad-red transition-colors">
-                <ChevronUp className="w-6 h-6 text-white" />
+              <div className="w-12 h-12 rounded-full border border-mad-red/50 flex items-center justify-center backdrop-blur-sm bg-black/20 group-hover/link:bg-mad-red/40 group-hover/link:border-mad-red transition-colors relative">
+                <ChevronUp className="w-6 h-6 text-white relative z-10" />
+                <div className="absolute inset-0 rounded-full border border-mad-red/30 motion-safe:animate-ping opacity-30 [animation-duration:3s]" />
               </div>
             </button>
             <div className="absolute top-8 left-1/2 -translate-x-1/2 mt-2 opacity-0 group-hover/link:opacity-100 transition-opacity bg-black/80 backdrop-blur-sm border border-white/10 px-3 py-1.5 rounded font-mono text-[10px] text-white whitespace-nowrap pointer-events-none">
@@ -764,7 +709,7 @@ export function SpatialDemonstrations() {
 
         {/* Disclaimer */}
         <p className="mt-8 text-center text-xs text-text-secondary/70 max-w-lg mx-auto font-sans">
-          Demonstration spaces shown using stock interiors. Client tours coming soon.
+          Demonstration space shown using stock interiors. Client tours coming soon.
         </p>
 
       </div>
