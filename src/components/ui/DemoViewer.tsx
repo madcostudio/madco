@@ -154,6 +154,8 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const [openTooltip, setOpenTooltip] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   
   // Transition veil
   const [veilOpacity, setVeilOpacity] = useState(1); // Start veiled while loading
@@ -208,7 +210,7 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
     const geometry = new THREE.SphereGeometry(500, 64, 40);
     geometry.scale(-1, 1, 1);
     
-    const material = new THREE.MeshBasicMaterial({ color: 0x000000 });
+    const material = new THREE.MeshBasicMaterial({ color: 0xffffff });
     materialRef.current = material;
 
     scene.add(new THREE.Mesh(geometry, material));
@@ -330,40 +332,50 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
       setOpenTooltip(null);
       setLinkDOMs([]);
       setHotspotDOMs([]);
+      setErrorMsg(null);
+      setIsLoading(true);
 
       if (!node._tex) {
         try {
           node._tex = await loadPanoTexture(node.pano);
         } catch (e) {
-          console.error("Failed to load pano:", node.pano);
+          console.error("Failed to load pano:", node.pano, e);
+          if (active) {
+            setErrorMsg("Tour image failed to load");
+            setIsLoading(false);
+          }
+          return;
         }
       }
       
       if (!active) return;
 
-      const oldTex = materialRef.current.map;
       materialRef.current.map = node._tex || null;
       materialRef.current.needsUpdate = true;
       
-      // Clean up old texture if it belongs to a different node, but caching means we keep them.
-      // We will just keep them in memory for instant traversal.
-
-      // Reset pitch and target FOV upon load
       camState.current.targetLat = 0;
       camState.current.targetFov = 75;
 
-      // Small delay to let texture upload to GPU
       setTimeout(() => {
         if (!active) return;
         setVeilOpacity(0);
         setIsTransitioning(false);
+        setIsLoading(false);
+        
+        // Preload next nodes in background
+        node.links.forEach(link => {
+          const targetNode = tour.nodes.find(n => n.id === link.to);
+          if (targetNode && !targetNode._tex) {
+            loadPanoTexture(targetNode.pano).then(tex => { targetNode._tex = tex; }).catch(() => {});
+          }
+        });
       }, 50);
     }
 
     loadNodeTexture();
 
     return () => { active = false; };
-  }, [node]);
+  }, [node, tour.nodes]);
 
   // Transition handler for clicks
   const handleLinkClick = (targetNodeId: string) => {
@@ -492,6 +504,38 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
             360° LIVE
           </div>
         </div>
+
+        {/* Error overlay */}
+        <AnimatePresence>
+          {errorMsg && (
+            <motion.div 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-md z-[20]"
+            >
+              <div className="flex flex-col items-center gap-4 text-center p-6">
+                <div className="w-12 h-12 rounded-full border border-mad-red flex items-center justify-center bg-mad-red/20 text-mad-red">
+                  <X className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-sans font-bold text-white text-lg">{errorMsg}</h3>
+                  <p className="text-text-secondary text-sm mt-1">Please refresh the page or try another space.</p>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Loading Spinner */}
+        <AnimatePresence>
+          {isLoading && !errorMsg && (
+            <motion.div 
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="absolute inset-0 flex items-center justify-center pointer-events-none z-[19]"
+            >
+              <div className="w-8 h-8 rounded-full border-2 border-white/10 border-t-mad-red animate-spin" />
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Drag Hint */}
         <AnimatePresence>
