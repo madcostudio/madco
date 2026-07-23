@@ -153,7 +153,7 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
         setLinkDOMs(lDOMs);
 
         // Hotspots (Info markers)
-        const hDOMs = nodeRef.current.hotspots.map((hs, i) => {
+        const hDOMs = (nodeRef.current.hotspots || []).map((hs, i) => {
           const r = 420;
           const pitch = hs.pitch;
           const yaw = hs.yaw;
@@ -622,96 +622,6 @@ export function SpatialDemonstrations() {
     viewerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
 
-  if (TOURS.length === 0) {
-    return (
-      <section className="px-6 md:px-12 xl:px-24 py-16 bg-surface-1 border-t border-white/5" ref={viewerRef}>
-        <div className="max-w-7xl mx-auto">
-          {/* Header */}
-          <div className="flex flex-col gap-3 mb-12">
-            <span className="font-mono text-xs tracking-widest text-mad-red uppercase">// SPATIAL DEMONSTRATIONS</span>
-            <h2 className="font-sans font-black text-4xl md:text-5xl uppercase tracking-tighter text-white">Walk the space.</h2>
-            <p className="text-text-secondary text-sm md:text-base max-w-2xl leading-relaxed italic">
-              Our first client tour is being captured in Mangalore this month. It will live here — a full walkthrough you can step through, position by position, exactly as it appears on Google.
-            </p>
-          </div>
-
-          {/* Cards Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            {/* Card 1: In Production */}
-            <div className="bg-[rgba(255,46,46,0.03)] border-2 border-dashed border-mad-red/30 rounded-xl overflow-hidden flex flex-col justify-center items-center text-center p-8 min-h-[300px]">
-              <div className="w-12 h-12 rounded-full border border-mad-red/50 flex items-center justify-center mb-4 text-mad-red bg-mad-red/10">
-                <Camera className="h-5 w-5" />
-              </div>
-              <h3 className="font-sans font-bold text-xl text-mad-red uppercase tracking-tight mb-3">In Production</h3>
-              <p className="text-text-secondary text-sm max-w-[260px] leading-relaxed mb-6">
-                Our first venue walkthrough is being shot now. Check back shortly — or book a call and yours could be the one we publish.
-              </p>
-              <div className="mt-auto bg-mad-red/10 border border-mad-red/20 px-3 py-1.5 rounded text-[10px] font-mono tracking-widest uppercase text-mad-red font-bold">
-                Capture In Progress
-              </div>
-            </div>
-
-            {/* Card 2: Reserved */}
-            <div className="bg-background border-2 border-dashed border-championship-gold/40 hover:border-championship-gold rounded-xl overflow-hidden transition-colors flex flex-col justify-center items-center text-center p-8 min-h-[300px] group">
-              <div className="w-12 h-12 rounded-full border border-championship-gold/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                <MapPin className="h-5 w-5 text-championship-gold" />
-              </div>
-              <h3 className="font-sans font-bold text-xl text-championship-gold uppercase tracking-tight mb-2">Reserved</h3>
-              <p className="text-text-secondary text-sm max-w-[200px]">This space is reserved for our first founding venue.</p>
-              <a href="/contact" className="mt-6 font-mono text-[11px] text-white bg-white/5 hover:bg-white/10 px-6 py-2.5 rounded uppercase tracking-widest border border-white/10 transition-colors">
-                Claim Slot
-              </a>
-            </div>
-          </div>
-
-          <p className="text-center text-xs text-text-secondary/70 font-sans mb-16">
-            Client tours coming soon.
-          </p>
-
-          {/* What you actually receive */}
-          <div className="pt-16 border-t border-white/5">
-            <h3 className="font-sans font-bold text-xl text-white mb-8 text-center">What you actually receive</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              
-              <div className="bg-surface-2 border border-white/5 p-6 rounded-xl">
-                <div className="text-mad-red mb-4">
-                  <Route className="h-6 w-6" />
-                </div>
-                <h4 className="font-sans font-bold text-white text-base mb-2">A walkable tour</h4>
-                <p className="text-text-secondary text-sm leading-relaxed">8–10 positions through your space, published to Google.</p>
-              </div>
-
-              <div className="bg-surface-2 border border-white/5 p-6 rounded-xl">
-                <div className="text-mad-red mb-4">
-                  <ImageIcon className="h-6 w-6" />
-                </div>
-                <h4 className="font-sans font-bold text-white text-base mb-2">Edited photography</h4>
-                <p className="text-text-secondary text-sm leading-relaxed">Professionally graded stills for your listing and socials.</p>
-              </div>
-
-              <div className="bg-surface-2 border border-white/5 p-6 rounded-xl">
-                <div className="text-mad-red mb-4">
-                  <QrCode className="h-6 w-6" />
-                </div>
-                <h4 className="font-sans font-bold text-white text-base mb-2">A printable QR code</h4>
-                <p className="text-text-secondary text-sm leading-relaxed">For your entrance, menus and receipts.</p>
-              </div>
-
-              <div className="bg-surface-2 border border-white/5 p-6 rounded-xl">
-                <div className="text-mad-red mb-4">
-                  <MonitorSmartphone className="h-6 w-6" />
-                </div>
-                <h4 className="font-sans font-bold text-white text-base mb-2">An optimised profile</h4>
-                <p className="text-text-secondary text-sm leading-relaxed">Hours, category, description and photos, all current.</p>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-      </section>
-    );
-  }
 
   return (
     <section className="px-6 md:px-12 xl:px-24 py-16 bg-surface-1 border-t border-white/5" ref={viewerRef}>

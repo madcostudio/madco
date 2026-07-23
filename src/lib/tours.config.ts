@@ -1,8 +1,8 @@
-// tours.config.ts
-//
-// Panorama requirements: 
-// Equirectangular JPG, 2:1 ratio, max 4096×2048, ~80% quality, under ~1.5MB, 
-// stored in /public/tours/{venue}/
+export type NodeLink = {
+  to: string;
+  yaw: number;
+  label: string;
+};
 
 export type Hotspot = {
   yaw: number;
@@ -12,19 +12,13 @@ export type Hotspot = {
   text: string;
 };
 
-export type NodeLink = {
-  to: string; // id of target node
-  yaw: number;
-  label: string;
-};
-
 export type TourNode = {
   id: string;
   label: string;
   pano: string;
   links: NodeLink[];
-  hotspots: Hotspot[];
-  _tex?: any; // Cached THREE.Texture
+  hotspots?: Hotspot[];
+  _tex?: any; // To hold the Three.js texture
 };
 
 export type TourData = {
