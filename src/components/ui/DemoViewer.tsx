@@ -3,73 +3,8 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import * as THREE from "three";
 import { motion, AnimatePresence } from "framer-motion";
-import { Expand, RotateCcw, X, Info, MapPin, ChevronUp, ChevronLeft, ChevronRight } from "lucide-react";
-
-// --- Types ---
-
-type Hotspot = {
-  yaw: number;
-  pitch: number;
-  kind: string;
-  title: string;
-  text: string;
-};
-
-type NodeLink = {
-  to: string; // id of target node
-  yaw: number;
-  label: string;
-};
-
-type TourNode = {
-  id: string;
-  label: string;
-  pano: string;
-  links: NodeLink[];
-  hotspots: Hotspot[];
-  _tex?: THREE.Texture; // Cached texture
-};
-
-type TourData = {
-  id: string;
-  name: string;
-  sub: string;
-  spec: string;
-  nodes: TourNode[];
-};
-
-// --- Data Models ---
-
-const TOURS: TourData[] = [
-  {
-    id: "cafe",
-    name: "Café Esthétique",
-    sub: "Café — high-retention social layout",
-    spec: "4 positions · menu hotspots",
-    nodes: [
-      {
-        id: "entrance", label: "Entrance", pano: "/tours/cafe/01-art_studio.jpg",
-        links: [{ to: "counter", yaw: 0, label: "To the counter" }],
-        hotspots: [{ yaw: 0.8, pitch: -0.1, kind: "Welcome", title: "Open Layout", text: "Bright, airy entrance designed to draw foot traffic." }]
-      },
-      {
-        id: "counter", label: "Counter", pano: "/tours/cafe/02-ballroom.jpg",
-        links: [{ to: "entrance", yaw: 3.14, label: "Back to entrance" }, { to: "seating", yaw: 1.5, label: "To seating area" }],
-        hotspots: [{ yaw: 0, pitch: 0, kind: "Menu", title: "Today's menu", text: "View our current offerings and specials." }]
-      },
-      {
-        id: "seating", label: "Seating", pano: "/tours/cafe/03-billiard_hall.jpg",
-        links: [{ to: "counter", yaw: -1.5, label: "Back to counter" }, { to: "window", yaw: 0, label: "To window seats" }],
-        hotspots: [{ yaw: 0.5, pitch: -0.2, kind: "Booking", title: "Reserve a table", text: "Direct integration with your reservation system." }]
-      },
-      {
-        id: "window", label: "Window Seats", pano: "/tours/cafe/04-artist_workshop.jpg",
-        links: [{ to: "seating", yaw: 3.14, label: "Back to seating" }],
-        hotspots: [{ yaw: 0, pitch: -0.1, kind: "Highlight", title: "The corner seat", text: "Our most requested spot for remote work." }]
-      }
-    ]
-  }
-];
+import { Expand, RotateCcw, X, Info, MapPin, ChevronUp, ChevronLeft, ChevronRight, Camera, Route, Image as ImageIcon, QrCode, MonitorSmartphone } from "lucide-react";
+import { TOURS, TourData, Hotspot, NodeLink } from "@/lib/tours.config";
 
 // Load texture helper
 const textureLoader = new THREE.TextureLoader();
@@ -96,7 +31,7 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
   
   const [autoRotate, setAutoRotate] = useState(true);
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const userEngaged = useRef(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
   const [openTooltip, setOpenTooltip] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -162,7 +97,7 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
     const animate = () => {
       camState.current.frameId = requestAnimationFrame(animate);
 
-      if (autoRotate && !userEngaged.current && !camState.current.isUserInteracting) {
+      if (autoRotate && !camState.current.isUserInteracting) {
         camState.current.targetLon += 0.05;
       }
 
@@ -346,8 +281,8 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
   };
 
   const handleInteract = () => {
-    if (!userEngaged.current) {
-      userEngaged.current = true;
+    if (!hasInteracted) {
+      setHasInteracted(true);
       setAutoRotate(false);
     }
   };
@@ -483,12 +418,12 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
 
         {/* Drag Hint */}
         <AnimatePresence>
-          {!userEngaged.current && (
+          {!hasInteracted && (
             <motion.div 
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               className="absolute inset-0 flex items-center justify-center pointer-events-none z-[12]"
             >
-              <div className="bg-black/50 backdrop-blur-sm border border-white/10 text-white font-mono text-xs uppercase tracking-widest px-6 py-3 rounded-full animate-bounce shadow-xl motion-reduce:animate-none">
+              <div className="bg-black/50 backdrop-blur-sm border border-white/10 text-white font-mono text-xs uppercase tracking-widest px-6 py-3 rounded-full animate-bounce shadow-xl">
                 Drag to Look
               </div>
             </motion.div>
@@ -547,16 +482,15 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
           >
             <button
               onClick={(e) => { e.stopPropagation(); handleLinkClick(lk.to); }}
-              className="absolute -translate-x-1/2 -translate-y-1/2 w-[62px] h-[62px] rounded-full flex flex-col items-center justify-center focus:outline-none focus:ring-2 focus:ring-white transition-transform motion-safe:hover:-translate-y-1 duration-300 ease-in-out"
+              className="absolute -translate-x-1/2 -translate-y-1/2 w-[62px] h-[62px] rounded-full flex flex-col items-center justify-center focus:outline-none focus:ring-2 focus:ring-white transition-transform hover:-translate-y-3 duration-[2.4s] ease-in-out"
               style={{
                 background: "radial-gradient(circle, rgba(255,46,46,0.6) 0%, rgba(255,46,46,0) 70%)",
                 boxShadow: "0 0 30px rgba(255,46,46,0.4)"
               }}
               aria-label={lk.label}
             >
-              <div className="w-12 h-12 rounded-full border border-mad-red/50 flex items-center justify-center backdrop-blur-sm bg-black/20 group-hover/link:bg-mad-red/40 group-hover/link:border-mad-red transition-colors relative">
-                <ChevronUp className="w-6 h-6 text-white relative z-10" />
-                <div className="absolute inset-0 rounded-full border border-mad-red/30 motion-safe:animate-ping opacity-30 [animation-duration:3s]" />
+              <div className="w-12 h-12 rounded-full border border-mad-red/50 flex items-center justify-center backdrop-blur-sm bg-black/20 group-hover/link:bg-mad-red/40 group-hover/link:border-mad-red transition-colors">
+                <ChevronUp className="w-6 h-6 text-white" />
               </div>
             </button>
             <div className="absolute top-8 left-1/2 -translate-x-1/2 mt-2 opacity-0 group-hover/link:opacity-100 transition-opacity bg-black/80 backdrop-blur-sm border border-white/10 px-3 py-1.5 rounded font-mono text-[10px] text-white whitespace-nowrap pointer-events-none">
@@ -652,7 +586,7 @@ function TourCard({ tour, isActive, onClick }: { tour: TourData, isActive: boole
 }
 
 export function SpatialDemonstrations() {
-  const [activeTourId, setActiveTourId] = useState<string>(TOURS[0].id);
+  const [activeTourId, setActiveTourId] = useState<string>(TOURS[0]?.id || "");
   const [activeNodeIdx, setActiveNodeIdx] = useState(0);
   const viewerRef = useRef<HTMLDivElement>(null);
 
@@ -663,6 +597,97 @@ export function SpatialDemonstrations() {
     setActiveNodeIdx(0);
     viewerRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   };
+
+  if (TOURS.length === 0) {
+    return (
+      <section className="px-6 md:px-12 xl:px-24 py-16 bg-surface-1 border-t border-white/5" ref={viewerRef}>
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <div className="flex flex-col gap-3 mb-12">
+            <span className="font-mono text-xs tracking-widest text-mad-red uppercase">// SPATIAL DEMONSTRATIONS</span>
+            <h2 className="font-sans font-black text-4xl md:text-5xl uppercase tracking-tighter text-white">Walk the space.</h2>
+            <p className="text-text-secondary text-sm md:text-base max-w-2xl leading-relaxed italic">
+              Our first client tour is being captured in Mangalore this month. It will live here — a full walkthrough you can step through, position by position, exactly as it appears on Google.
+            </p>
+          </div>
+
+          {/* Cards Row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            {/* Card 1: In Production */}
+            <div className="bg-[rgba(255,46,46,0.03)] border-2 border-dashed border-mad-red/30 rounded-xl overflow-hidden flex flex-col justify-center items-center text-center p-8 min-h-[300px]">
+              <div className="w-12 h-12 rounded-full border border-mad-red/50 flex items-center justify-center mb-4 text-mad-red bg-mad-red/10">
+                <Camera className="h-5 w-5" />
+              </div>
+              <h3 className="font-sans font-bold text-xl text-mad-red uppercase tracking-tight mb-3">In Production</h3>
+              <p className="text-text-secondary text-sm max-w-[260px] leading-relaxed mb-6">
+                Our first venue walkthrough is being shot now. Check back shortly — or book a call and yours could be the one we publish.
+              </p>
+              <div className="mt-auto bg-mad-red/10 border border-mad-red/20 px-3 py-1.5 rounded text-[10px] font-mono tracking-widest uppercase text-mad-red font-bold">
+                Capture In Progress
+              </div>
+            </div>
+
+            {/* Card 2: Reserved */}
+            <div className="bg-background border-2 border-dashed border-championship-gold/40 hover:border-championship-gold rounded-xl overflow-hidden transition-colors flex flex-col justify-center items-center text-center p-8 min-h-[300px] group">
+              <div className="w-12 h-12 rounded-full border border-championship-gold/30 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                <MapPin className="h-5 w-5 text-championship-gold" />
+              </div>
+              <h3 className="font-sans font-bold text-xl text-championship-gold uppercase tracking-tight mb-2">Reserved</h3>
+              <p className="text-text-secondary text-sm max-w-[200px]">This space is reserved for our first founding venue.</p>
+              <a href="/contact" className="mt-6 font-mono text-[11px] text-white bg-white/5 hover:bg-white/10 px-6 py-2.5 rounded uppercase tracking-widest border border-white/10 transition-colors">
+                Claim Slot
+              </a>
+            </div>
+          </div>
+
+          <p className="text-center text-xs text-text-secondary/70 font-sans mb-16">
+            Client tours coming soon.
+          </p>
+
+          {/* What you actually receive */}
+          <div className="pt-16 border-t border-white/5">
+            <h3 className="font-sans font-bold text-xl text-white mb-8 text-center">What you actually receive</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              
+              <div className="bg-surface-2 border border-white/5 p-6 rounded-xl">
+                <div className="text-mad-red mb-4">
+                  <Route className="h-6 w-6" />
+                </div>
+                <h4 className="font-sans font-bold text-white text-base mb-2">A walkable tour</h4>
+                <p className="text-text-secondary text-sm leading-relaxed">8–10 positions through your space, published to Google.</p>
+              </div>
+
+              <div className="bg-surface-2 border border-white/5 p-6 rounded-xl">
+                <div className="text-mad-red mb-4">
+                  <ImageIcon className="h-6 w-6" />
+                </div>
+                <h4 className="font-sans font-bold text-white text-base mb-2">Edited photography</h4>
+                <p className="text-text-secondary text-sm leading-relaxed">Professionally graded stills for your listing and socials.</p>
+              </div>
+
+              <div className="bg-surface-2 border border-white/5 p-6 rounded-xl">
+                <div className="text-mad-red mb-4">
+                  <QrCode className="h-6 w-6" />
+                </div>
+                <h4 className="font-sans font-bold text-white text-base mb-2">A printable QR code</h4>
+                <p className="text-text-secondary text-sm leading-relaxed">For your entrance, menus and receipts.</p>
+              </div>
+
+              <div className="bg-surface-2 border border-white/5 p-6 rounded-xl">
+                <div className="text-mad-red mb-4">
+                  <MonitorSmartphone className="h-6 w-6" />
+                </div>
+                <h4 className="font-sans font-bold text-white text-base mb-2">An optimised profile</h4>
+                <p className="text-text-secondary text-sm leading-relaxed">Hours, category, description and photos, all current.</p>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="px-6 md:px-12 xl:px-24 py-16 bg-surface-1 border-t border-white/5" ref={viewerRef}>
@@ -678,7 +703,7 @@ export function SpatialDemonstrations() {
         </div>
         
         {/* Viewer */}
-        <Viewer tour={activeTour} activeNodeIdx={activeNodeIdx} onNodeChange={setActiveNodeIdx} />
+        {activeTour && <Viewer tour={activeTour} activeNodeIdx={activeNodeIdx} onNodeChange={setActiveNodeIdx} />}
         
         {/* Grid Header */}
         <div className="mt-16 mb-6">
@@ -706,11 +731,6 @@ export function SpatialDemonstrations() {
             <p className="text-text-secondary text-xs max-w-[150px]">This space is reserved for our first founding venue.</p>
           </div>
         </div>
-
-        {/* Disclaimer */}
-        <p className="mt-8 text-center text-xs text-text-secondary/70 max-w-lg mx-auto font-sans">
-          Demonstration space shown using stock interiors. Client tours coming soon.
-        </p>
 
       </div>
     </section>
