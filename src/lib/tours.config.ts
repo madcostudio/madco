@@ -27,6 +27,7 @@ export type TourData = {
   sub: string;
   spec: string;
   nodes: TourNode[];
+  googleMapsUrl?: string;
 };
 
 export const TOURS: TourData[] = [

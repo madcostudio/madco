@@ -9,6 +9,7 @@ import { Logo } from "@/components/ui/Logo";
 import { ApertureTransition } from "@/components/ui/ApertureTransition";
 import Link from "next/link";
 import NavigationWrapper from "@/components/ui/NavigationWrapper";
+import { MobileNav } from "@/components/ui/MobileNav";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -78,15 +79,18 @@ export default function RootLayout({
               </nav>
 
               {/* Navigation Action */}
-              <div>
-                <Magnetic>
-                  <Link 
-                    href="/contact" 
-                    className="px-4 py-2 border border-white/10 hover:border-mad-red bg-surface-2 hover:bg-mad-red text-white text-xs font-mono tracking-widest uppercase transition-all duration-300 rounded cursor-pointer"
-                  >
-                    Book Call
-                  </Link>
-                </Magnetic>
+              <div className="flex items-center gap-4">
+                <div className="hidden md:block">
+                  <Magnetic>
+                    <Link 
+                      href="/contact" 
+                      className="px-4 py-2 border border-white/10 hover:border-mad-red bg-surface-2 hover:bg-mad-red text-white text-xs font-mono tracking-widest uppercase transition-all duration-300 rounded cursor-pointer"
+                    >
+                      Book Call
+                    </Link>
+                  </Magnetic>
+                </div>
+                <MobileNav />
               </div>
             </header>
           }

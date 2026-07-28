@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import * as THREE from "three";
 import { motion, AnimatePresence } from "framer-motion";
-import { Expand, RotateCcw, X, Info, MapPin, ChevronUp, ChevronLeft, ChevronRight, Camera, Route, Image as ImageIcon, QrCode, MonitorSmartphone } from "lucide-react";
+import { Expand, RotateCcw, X, Info, MapPin, ChevronUp, ChevronLeft, ChevronRight, Camera, Route, Image as ImageIcon, QrCode, MonitorSmartphone, Plus, Minus, ExternalLink, Compass, Coffee, Utensils, Dumbbell, Scissors, Stethoscope, Building, Store, PartyPopper, Briefcase, Home } from "lucide-react";
 import { TOURS, TourData, Hotspot, NodeLink } from "@/lib/tours.config";
 
 // Load texture helper
@@ -371,16 +371,33 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
           style={{ opacity: veilOpacity }}
         />
 
-        {/* Chrome Badges */}
-        <div className="absolute top-4 md:top-6 left-4 md:left-6 flex gap-3 z-[11] pointer-events-none">
-          <div className="bg-black/60 backdrop-blur-md text-white font-mono text-[10px] tracking-widest px-3 py-1.5 rounded-full uppercase border border-white/10">
-            CONCEPT
+        {/* Top-Left Overlay Card (Google Maps Style) */}
+        <div className="absolute top-4 md:top-6 left-4 md:left-6 z-[11] flex flex-col gap-2">
+          <div className="bg-white/90 backdrop-blur-md border border-white/20 p-4 rounded-lg shadow-lg flex flex-col gap-1 w-64 pointer-events-auto">
+            <h3 className="font-sans font-bold text-black text-lg leading-tight">{tour.name}</h3>
+            <p className="font-sans text-xs text-black/60 mb-1">{tour.sub}</p>
+            <div className="relative group/tooltip inline-block mt-1">
+              <a 
+                href={tour.googleMapsUrl || "#"} 
+                className={`flex items-center gap-1 font-sans text-xs font-semibold ${tour.googleMapsUrl ? 'text-electric-azure hover:underline' : 'text-black/40 cursor-not-allowed'}`}
+                onClick={(e) => { if (!tour.googleMapsUrl) e.preventDefault(); }}
+              >
+                View on Google Maps <ExternalLink className="w-3 h-3" />
+              </a>
+              {!tour.googleMapsUrl && (
+                <div className="absolute top-full left-0 mt-2 w-48 p-2 bg-black text-white text-[10px] rounded shadow-xl opacity-0 group-hover/tooltip:opacity-100 pointer-events-none transition-opacity z-50">
+                  This is a demo. Client tours link directly to their Google Maps profile.
+                </div>
+              )}
+            </div>
           </div>
         </div>
+
+        {/* Top-Right DEMO Tag */}
         <div className="absolute top-4 md:top-6 right-4 md:right-6 z-[11] pointer-events-none">
-          <div className="flex items-center gap-2 bg-electric-azure/10 border border-electric-azure/30 backdrop-blur-md text-electric-azure font-mono text-[10px] tracking-widest px-3 py-1.5 rounded-full uppercase font-bold shadow-[0_0_15px_rgba(41,163,255,0.15)]">
-            <span className="w-1.5 h-1.5 rounded-full bg-electric-azure animate-pulse" />
-            360° LIVE
+          <div className="flex items-center gap-2 bg-black/60 backdrop-blur-md border border-championship-gold/30 text-championship-gold font-mono text-[10px] tracking-widest px-3 py-1.5 rounded-full uppercase font-bold shadow-[0_0_15px_rgba(212,175,55,0.15)]">
+            <span className="w-1.5 h-1.5 rounded-full bg-championship-gold animate-pulse" />
+            DEMONSTRATION
           </div>
         </div>
 
@@ -499,44 +516,62 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
           </div>
         ))}
 
-        {/* Controls Bar Background */}
-        <div className="absolute bottom-0 inset-x-0 h-24 bg-gradient-to-t from-black/90 to-transparent pointer-events-none z-[11]" />
-        
-        {/* Controls */}
-        <div className="absolute bottom-0 inset-x-0 p-4 md:p-6 flex justify-between items-end z-[12] pointer-events-none">
+        {/* Bottom Bar (Location Info & Vertical Controls) */}
+        <div className="absolute bottom-4 md:bottom-6 left-4 md:left-6 right-4 md:right-6 flex justify-between items-end z-[12] pointer-events-none">
           
-          <div className="flex flex-col gap-1 pointer-events-auto bg-black/40 backdrop-blur-md border border-white/10 px-4 py-2 rounded-lg">
-            <div className="font-sans text-sm text-white font-bold">{node.label}</div>
-            <div className="font-mono text-[10px] text-mad-red uppercase tracking-widest">
+          {/* Bottom Left: Position Info */}
+          <div className="flex flex-col gap-1 pointer-events-auto bg-black/60 backdrop-blur-md border border-white/10 px-4 py-2 rounded-lg shadow-lg">
+            <div className="flex items-center gap-2">
+              <MapPin className="w-3 h-3 text-electric-azure" />
+              <div className="font-sans text-sm text-white font-bold">{node.label}</div>
+            </div>
+            <div className="font-mono text-[9px] text-white/50 uppercase tracking-widest ml-5">
               Position {activeNodeIdx + 1} of {tour.nodes.length}
             </div>
           </div>
 
-          <div className="flex gap-2 pointer-events-auto">
-            <button onClick={() => setAutoRotate(!autoRotate)} className={`p-2 rounded-md transition-colors border ${autoRotate ? 'bg-white/10 border-white/20 text-white' : 'bg-black/40 border-white/10 text-white/50 hover:bg-white/10 hover:text-white'}`} aria-label="Toggle auto-rotate">
-              <RotateCcw className={`w-4 h-4 ${autoRotate ? 'animate-spin-slow' : ''}`} style={{ animationDuration: '4s' }} />
+          {/* Bottom Right: Google-Style Vertical Controls */}
+          <div className="flex flex-col gap-2 pointer-events-auto">
+            {/* Compass / Auto-rotate */}
+            <button 
+              onClick={() => setAutoRotate(!autoRotate)} 
+              className={`w-10 h-10 flex items-center justify-center rounded bg-black/80 backdrop-blur-md border border-white/10 transition-colors shadow-lg group ${autoRotate ? 'text-electric-azure border-electric-azure/30' : 'text-white/70 hover:text-electric-azure hover:border-electric-azure/30'}`}
+              aria-label="Toggle auto-rotate"
+              title="Auto-rotate"
+            >
+              <Compass className={`w-5 h-5 transition-transform duration-[3s] linear ${autoRotate ? 'animate-spin' : ''}`} />
             </button>
-            <div className="flex bg-black/40 border border-white/10 rounded-md overflow-hidden">
+            
+            {/* Zoom Stack */}
+            <div className="flex flex-col bg-black/80 backdrop-blur-md border border-white/10 rounded shadow-lg overflow-hidden">
               <button 
-                onClick={() => handleLinkClick(activeNodeIdx > 0 ? tour.nodes[activeNodeIdx-1].id : tour.nodes[tour.nodes.length-1].id)}
-                className="p-2 text-white/70 hover:bg-white/10 hover:text-white transition-colors border-r border-white/10"
-                aria-label="Previous position"
+                onClick={() => { camState.current.targetFov = Math.max(40, camState.current.targetFov - 15); handleInteract(); }}
+                className="w-10 h-10 flex items-center justify-center text-white/70 hover:text-electric-azure hover:bg-white/5 transition-colors border-b border-white/10"
+                aria-label="Zoom in"
+                title="Zoom in"
               >
-                <ChevronLeft className="w-4 h-4" />
+                <Plus className="w-5 h-5" />
               </button>
               <button 
-                onClick={() => handleLinkClick(activeNodeIdx < tour.nodes.length-1 ? tour.nodes[activeNodeIdx+1].id : tour.nodes[0].id)}
-                className="p-2 text-white/70 hover:bg-white/10 hover:text-white transition-colors"
-                aria-label="Next position"
+                onClick={() => { camState.current.targetFov = Math.min(92, camState.current.targetFov + 15); handleInteract(); }}
+                className="w-10 h-10 flex items-center justify-center text-white/70 hover:text-electric-azure hover:bg-white/5 transition-colors"
+                aria-label="Zoom out"
+                title="Zoom out"
               >
-                <ChevronRight className="w-4 h-4" />
+                <Minus className="w-5 h-5" />
               </button>
             </div>
-            <button onClick={() => { if(!document.fullscreenElement) { containerRef.current?.requestFullscreen(); setIsFullscreen(true); } else { document.exitFullscreen(); setIsFullscreen(false); } }} className="p-2 bg-black/40 border border-white/10 text-white/70 hover:bg-white/10 hover:text-white rounded-md transition-colors" aria-label="Fullscreen">
-              <Expand className="w-4 h-4" />
+
+            {/* Fullscreen */}
+            <button 
+              onClick={() => { if(!document.fullscreenElement) { containerRef.current?.requestFullscreen(); setIsFullscreen(true); } else { document.exitFullscreen(); setIsFullscreen(false); } }} 
+              className="w-10 h-10 flex items-center justify-center rounded bg-black/80 backdrop-blur-md border border-white/10 text-white/70 hover:text-electric-azure hover:border-electric-azure/30 transition-colors shadow-lg"
+              aria-label="Toggle fullscreen"
+              title="Toggle fullscreen"
+            >
+              <Expand className="w-5 h-5" />
             </button>
           </div>
-
         </div>
       </div>
 
@@ -639,6 +674,31 @@ export function SpatialDemonstrations() {
         {/* Viewer */}
         {activeTour && <Viewer tour={activeTour} activeNodeIdx={activeNodeIdx} onNodeChange={setActiveNodeIdx} />}
         
+        {/* Category Grid */}
+        <div className="mt-16 mb-6">
+          <h3 className="font-sans font-bold text-xl text-white uppercase tracking-tight">Spaces we build for</h3>
+          <p className="text-text-secondary text-sm">Industries where spatial presence drives revenue.</p>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
+          {[
+            { icon: Coffee, label: "Cafés" },
+            { icon: Utensils, label: "Restaurants" },
+            { icon: Dumbbell, label: "Gyms & Studios" },
+            { icon: Scissors, label: "Salons & Spas" },
+            { icon: Stethoscope, label: "Clinics" },
+            { icon: Building, label: "Hotels & Resorts" },
+            { icon: Store, label: "Boutiques & Showrooms" },
+            { icon: PartyPopper, label: "Banquet Halls" },
+            { icon: Briefcase, label: "Co-working" },
+            { icon: Home, label: "Real Estate" }
+          ].map((cat, idx) => (
+            <div key={idx} className="flex flex-col items-center justify-center p-6 bg-surface-2 border border-white/5 rounded-xl hover:border-mad-red hover:bg-mad-red/5 transition-all group cursor-default">
+              <cat.icon className="w-8 h-8 text-mad-red mb-3 group-hover:scale-110 transition-transform" strokeWidth={1.5} />
+              <span className="font-sans font-medium text-sm text-white text-center">{cat.label}</span>
+            </div>
+          ))}
+        </div>
+
         {/* Grid Header */}
         <div className="mt-16 mb-6">
           <h3 className="font-sans font-bold text-xl text-white">Spaces we&apos;ve built</h3>
