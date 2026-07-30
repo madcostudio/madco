@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import * as THREE from "three";
 import { motion, AnimatePresence } from "framer-motion";
-import { Expand, RotateCcw, X, Info, MapPin, ChevronUp, ChevronLeft, ChevronRight, Camera, Route, Image as ImageIcon, QrCode, MonitorSmartphone, Plus, Minus, ExternalLink, Compass, Coffee, Utensils, Dumbbell, Scissors, Stethoscope, Building, Store, PartyPopper, Briefcase, Home } from "lucide-react";
+import { Expand, RotateCcw, X, Info, MapPin, ChevronUp, ChevronLeft, ChevronRight, Camera, Route, Image as ImageIcon, QrCode, MonitorSmartphone, Plus, Minus, ExternalLink, Compass, Coffee, Utensils, Dumbbell, Scissors, Stethoscope, Building, Store, PartyPopper, Briefcase, Home, Warehouse } from "lucide-react";
 import { TOURS, TourData, Hotspot, NodeLink } from "@/lib/tours.config";
 
 // Load texture helper
@@ -681,21 +681,21 @@ export function SpatialDemonstrations() {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
           {[
-            { icon: Coffee, label: "Cafés" },
-            { icon: Utensils, label: "Restaurants" },
-            { icon: Dumbbell, label: "Gyms & Studios" },
-            { icon: Scissors, label: "Salons & Spas" },
-            { icon: Stethoscope, label: "Clinics" },
-            { icon: Building, label: "Hotels & Resorts" },
-            { icon: Store, label: "Boutiques & Showrooms" },
-            { icon: PartyPopper, label: "Banquet Halls" },
-            { icon: Briefcase, label: "Co-working" },
-            { icon: Home, label: "Real Estate" }
+            { icon: Coffee, label: "Cafés", href: "https://www.google.com/maps/@40.7360446,-73.9870871,3a,90y,130.73h,82.01t/data=!3m8!1e1!3m6!1sCIHM0ogKEICAgICEiPaUEw!2e10!3e12!6shttps:%2F%2Flh3.googleusercontent.com%2Fgpms-cs-s%2FAFP8RcPqhVzCTLiGjPmKMKKesek3HopnjdOff69q3-5cipg7l_KUsAknmQPWfZZvKSgaDNYSwH7ASeZnEDASoTrNckMfZgcAjLEu1v37qwGg0--eHZDyOD34tVP-qyFUj8Ug_pQDaOXn%3Dw900-h600-k-no-pi7.992765295818529-ya101.77146502175432-ro0-fo100!7i13312!8i6656?entry=ttu&g_ep=EgoyMDI2MDcyNy4wIKXMDSoASAFQAw%3D%3D" },
+            { icon: Utensils, label: "Restaurants", href: "https://www.google.com/maps/@33.3954518,-84.5933116,3a,90y,169.29h,82.11t/data=!3m7!1e1!3m5!1sCIHM0ogKEICAgICLmKRH!2e10!6shttps:%2F%2Flh3.googleusercontent.com%2Fgpms-cs-s%2FAFP8RcN2hjWABdF_bfgmwrA2d21vCw2lQ9EDeSNswxrlnzjkTpZkLFhPNE7ycf9-tuFb3t_AuRZdOCt_4DBNq-zaIna-wOuW0HMePq87IDoHYquMY28dezoCaX12WKWkbT6hJ4JmBw%3Dw900-h600-k-no-pi7.8949574639060955-ya65.11606220527433-ro0-fo100!7i10000!8i5000?entry=ttu&g_ep=EgoyMDI2MDcyNy4wIKXMDSoASAFQAw%3D%3D" },
+            { icon: Dumbbell, label: "Gyms & Studios", href: "https://www.google.com/maps/@33.7323369,-78.9489687,3a,75y,337.96h,88.18t/data=!3m7!1e1!3m5!1sCIHM0ogKEICAgICV7YrGdA!2e10!6shttps:%2F%2Flh3.googleusercontent.com%2Fgpms-cs-s%2FAFP8RcMfWPB_JeoLqodV92dfc6jowjg9Q1zFYlNx6Sej6xKtNaALZmLMvp73dYws-Lldu6oHF-KQZrZeeHv3U2NhcLXLjiFZbbugOb_yT8yxq0US41m1t9M6E0XRaKnhhv8TlXHSCgqB%3Dw900-h600-k-no-pi1.8228141783555856-ya59.597267825470055-ro0-fo100!7i7296!8i3648?entry=ttu&g_ep=EgoyMDI2MDcyNy4wIKXMDSoASAFQAw%3D%3D" },
+            { icon: Scissors, label: "Salons & Spas", href: "https://www.google.com/maps/@39.8949676,-74.949098,3a,75y,319.74h,75.23t/data=!3m7!1e1!3m5!1sCIABIhDDSAn0xdgyOoafLMS8Ec0b!2e10!6shttps:%2F%2Flh3.googleusercontent.com%2Fgpms-cs-s%2FAFP8RcMnlu7quyN-S8WCP0qtD-dp5cpaMOW2JZx3FitCOIvqSIxXJAXsEx0hfAvjWTuPTBrtuzD_jNUesf-KYuwWVCKlGqhXkLWgqxDSIWSbonGh7XeAhpH2r09CrjrbYjeVsvvJB6FhWg6R_7MF%3Dw900-h600-k-no-pi14.770151268329741-ya69.74133303008199-ro0-fo100!7i10000!8i5000?entry=ttu&g_ep=EgoyMDI2MDcyNy4wIKXMDSoASAFQAw%3D%3D" },
+            { icon: Stethoscope, label: "Clinics", href: "https://www.google.com/maps/@33.1122329,-96.7647505,3a,90y,279.62h,92.28t/data=!3m8!1e1!3m6!1sCIHM0ogKEICAgIDKmrX5ogE!2e10!3e12!6shttps:%2F%2Flh3.googleusercontent.com%2Fgpms-cs-s%2FAFP8RcPlibVH5zkOqY1FFTQ1CZrumcTSu8qYHBpzzXx2UkNGGxIVnBRFHp2NK_Dh5b5Oqr5H6rujp4TmKB3CiV6vF4l93XHWEfqVg0dI9rhRGrrywOII4esDI3hrVOLxSZVUxHgxNHu2IA%3Dw900-h600-k-no-pi-2.2811560910515425-ya270.24031045649417-ro0-fo100!7i9592!8i4796?entry=ttu&g_ep=EgoyMDI2MDcyNy4wIKXMDSoASAFQAw%3D%3D" },
+            { icon: Building, label: "Hotels & Resorts", href: "https://www.google.com/maps/@35.5333536,-82.6064787,3a,75y,306.31h,71.34t/data=!3m7!1e1!3m5!1sCIABIhBQ9WiqG79_jrhlcIc4hq8l!2e10!6shttps:%2F%2Flh3.googleusercontent.com%2Fgpms-cs-s%2FAFP8RcNgmNaTdKSWUHxTd-FQFP4VGKltsCM6JwCC9eHa8c6b1W0dNB--BCxo9jlo_ma3pFb4WS4fiYZSpSKAHSbpjdV1_Nkd5BGFMJcHkJXwBClPbu1r6odHSLV2n7IGMkbEqAb7Ytn5-lq100s%3Dw900-h600-k-no-pi18.663174959421923-ya307.30574463140306-ro0-fo100!7i10000!8i5000?entry=ttu&g_ep=EgoyMDI2MDcyNy4wIKXMDSoASAFQAw%3D%3D" },
+            { icon: Store, label: "Boutiques & Showrooms", href: "https://www.google.com/maps/@39.8978545,-75.032855,3a,75y,308.35h,81.31t/data=!3m8!1e1!3m6!1sAF1QipPMXL_Wz25nn7Gd7LMuIf2TzvuSrZ-rHJSu5UAU!2e10!3e12!6shttps:%2F%2Flh3.googleusercontent.com%2Fp%2FAF1QipPMXL_Wz25nn7Gd7LMuIf2TzvuSrZ-rHJSu5UAU%3Dw900-h600-k-no-pi8.689739975830548-ya164.58867312830824-ro0-fo100!7i13312!8i6656?entry=ttu&g_ep=EgoyMDI2MDcyNy4wIKXMDSoASAFQAw%3D%3D" },
+            { icon: PartyPopper, label: "Banquet Halls", href: "https://www.google.com/maps/@40.430287,-74.3035518,3a,90y,89.01h,86.53t/data=!3m7!1e1!3m5!1sCIHM0ogKEICAgICEyPDoNQ!2e10!6shttps:%2F%2Flh3.googleusercontent.com%2Fgpms-cs-s%2FAFP8RcN6QEgUlBy67eDOzAwV1xNuHCbARtdLk9gfKfkrCvhBwln6H1mocjESj5L6A2vXOpLPAdJANDH4aBx0LFJPI5h5VAn8E_3s5hlDIAD2zm1erbtlJ5cz2fzV9Zq_n1F5cc-DYrwp%3Dw900-h600-k-no-pi3.466856440931352-ya141.1728633653697-ro0-fo100!7i13312!8i6656?entry=ttu&g_ep=EgoyMDI2MDcyNy4wIKXMDSoASAFQAw%3D%3D" },
+            { icon: Warehouse, label: "Warehouse & Storage", href: "https://www.google.com/maps/@42.4567494,-70.9480291,3a,90y,24.17h,91.6t/data=!3m8!1e1!3m6!1sCIHM0ogKEICAgICppMupHA!2e10!3e12!6shttps:%2F%2Flh3.googleusercontent.com%2Fgpms-cs-s%2FAFP8RcMcFELvr6t9V8PFWVQZtQtYo4ZlPakpc6s-atYhg7vQkbpr9kfDGoIF4VzeBSiA4M2ftCJA1Lmt5yE7F2F6XeG75sEn-YWvUSNbzhqsSdxa9EUpZ3dbpimUolcYOJF4EsDyALA%3Dw900-h600-k-no-pi-1.600561636292312-ya277.90132085486937-ro0-fo100!7i10000!8i5000?entry=ttu&g_ep=EgoyMDI2MDcyNy4wIKXMDSoASAFQAw%3D%3D" },
+            { icon: Home, label: "Real Estate", href: "https://www.google.com/maps/@39.916357,-75.0716109,3a,75y,344.03h,87.73t/data=!3m8!1e1!3m6!1sCIHM0ogKEICAgICE8MOF8wE!2e10!3e12!6shttps:%2F%2Flh3.googleusercontent.com%2Fgpms-cs-s%2FAFP8RcPmwcWx-VCxMOERXORsUcmUCWf2Pqeg_7w9JwnnNDZT5vAEYcqXgPQn_DvAJy06bs8fcbVB7Z2dyjqy3iNj59XidhT9GXHxMVSKOcKy5zpjYs7L_KkSpBh40pJc1fx3Pa1Dfh-OTA%3Dw900-h600-k-no-pi2.2736368941838663-ya135.03179491747272-ro0-fo100!7i10000!8i5000?entry=ttu&g_ep=EgoyMDI2MDcyNy4wIKXMDSoASAFQAw%3D%3D" }
           ].map((cat, idx) => (
-            <div key={idx} className="flex flex-col items-center justify-center p-6 bg-surface-2 border border-white/5 rounded-xl hover:border-mad-red hover:bg-mad-red/5 transition-all group cursor-default">
+            <a key={idx} href={cat.href} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center justify-center p-6 bg-surface-2 border border-white/5 rounded-xl hover:border-mad-red hover:bg-mad-red/5 transition-all group cursor-pointer">
               <cat.icon className="w-8 h-8 text-mad-red mb-3 group-hover:scale-110 transition-transform" strokeWidth={1.5} />
               <span className="font-sans font-medium text-sm text-white text-center">{cat.label}</span>
-            </div>
+            </a>
           ))}
         </div>
 
