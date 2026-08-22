@@ -7,6 +7,7 @@ import { Magnetic } from "@/components/ui/Magnetic";
 import { SpeedStreak } from "@/components/ui/SpeedStreak";
 import { ArrowRight, MessageSquare } from "lucide-react";
 import Link from "next/link";
+import { config } from "@/lib/config";
 
 const cafeHotspots = [
   {
@@ -42,7 +43,7 @@ export function Hero() {
   const yViewport = useTransform(scrollY, [0, 600], [0, 35]);
 
   return (
-    <section className="relative min-h-[95vh] flex flex-col justify-center px-6 pt-36 pb-16 overflow-hidden md:px-12 xl:px-24">
+    <section className="relative min-h-[100vh] flex flex-col justify-center px-6 pt-28 pb-16 overflow-hidden md:px-12 xl:px-24">
       {/* Background Motion Lines */}
       <SpeedStreak />
       
@@ -55,9 +56,8 @@ export function Hero() {
           transition={{ duration: 0.6, ease: "easeOut" }}
           className="flex items-center gap-3"
         >
-          {/* Logo red dot breathe style */}
           <span className="h-2 w-2 rounded-full bg-mad-red animate-pulse" />
-          <span className="font-mono text-xs tracking-widest text-championship-gold uppercase">
+          <span className="font-mono text-xs tracking-widest text-[#d4af37] uppercase">
             MAD.CO STUDIO // MANGALORE, INDIA
           </span>
         </motion.div>
@@ -67,13 +67,17 @@ export function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="font-sans font-black text-[12vw] sm:text-[9vw] md:text-[6vw] leading-[0.9] tracking-tighter text-white uppercase select-none"
+          className="font-sans font-black text-[12vw] sm:text-[9vw] md:text-[6.5vw] lg:text-[5.8vw] leading-[0.9] tracking-tighter text-white uppercase select-none"
         >
           WE MAKE BRANDS <br />
           <span className="text-stroke-red text-mad-red hover:text-white transition-colors duration-500">
             IMPOSSIBLE
           </span>{" "}
-          TO IGNORE.
+          TO <br />
+          <span className="inline-block relative">
+            IGNORE.
+            <span className="absolute -bottom-1 left-0 w-[110%] h-[2px] bg-gradient-to-r from-mad-red via-mad-red/60 to-transparent pointer-events-none" />
+          </span>
         </motion.h1>
 
         <motion.p
@@ -83,7 +87,7 @@ export function Hero() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="max-w-xl text-lg md:text-xl text-text-secondary leading-relaxed font-sans"
         >
-          We don’t sell 360 photography. We sell attention. We sell walk-ins. We sell memorable first impressions.
+          We don&apos;t sell 360° photography. We sell attention. We sell walk-ins.
         </motion.p>
 
         {/* Action CTAs */}
@@ -97,10 +101,8 @@ export function Hero() {
           <Magnetic>
             <Link 
               href="/contact" 
-              className="relative overflow-hidden group flex items-center gap-2 px-6 py-4 bg-surface-2 text-white text-sm font-mono tracking-widest uppercase rounded border border-white/10 transition-colors duration-300"
+              className="relative overflow-hidden group flex items-center gap-2 px-6 py-4 bg-mad-red text-white text-sm font-mono tracking-widest uppercase rounded border border-mad-red hover:bg-dark-crimson transition-colors duration-300"
             >
-              {/* Liquid red fill-sweep overlay */}
-              <span className="absolute inset-0 bg-mad-red -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-out origin-left z-0" />
               <span className="relative z-10 flex items-center gap-2">
                 <span>Book Strategy Call</span>
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -110,12 +112,12 @@ export function Hero() {
 
           <Magnetic>
             <a 
-              href="https://wa.me/918762640420?text=Hi%20Mad.co%20Studio%2C%20I'd%20like%20to%20discuss%20improving%20my%20business%20digital%20presence."
+              href={`${config.WHATSAPP_URL}?text=${encodeURIComponent("Hi MAD.Co Studio, I'd like to discuss improving my business digital presence.")}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 px-6 py-4 bg-surface-2 hover:bg-surface-3 text-white text-sm font-mono tracking-widest uppercase transition-colors duration-300 rounded border border-white/5"
+              className="flex items-center gap-2 px-6 py-4 bg-transparent hover:bg-surface-2 text-white text-sm font-mono tracking-widest uppercase transition-colors duration-300 rounded border border-white/10 hover:border-white/20"
             >
-              <MessageSquare className="h-4 w-4 text-electric-azure" />
+              <MessageSquare className="h-4 w-4 text-mad-azure" />
               <span>WhatsApp Quick Connect</span>
             </a>
           </Magnetic>
@@ -130,8 +132,17 @@ export function Hero() {
         transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-20 mx-auto max-w-7xl w-full mt-12 shadow-2xl"
       >
-        <div className="absolute -top-3 -left-3 px-3 py-1 bg-surface-3 border border-white/10 text-[10px] font-mono tracking-widest text-championship-gold uppercase rounded-sm z-30 shadow-md">
-          CONCEPT TOUR // CAFE ESTHÉTIQUE
+        {/* REC indicator + label */}
+        <div className="absolute -top-3 -left-3 flex items-center gap-2 px-3 py-1 bg-surface-2 border border-white/10 text-[10px] font-mono tracking-widest uppercase rounded-sm z-30 shadow-md">
+          <span className="h-2 w-2 rounded-full bg-mad-red animate-rec-pulse" />
+          <span className="text-mad-red font-bold">LIVE</span>
+          <span className="text-text-secondary">// CAFÉ ESTHÉTIQUE</span>
+        </div>
+        {/* Drag cue */}
+        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
+          <div className="px-3 py-1.5 bg-black/60 backdrop-blur-sm border border-white/10 rounded text-[10px] font-mono tracking-widest text-white/60 uppercase">
+            Click & drag to explore
+          </div>
         </div>
         <Panorama src="/cafe_360.png" hotspots={cafeHotspots} />
       </motion.div>

@@ -5,6 +5,17 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 
+const navLinks = [
+  { href: "/tours", label: "360 Tours" },
+  { href: "/web-design", label: "Web Design" },
+  { href: "/mad-tap", label: "MAD Tap" },
+  { href: "/software", label: "Automation" },
+  { href: "/social", label: "Social", badge: "Soon" },
+  { href: "/work", label: "Work" },
+  { href: "/process", label: "Process" },
+  { href: "/about", label: "Studio" },
+];
+
 export function MobileNav() {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -50,19 +61,22 @@ export function MobileNav() {
               <X className="w-8 h-8" />
             </button>
 
-            <nav className="flex flex-col items-center gap-8 font-mono text-lg tracking-widest uppercase text-white">
-              <Link href="/tours" onClick={close} className="hover:text-mad-red transition-colors duration-300">
-                360 Tours
-              </Link>
-              <Link href="/work" onClick={close} className="hover:text-mad-red transition-colors duration-300">
-                Work
-              </Link>
-              <Link href="/#services" onClick={close} className="hover:text-mad-red transition-colors duration-300">
-                Competencies
-              </Link>
-              <Link href="/#process" onClick={close} className="hover:text-mad-red transition-colors duration-300">
-                System Process
-              </Link>
+            <nav className="flex flex-col items-center gap-6 font-mono text-lg tracking-widest uppercase text-white">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={close}
+                  className="hover:text-mad-red transition-colors duration-300 flex items-center gap-2"
+                >
+                  {link.label}
+                  {link.badge && (
+                    <span className="text-[9px] px-1.5 py-0.5 bg-mad-azure/20 text-mad-azure rounded-sm font-bold tracking-wider">
+                      {link.badge}
+                    </span>
+                  )}
+                </Link>
+              ))}
               
               <div className="mt-8">
                 <Link 

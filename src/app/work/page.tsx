@@ -21,7 +21,7 @@ export default function WorkPage() {
           <span className="font-mono text-xs tracking-widest text-text-secondary uppercase mb-4">
             // DEMONSTRATION GALLERY
           </span>
-          <h1 className="font-sans font-black text-5xl md:text-7xl uppercase tracking-tighter text-white mb-6">
+          <h1 className="font-display text-5xl md:text-7xl uppercase tracking-tight text-white mb-6">
             SEE THE DIFFERENCE.
           </h1>
           <p className="max-w-2xl text-base md:text-lg text-text-secondary leading-relaxed mb-10 border-l-2 border-championship-gold pl-6 text-left bg-white/5 p-6 rounded-r-lg">
@@ -51,7 +51,7 @@ export default function WorkPage() {
               <span className="font-mono text-xs tracking-widest text-mad-red uppercase">
                 // THE REAL TRANSFORMATION
               </span>
-              <h2 className="font-sans font-black text-4xl md:text-5xl uppercase tracking-tighter text-white leading-tight">
+              <h2 className="font-display text-4xl md:text-5xl uppercase tracking-tight text-white leading-tight">
                 MOST PROFILES ARE LEAKING CUSTOMERS.
               </h2>
               <p className="text-base text-text-secondary leading-relaxed font-sans">
@@ -100,7 +100,7 @@ export default function WorkPage() {
                 <CompletenessMeter />
               </div>
               <div className="order-1 lg:order-2">
-                <h3 className="font-sans font-black text-3xl uppercase tracking-tight text-white mb-4">Complete Rebuilds</h3>
+                <h3 className="font-display text-3xl uppercase tracking-tight text-white mb-4">Complete Rebuilds</h3>
                 <p className="text-text-secondary text-sm leading-relaxed max-w-md">We don&apos;t just hand you files. We deploy them into the ecosystem where your customers are actually searching. An optimised profile acts as an always-on funnel.</p>
               </div>
             </div>
@@ -114,7 +114,7 @@ export default function WorkPage() {
             <span className="font-mono text-xs tracking-widest text-text-secondary uppercase">
               // THE ARSENAL
             </span>
-            <h2 className="font-sans font-black text-3xl md:text-5xl uppercase tracking-tighter text-white">
+            <h2 className="font-display text-3xl md:text-5xl uppercase tracking-tight text-white">
               WHAT YOU ACTUALLY GET.
             </h2>
             <p className="text-text-secondary text-sm">Everything included in a standard Immersive Pro delivery.</p>
@@ -128,7 +128,7 @@ export default function WorkPage() {
         <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
         <div className="max-w-4xl mx-auto w-full relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
           <div>
-            <h2 className="font-sans font-black text-3xl md:text-4xl uppercase tracking-tighter text-white mb-2">
+            <h2 className="font-display text-3xl md:text-4xl uppercase tracking-tight text-white mb-2">
               Ready to Upgrade Your Space?
             </h2>
             <p className="text-white/80 text-sm">Claim one of the founding slots before they close.</p>
@@ -141,7 +141,7 @@ export default function WorkPage() {
               Book a Call
             </Link>
             <a
-              href="https://wa.me/910000000000" // Placeholder, update if needed
+              href="https://wa.me/918762640420"
               target="_blank"
               rel="noopener noreferrer"
               className="flex justify-center items-center gap-2 px-6 py-4 bg-white/10 hover:bg-white/20 text-white border border-white/20 text-xs font-mono tracking-widest uppercase transition-colors duration-300 rounded font-bold"

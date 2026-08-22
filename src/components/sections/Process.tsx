@@ -2,6 +2,8 @@
 
 import React from "react";
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 const steps = [
   {
@@ -36,7 +38,7 @@ export function Process() {
           <span className="font-mono text-xs tracking-widest text-mad-red uppercase">
             // OUR SYSTEM DIRECTIVE
           </span>
-          <h2 className="font-sans font-black text-4xl md:text-6xl uppercase tracking-tighter text-white">
+          <h2 className="font-display text-4xl md:text-6xl uppercase tracking-tight text-white">
             ENGINEERED TO PERFECTION.
           </h2>
         </div>
@@ -74,6 +76,17 @@ export function Process() {
               </div>
             </motion.div>
           ))}
+        </div>
+
+        {/* Link to full process page */}
+        <div className="mt-12 text-center">
+          <Link
+            href="/process"
+            className="inline-flex items-center gap-2 text-xs font-mono tracking-widest text-text-secondary hover:text-white uppercase transition-colors duration-300"
+          >
+            Explore full process
+            <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
         </div>
 
       </div>

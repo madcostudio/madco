@@ -1,16 +1,22 @@
 @import "tailwindcss";
 
 :root {
-  --background: #090909;
-  --foreground: #ffffff;
-  --surface-1: #0F0F10;
-  --surface-2: #151515;
-  --surface-3: #1A1A1A;
-  --mad-red: #FF2E2E;
-  --dark-crimson: #B32020;
-  --electric-azure: #29A3FF;
-  --championship-gold: #C8A24D;
-  --text-secondary: #8E8E93;
+  /* ── Bible-exact brand colours ── */
+  --mad-black: #050508;
+  --mad-white: #FFFFFF;
+  --mad-red: #F5250F;
+  --mad-azure: #1B6EF3;
+
+  /* Support greys derived from black */
+  --surface-1: #0E0E12;
+  --surface-2: #1A1A20;
+  --surface-3: #222228;
+  --text-secondary: #8A8A92;
+
+  /* Aliases */
+  --background: var(--mad-black);
+  --foreground: var(--mad-white);
+  --dark-crimson: #B31A0C;
 }
 
 @theme {
@@ -21,44 +27,44 @@
   --color-surface-3: var(--surface-3);
   --color-mad-red: var(--mad-red);
   --color-dark-crimson: var(--dark-crimson);
-  --color-electric-azure: var(--electric-azure);
-  --color-championship-gold: var(--championship-gold);
+  --color-mad-azure: var(--mad-azure);
   --color-text-secondary: var(--text-secondary);
-  
+
+  --font-display: "Anton", "Impact", "Haettenschweiler", sans-serif;
   --font-sans: "Geist", "Inter", "Helvetica Neue", system-ui, sans-serif;
   --font-mono: "Geist Mono", "SF Mono", Menlo, monospace;
 }
 
-/* Custom Scrollbar */
+/* ── Custom Scrollbar ── */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #090909;
+  background: var(--mad-black);
 }
 ::-webkit-scrollbar-thumb {
-  background: #1A1A1A;
+  background: var(--surface-2);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #FF2E2E;
+  background: var(--mad-red);
 }
 
 html {
   scroll-behavior: smooth;
-  background-color: #090909;
-  color: #ffffff;
+  background-color: var(--mad-black);
+  color: var(--mad-white);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-  background-color: #090909;
-  color: #ffffff;
+  background-color: var(--mad-black);
+  color: var(--mad-white);
 }
 
-/* Custom Animations */
+/* ── Animations ── */
 @keyframes speed-streak {
   0% {
     transform: translateX(-100%) skewX(-25deg);
@@ -102,7 +108,7 @@ body {
   50% {
     transform: scale(1.3);
     opacity: 1;
-    filter: drop-shadow(0 0 6px rgba(255, 46, 46, 0.7));
+    filter: drop-shadow(0 0 6px rgba(245, 37, 15, 0.7));
   }
 }
 
@@ -110,16 +116,29 @@ body {
   animation: breathe 3s ease-in-out infinite;
 }
 
-/* Utilities for Layout */
+@keyframes rec-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.animate-rec-pulse {
+  animation: rec-pulse 2s ease-in-out infinite;
+}
+
+/* ── Utilities for Layout ── */
 .bg-grid-pattern {
   background-size: 40px 40px;
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
 }
 
 .glass-morphism {
-  background: rgba(15, 15, 16, 0.75);
+  background: rgba(14, 14, 18, 0.75);
   backdrop-filter: blur(20px) saturate(120%);
   -webkit-backdrop-filter: blur(20px) saturate(120%);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -131,6 +150,23 @@ body {
   color: transparent;
 }
 .text-stroke-red {
-  -webkit-text-stroke: 1px rgba(255, 46, 46, 0.3);
+  -webkit-text-stroke: 1.5px rgba(245, 37, 15, 0.65);
   color: transparent;
+}
+
+/* Display face utility */
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* ── Prefers Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

@@ -121,7 +121,7 @@ export function CTASection() {
               <span className="font-mono text-xs tracking-widest text-mad-red uppercase">
                 // START THE TRANSFORMATION
               </span>
-              <h2 className="font-sans font-black text-4xl md:text-5xl uppercase tracking-tighter text-white">
+              <h2 className="font-display text-4xl md:text-5xl uppercase tracking-tight text-white">
                 LET&apos;S SCALE YOUR ATTENTION.
               </h2>
               <p className="text-sm md:text-base text-text-secondary leading-relaxed font-sans mt-2">

@@ -7,6 +7,7 @@ import { Magnetic } from "@/components/ui/Magnetic";
 import { ScrollSetup } from "@/components/ui/ScrollSetup";
 import { Logo } from "@/components/ui/Logo";
 import { ApertureTransition } from "@/components/ui/ApertureTransition";
+import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
 import Link from "next/link";
 import NavigationWrapper from "@/components/ui/NavigationWrapper";
 import { MobileNav } from "@/components/ui/MobileNav";
@@ -22,21 +23,27 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Mad.co Studio — Experience-Led Spatial Marketing & 360 Tours",
-  description: "We make brands impossible to ignore. Elite marketing agency specializing in immersive 360° virtual tours, high-speed digital presence, and local business growth campaigns. Based in Mangalore, India.",
-  keywords: ["Mad.co Studio", "Virtual Tours Mangalore", "360 Photography India", "Local Business Growth", "Restaurant Marketing", "Cafe Virtual Scan"],
-  authors: [{ name: "Mad.co Team" }],
+  title: "MAD.Co — We Make Brands Impossible to Ignore",
+  description: "Elite creative & spatial-marketing studio. Immersive 360° virtual tours, high-speed web design, NFC tap technology, and automation. Based in Mangalore, India.",
+  keywords: [
+    "MAD.Co", "virtual tours Mangalore", "360 photography India",
+    "Google Business optimization Mangalore", "restaurant marketing",
+    "cafe virtual tour", "NFC ordering", "QR menu",
+    "website design Mangalore", "spatial marketing"
+  ],
+  authors: [{ name: "MAD.Co Studio" }],
   openGraph: {
-    title: "Mad.co Studio — Experience-Led Spatial Marketing & 360 Tours",
-    description: "We make brands impossible to ignore. Elite marketing agency in Mangalore creating high-end 360° interactive virtual tours and digital campaigns.",
+    title: "MAD.Co — We Make Brands Impossible to Ignore",
+    description: "Elite creative & spatial-marketing studio in Mangalore. Immersive 360° tours, ultra-fast web design, NFC tap tech, and automation.",
     type: "website",
-    locale: "en_US",
+    locale: "en_IN",
+    siteName: "MAD.Co",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Mad.co Studio — Immersive 360 Tours",
-    description: "We sell attention, trust, and physical walk-ins. Immersive virtual experiences that scale local storefront visibility.",
-  }
+    title: "MAD.Co — Immersive 360° Tours & Spatial Marketing",
+    description: "We sell attention, trust, and walk-ins. Immersive virtual experiences that scale local storefront visibility.",
+  },
 };
 
 export default function RootLayout({
@@ -49,6 +56,38 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth`}
     >
+      <head>
+        {/* Anton — display typeface (heavyweight condensed sans) */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+          rel="stylesheet"
+        />
+        {/* Schema.org LocalBusiness */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              "name": "MAD.Co Studio",
+              "description": "Elite creative & spatial-marketing studio specializing in immersive 360° virtual tours, web design, NFC tap technology, and automation.",
+              "url": "https://madco.in",
+              "email": "admin@madco.in",
+              "telephone": "+918762640420",
+              "address": {
+                "@type": "PostalAddress",
+                "addressLocality": "Mangalore",
+                "addressRegion": "Karnataka",
+                "addressCountry": "IN"
+              },
+              "areaServed": "Mangalore",
+              "sameAs": []
+            }),
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans relative overflow-x-hidden selection:bg-mad-red selection:text-white">
         
         {/* Core Layout Decors */}
@@ -56,6 +95,7 @@ export default function RootLayout({
         <ApertureTransition />
         <Noise />
         <AmbientGlow />
+        <WhatsAppFloat />
 
         <NavigationWrapper
           header={
@@ -71,10 +111,13 @@ export default function RootLayout({
                   Work
                 </Link>
                 <Link href="/#services" className="hover:text-white transition-colors duration-300">
-                  Competencies
+                  Services
                 </Link>
-                <Link href="/#process" className="hover:text-white transition-colors duration-300">
-                  System Process
+                <Link href="/process" className="hover:text-white transition-colors duration-300">
+                  Process
+                </Link>
+                <Link href="/about" className="hover:text-white transition-colors duration-300">
+                  Studio
                 </Link>
               </nav>
 
@@ -106,7 +149,10 @@ export default function RootLayout({
                     <span className="h-2 w-2 rounded-full bg-mad-red animate-breathe" />
                   </Link>
                   <p className="max-w-xs text-xs text-text-secondary leading-relaxed font-sans">
-                    We design attention-led virtual scans and digital presence for experience-led businesses. Making spaces impossible to ignore since 2026.
+                    We make brands impossible to ignore. Elite creative & spatial-marketing studio. Making spaces impossible to ignore since 2026.
+                  </p>
+                  <p className="text-xs text-text-secondary font-mono tracking-wider">
+                    madco.in
                   </p>
                 </div>
 
@@ -116,16 +162,28 @@ export default function RootLayout({
                     <Link href="/tours" className="text-text-secondary hover:text-white transition-colors duration-300">
                       360 Tours
                     </Link>
+                    <Link href="/web-design" className="text-text-secondary hover:text-white transition-colors duration-300">
+                      Web Design
+                    </Link>
+                    <Link href="/mad-tap" className="text-text-secondary hover:text-white transition-colors duration-300">
+                      MAD Tap
+                    </Link>
+                    <Link href="/software" className="text-text-secondary hover:text-white transition-colors duration-300">
+                      Automation
+                    </Link>
                     <Link href="/work" className="text-text-secondary hover:text-white transition-colors duration-300">
                       Work
-                    </Link>
-                    <Link href="/#services" className="text-text-secondary hover:text-white transition-colors duration-300">
-                      Competencies
                     </Link>
                   </div>
 
                   <div className="flex flex-col gap-3">
-                    <h5 className="text-white uppercase font-bold text-[10px] tracking-widest opacity-60">// SPATIALS</h5>
+                    <h5 className="text-white uppercase font-bold text-[10px] tracking-widest opacity-60">// EXPLORE</h5>
+                    <Link href="/process" className="text-text-secondary hover:text-white transition-colors duration-300">
+                      Process
+                    </Link>
+                    <Link href="/about" className="text-text-secondary hover:text-white transition-colors duration-300">
+                      Studio
+                    </Link>
                     <Link href="/tours#packages" className="text-text-secondary hover:text-white transition-colors duration-300">
                       Pricing Plans
                     </Link>

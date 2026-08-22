@@ -12,6 +12,7 @@ function ContactForm() {
   const [formData, setFormData] = useState({
     name: "",
     businessName: "",
+    category: "cafe",
     package: "immersive-pro",
     contact: "",
     email: "",
@@ -33,6 +34,8 @@ function ContactForm() {
         setFormData((prev) => ({ ...prev, package: "enterprise" }));
       } else if (p.includes("growth") || p.includes("care")) {
         setFormData((prev) => ({ ...prev, package: "growth" }));
+      } else {
+        setFormData((prev) => ({ ...prev, package: pkgParam }));
       }
     }
   }, [searchParams]);
@@ -105,6 +108,7 @@ function ContactForm() {
         body: JSON.stringify({
           name: formData.name,
           businessName: formData.businessName,
+          category: formData.category,
           package: formData.package,
           contact: formData.contact,
           email: formData.email,
@@ -153,18 +157,40 @@ function ContactForm() {
               />
             </div>
 
-            <div className="flex flex-col gap-2">
-              <label className="font-mono text-xs tracking-widest text-text-secondary uppercase">
-                Business Name
-              </label>
-              <input 
-                type="text"
-                required
-                placeholder="The Banyan Tree Cafe"
-                value={formData.businessName}
-                onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
-                className="w-full bg-background border border-white/10 focus:border-mad-red outline-none px-4 py-3 rounded text-sm text-white font-sans transition-colors duration-300"
-              />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex flex-col gap-2">
+                <label className="font-mono text-xs tracking-widest text-text-secondary uppercase">
+                  Business Name
+                </label>
+                <input 
+                  type="text"
+                  required
+                  placeholder="The Banyan Tree Cafe"
+                  value={formData.businessName}
+                  onChange={(e) => setFormData({ ...formData, businessName: e.target.value })}
+                  className="w-full bg-background border border-white/10 focus:border-mad-red outline-none px-4 py-3 rounded text-sm text-white font-sans transition-colors duration-300"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="font-mono text-xs tracking-widest text-text-secondary uppercase">
+                  Business Category
+                </label>
+                <select 
+                  value={formData.category}
+                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  className="w-full bg-background border border-white/10 focus:border-mad-red outline-none px-4 py-3 rounded text-sm text-white font-sans transition-colors duration-300"
+                >
+                  <option value="cafe">Café</option>
+                  <option value="restaurant">Restaurant / Bar</option>
+                  <option value="gym">Gym / Fitness Center</option>
+                  <option value="salon">Salon / Spa</option>
+                  <option value="clinic">Clinic / Hospital</option>
+                  <option value="showroom">Retail Showroom</option>
+                  <option value="hotel">Hotel / Resort</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -177,11 +203,27 @@ function ContactForm() {
                   onChange={(e) => setFormData({ ...formData, package: e.target.value })}
                   className="w-full bg-background border border-white/10 focus:border-mad-red outline-none px-4 py-3 rounded text-sm text-white font-sans transition-colors duration-300"
                 >
-                  <option value="starter">Starter Scan (Founding: ₹4,999)</option>
-                  <option value="immersive-pro">Immersive Pro (Founding: ₹9,999)</option>
-                  <option value="enterprise">Enterprise Custom (Founding: ₹19,999)</option>
-                  <option value="growth">Growth Care Plan (₹2,999/month)</option>
-                  <option value="general">General Branding Inquiry</option>
+                  <optgroup label="360° Tours">
+                    <option value="starter">Starter Scan (₹9,999)</option>
+                    <option value="immersive-pro">Immersive Pro (₹19,999)</option>
+                    <option value="enterprise">Signature / Enterprise</option>
+                    <option value="growth">Growth Care Plan</option>
+                  </optgroup>
+                  <optgroup label="Web Design">
+                    <option value="Web: Launchpad">Launchpad (₹19,999)</option>
+                    <option value="Web: Launch">Launch (₹29,999)</option>
+                    <option value="Web: Growth">Growth (₹59,999)</option>
+                    <option value="Web: Custom">Custom Web App</option>
+                  </optgroup>
+                  <optgroup label="MAD Tap (NFC/QR)">
+                    <option value="Tap: Review Booster">Review Booster</option>
+                    <option value="Tap: Tap Menu / Order">Tap Menu / Order</option>
+                    <option value="Tap: Theater / Enterprise">Theater / Enterprise</option>
+                  </optgroup>
+                  <optgroup label="Other">
+                    <option value="Software & Automation">Software & Automation</option>
+                    <option value="general">General Inquiry</option>
+                  </optgroup>
                 </select>
               </div>
 
@@ -245,16 +287,30 @@ function ContactForm() {
               />
             </div>
 
-            <Magnetic>
-              <button 
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-mad-red text-white text-sm font-mono tracking-widest uppercase hover:bg-dark-crimson disabled:opacity-50 transition-colors duration-300 rounded border border-white/10 cursor-pointer"
-              >
-                <Calendar className="h-4 w-4" />
-                <span>{isSubmitting ? "Locking Slot..." : "Secure My Strategy Audit"}</span>
-              </button>
-            </Magnetic>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Magnetic>
+                <button 
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-mad-red text-white text-sm font-mono tracking-widest uppercase hover:bg-dark-crimson disabled:opacity-50 transition-colors duration-300 rounded border border-white/10 cursor-pointer"
+                >
+                  <Calendar className="h-4 w-4" />
+                  <span>{isSubmitting ? "Locking Slot..." : "Secure My Audit"}</span>
+                </button>
+              </Magnetic>
+
+              <Magnetic>
+                <a
+                  href={`https://wa.me/918762640420?text=${encodeURIComponent("Hi MAD.Co, I'm interested in an audit for my space.")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-surface-2 text-white text-sm font-mono tracking-widest uppercase hover:bg-surface-3 transition-colors duration-300 rounded border border-white/5 cursor-pointer"
+                >
+                  <MessageSquare className="h-4 w-4 text-mad-azure" />
+                  <span>Fast Lane (WhatsApp)</span>
+                </a>
+              </Magnetic>
+            </div>
           </motion.form>
         ) : (
           <motion.div 
@@ -309,8 +365,8 @@ export default function ContactPage() {
             <span className="font-mono text-xs tracking-widest text-mad-red uppercase">
               // AUDIT SECURE SHEET
             </span>
-            <h1 className="font-sans font-black text-4xl md:text-5xl uppercase tracking-tighter text-white leading-tight">
-              SPATIAL AUDIT &amp; STRATEGY CALL.
+            <h1 className="font-display text-4xl md:text-5xl uppercase tracking-tight text-white leading-tight">
+              BOOK A 15-MINUTE SPATIAL AUDIT.
             </h1>
             <p className="text-sm md:text-base text-text-secondary leading-relaxed font-sans mt-2">
               Fill in your physical store details. We will check your listing, research your competitors in Mangalore, and design a custom spatial strategy blueprint. No obligation.

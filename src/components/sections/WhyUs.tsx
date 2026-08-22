@@ -36,7 +36,7 @@ export function WhyUs() {
               <span className="font-mono text-xs tracking-widest text-mad-red uppercase">
                 // CONVERSION SCIENCE
               </span>
-              <h2 className="font-sans font-black text-4xl md:text-5xl uppercase tracking-tighter text-white">
+              <h2 className="font-display text-4xl md:text-5xl uppercase tracking-tight text-white">
                 WE CONVERT VIEWS INTO VISITORS.
               </h2>
               <p className="text-sm md:text-base text-text-secondary leading-relaxed font-sans mt-2">
