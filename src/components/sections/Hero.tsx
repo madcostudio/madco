@@ -93,8 +93,9 @@ export function Hero() {
   // Transform 0 -> 1 for Tiny Planet unrolling into full 360 showroom
   const planetProgress = useTransform(scrollYProgress, [0, 0.6], [0, 1]);
   // Fade writing out 100% (to 0 opacity) as user scrolls down
-  const heroContentOpacity = useTransform(scrollYProgress, [0, 0.28], [1, 0]);
-  const heroContentY = useTransform(scrollYProgress, [0, 0.28], [0, -40]);
+  const heroContentOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0]);
+  const heroContentY = useTransform(scrollYProgress, [0, 0.25], [0, -40]);
+  const heroPointerEvents = useTransform(scrollYProgress, (v) => v > 0.22 ? "none" : "auto");
   const scrollCueOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
 
   return (
@@ -105,7 +106,7 @@ export function Hero() {
       <div ref={containerRef} className="relative h-[220vh] w-full">
         <section className="sticky top-0 h-screen w-full flex flex-col justify-center items-start px-6 pt-24 pb-16 overflow-hidden md:px-12 xl:px-24">
           
-          {/* Background 360 Tiny Planet WebGL Canvas (Real open-source 8K HDR capture) */}
+          {/* Background 360 Tiny Planet WebGL Canvas (VIP Motors Dubai luxury supercar showroom) */}
           <TinyPlanetHero
             src="/dealership_360.jpg"
             scrollProgress={planetProgress}
@@ -116,8 +117,8 @@ export function Hero() {
 
           {/* Hero Content Container - Fades out 100% on scroll */}
           <motion.div
-            style={{ opacity: heroContentOpacity, y: heroContentY }}
-            className="relative z-10 mx-auto max-w-7xl w-full text-left flex flex-col gap-6 md:gap-7 my-auto pointer-events-auto"
+            style={{ opacity: heroContentOpacity, y: heroContentY, pointerEvents: heroPointerEvents as any }}
+            className="relative z-10 mx-auto max-w-7xl w-full text-left flex flex-col gap-6 md:gap-7 my-auto"
           >
             {/* Studio Location Status Badge */}
             <motion.div
