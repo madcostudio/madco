@@ -159,6 +159,64 @@ body {
   font-family: var(--font-display);
 }
 
+/* ── Custom Headline & Scroll Kinetic Styles ── */
+@keyframes laser-sweep {
+  0% {
+    left: -100%;
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    left: 200%;
+    opacity: 0;
+  }
+}
+
+.animate-laser-sweep {
+  animation: laser-sweep 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes glitch-shake {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3px, 1px); }
+  40% { transform: translate(3px, -2px); }
+  60% { transform: translate(-2px, 2px); }
+  80% { transform: translate(2px, -1px); }
+  100% { transform: translate(0, 0); }
+}
+
+.animate-glitch-shake {
+  animation: glitch-shake 0.25s ease-in-out;
+}
+
+.text-stroke-red-glow {
+  -webkit-text-stroke: 1.5px rgba(245, 37, 15, 0.85);
+  color: transparent;
+  text-shadow: 0 0 25px rgba(245, 37, 15, 0.4);
+}
+
+.text-stroke-red-glow:hover {
+  -webkit-text-stroke: 1.5px #FFFFFF;
+  color: #FFFFFF;
+  text-shadow: 0 0 30px rgba(245, 37, 15, 0.8), 0 0 60px rgba(245, 37, 15, 0.5);
+}
+
+@keyframes wheel-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+.animate-wheel-spin {
+  animation: wheel-spin 0.25s linear infinite;
+}
+.animate-wheel-spin-slow {
+  animation: wheel-spin 0.6s linear infinite;
+}
+
 /* ── Prefers Reduced Motion ── */
 @media (prefers-reduced-motion: reduce) {
   *,

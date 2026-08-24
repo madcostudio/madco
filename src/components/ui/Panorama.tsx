@@ -132,7 +132,8 @@ export function Panorama({ src, hotspots = [] }: PanoramaProps) {
       const isTouch = event.pointerType === "touch" || (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches);
       const factor = (camera.fov / 500) * (isTouch ? 4.1 : 1.5);
 
-      lon = (onPointerDownPointerX - clientX) * factor + onPointerDownLon;
+      // Invert delta so drag follows natural camera panning direction (non-inverted X-axis)
+      lon = (clientX - onPointerDownPointerX) * factor + onPointerDownLon;
       lat = (clientY - onPointerDownPointerY) * factor + onPointerDownLat;
     };
 

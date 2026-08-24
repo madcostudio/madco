@@ -112,9 +112,9 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
       const phi = THREE.MathUtils.degToRad(90 - camState.current.lat);
       const theta = THREE.MathUtils.degToRad(camState.current.lon);
       const targetVec = new THREE.Vector3(
-        500 * Math.sin(phi) * Math.cos(theta),
+        500 * Math.sin(phi) * Math.sin(theta),
         500 * Math.cos(phi),
-        500 * Math.sin(phi) * Math.sin(theta)
+        500 * Math.sin(phi) * Math.cos(theta)
       );
       camera.lookAt(targetVec);
 
@@ -314,7 +314,8 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
 
     if (camState.current.pointers.length === 1) {
       const fovFactor = camState.current.targetFov / 75;
-      camState.current.targetLon = (camState.current.onDownX - e.clientX) * 0.1 * fovFactor + camState.current.onDownLon;
+      // Invert delta so drag follows natural camera panning direction (non-inverted X-axis)
+      camState.current.targetLon = (e.clientX - camState.current.onDownX) * 0.1 * fovFactor + camState.current.onDownLon;
       camState.current.targetLat = (e.clientY - camState.current.onDownY) * 0.1 * fovFactor + camState.current.onDownLat;
     } else if (camState.current.pointers.length === 2) {
       const p1 = camState.current.pointers[0]; const p2 = camState.current.pointers[1];
@@ -339,8 +340,8 @@ function Viewer({ tour, activeNodeIdx, onNodeChange }: { tour: TourData, activeN
     const speed = 5;
     if (e.key === "ArrowUp") camState.current.targetLat += speed;
     if (e.key === "ArrowDown") camState.current.targetLat -= speed;
-    if (e.key === "ArrowLeft") camState.current.targetLon -= speed;
-    if (e.key === "ArrowRight") camState.current.targetLon += speed;
+    if (e.key === "ArrowLeft") camState.current.targetLon += speed;
+    if (e.key === "ArrowRight") camState.current.targetLon -= speed;
     if (e.key === "=" || e.key === "+") camState.current.targetFov = Math.max(40, camState.current.targetFov - speed);
     if (e.key === "-") camState.current.targetFov = Math.min(92, camState.current.targetFov + speed);
   };

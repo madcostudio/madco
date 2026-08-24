@@ -116,9 +116,16 @@ export function CTASection() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start relative z-10">
           
           {/* Left Column: Booking details & WhatsApp */}
-          <div className="lg:col-span-5 flex flex-col gap-8">
+          <motion.div 
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-5 flex flex-col gap-8"
+          >
             <div className="flex flex-col gap-4">
-              <span className="font-mono text-xs tracking-widest text-mad-red uppercase">
+              <span className="font-mono text-xs tracking-widest text-mad-red uppercase flex items-center gap-2">
+                <span className="h-1.5 w-1.5 rounded-full bg-mad-red animate-pulse" />
                 // START THE TRANSFORMATION
               </span>
               <h2 className="font-display text-4xl md:text-5xl uppercase tracking-tight text-white">
@@ -158,10 +165,16 @@ export function CTASection() {
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Right Column: Lead Form */}
-          <div className="lg:col-span-7 w-full">
+          <motion.div 
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="lg:col-span-7 w-full"
+          >
             <div className="bg-surface-2 border border-white/5 rounded-xl p-8 relative">
               
               <AnimatePresence mode="wait">
@@ -314,7 +327,7 @@ export function CTASection() {
               </AnimatePresence>
               
             </div>
-          </div>
+          </motion.div>
 
         </div>
 

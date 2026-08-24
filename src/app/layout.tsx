@@ -55,6 +55,7 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full scroll-smooth`}
+      suppressHydrationWarning
     >
       <head>
         {/* Anton — display typeface (heavyweight condensed sans) */}
@@ -88,7 +89,10 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-full flex flex-col bg-background text-foreground font-sans relative overflow-x-hidden selection:bg-mad-red selection:text-white">
+      <body 
+        suppressHydrationWarning
+        className="min-h-full flex flex-col bg-background text-foreground font-sans relative overflow-x-hidden selection:bg-mad-red selection:text-white"
+      >
         
         {/* Core Layout Decors */}
         <ScrollSetup />
