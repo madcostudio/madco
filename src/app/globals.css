@@ -152,13 +152,13 @@ body {
 .text-stroke-red,
 .text-mesh-red {
   background-image: 
-    repeating-linear-gradient(45deg, rgba(245, 37, 15, 0.55) 0, rgba(245, 37, 15, 0.55) 1.5px, transparent 1.5px, transparent 6px),
-    repeating-linear-gradient(-45deg, rgba(245, 37, 15, 0.55) 0, rgba(245, 37, 15, 0.55) 1.5px, transparent 1.5px, transparent 6px);
+    repeating-linear-gradient(45deg, rgba(245, 37, 15, 0.45) 0, rgba(245, 37, 15, 0.45) 1px, transparent 1px, transparent 8px),
+    repeating-linear-gradient(-45deg, rgba(245, 37, 15, 0.45) 0, rgba(245, 37, 15, 0.45) 1px, transparent 1px, transparent 8px);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  -webkit-text-stroke: 1.5px rgba(245, 37, 15, 0.95);
-  text-shadow: 0 0 15px rgba(245, 37, 15, 0.3), 0 2px 10px rgba(0, 0, 0, 0.8);
+  -webkit-text-stroke: 1px rgba(245, 37, 15, 0.85);
+  text-shadow: none;
 }
 
 /* Display face utility */
