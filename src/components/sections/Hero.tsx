@@ -91,12 +91,12 @@ export function Hero() {
   });
 
   // Transform 0 -> 1 for Tiny Planet unrolling into full 360 showroom
-  const planetProgress = useTransform(scrollYProgress, [0, 0.6], [0, 1]);
-  // Fade writing out 100% (to 0 opacity) as user scrolls down
-  const heroContentOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0]);
-  const heroContentY = useTransform(scrollYProgress, [0, 0.25], [0, -40]);
-  const heroPointerEvents = useTransform(scrollYProgress, (v) => v > 0.22 ? "none" : "auto");
-  const scrollCueOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
+  const planetProgress = useTransform(scrollYProgress, [0, 0.45], [0, 1]);
+  // Fade writing out 100% (to 0 opacity) as background 360 reaches regular view
+  const heroContentOpacity = useTransform(scrollYProgress, [0, 0.3, 0.45], [1, 0.25, 0]);
+  const heroContentY = useTransform(scrollYProgress, [0, 0.45], [0, -45]);
+  const heroPointerEvents = useTransform(scrollYProgress, (v) => v >= 0.38 ? "none" : "auto");
+  const scrollCueOpacity = useTransform(scrollYProgress, [0, 0.18], [1, 0]);
 
   return (
     <>

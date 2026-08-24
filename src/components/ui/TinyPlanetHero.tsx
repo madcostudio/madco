@@ -16,6 +16,7 @@ export function TinyPlanetHero({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isRegularView, setIsRegularView] = useState(false);
 
   // Smooth spring physics for camera transformation driven by scroll
   const smoothProgress = useSpring(scrollProgress, {
@@ -47,7 +48,7 @@ export function TinyPlanetHero({
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(width, height);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.toneMappingExposure = 1.25;
 
     // 2. Spherical Geometry for 360 Equirectangular Projection
     const geometry = new THREE.SphereGeometry(600, 72, 48);
@@ -76,39 +77,97 @@ export function TinyPlanetHero({
       setIsLoaded(true);
     });
 
-    // 4. Mouse subtle interaction offset
-    let mouseX = 0;
-    let mouseY = 0;
+    // 4. Mouse / Pointer tracking and drag interactions
+    let normMouseX = 0;
+    let normMouseY = 0;
+    let isDragging = false;
+    let previousPointerX = 0;
+    let previousPointerY = 0;
+    let dragLonOffset = 0;
+    let dragLatOffset = 0;
+
     const handleMouseMove = (e: MouseEvent) => {
-      mouseX = (e.clientX / window.innerWidth - 0.5) * 15;
-      mouseY = (e.clientY / window.innerHeight - 0.5) * 8;
+      // Normalized coordinates: -1 to +1 from screen center
+      normMouseX = (e.clientX / window.innerWidth) * 2 - 1;
+      normMouseY = (e.clientY / window.innerHeight) * 2 - 1;
     };
+
+    const handlePointerDown = (e: PointerEvent) => {
+      const progress = Number(smoothProgress.get()) || 0;
+      if (progress < 0.3) return; // Only allow drag pan in/near regular view
+      isDragging = true;
+      previousPointerX = e.clientX;
+      previousPointerY = e.clientY;
+    };
+
+    const handlePointerMove = (e: PointerEvent) => {
+      if (!isDragging) return;
+      const deltaX = e.clientX - previousPointerX;
+      const deltaY = e.clientY - previousPointerY;
+      previousPointerX = e.clientX;
+      previousPointerY = e.clientY;
+
+      // Responsive dragging sensitivity
+      dragLonOffset -= deltaX * 0.25;
+      dragLatOffset += deltaY * 0.2;
+      dragLatOffset = Math.max(-45, Math.min(45, dragLatOffset));
+    };
+
+    const handlePointerUp = () => {
+      isDragging = false;
+    };
+
     window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
 
     // 5. Animation Loop
     let animationFrameId = 0;
     let baseLon = 180;
+    let currentLon = 180;
+    let currentLat = -88;
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
 
-      const progress = Number(smoothProgress.get()) || 0; // 0 (Tiny Planet) -> 1 (Normal View)
+      const progress = Number(smoothProgress.get()) || 0; // 0 (Tiny Planet) -> 1 (Regular View)
+      setIsRegularView(progress > 0.4);
 
       // Interpolate FOV: 135° (Tiny Planet) -> 75° (Standard View)
       const currentFov = THREE.MathUtils.lerp(135, 75, progress);
       camera.fov = currentFov;
       camera.updateProjectionMatrix();
 
-      // Interpolate Latitude: -88° (Looking down for planet) -> 0° (Eye level horizon)
-      const targetLat = THREE.MathUtils.lerp(-88, 0, progress) + mouseY * progress;
+      // High sensitivity pointer look scaling:
+      // Tiny planet (progress=0): subtle tilt (±15° yaw, ±6° lat)
+      // Regular view (progress=1): high sensitivity panoramic pan (±160° yaw, ±40° pitch)
+      const sensitivityYaw = THREE.MathUtils.lerp(15, 160, progress);
+      const sensitivityPitch = THREE.MathUtils.lerp(6, 40, progress);
 
-      // Slow idle ambient rotation
-      baseLon += 0.02;
-      const targetLon = baseLon + THREE.MathUtils.lerp(0, 45, progress) + mouseX * progress;
+      // Edge continuous pan when mouse moves near edges in regular view
+      let edgePanVelocity = 0;
+      if (progress > 0.4 && Math.abs(normMouseX) > 0.5) {
+        const edgeIntensity = (Math.abs(normMouseX) - 0.5) / 0.5;
+        edgePanVelocity = Math.sign(normMouseX) * edgeIntensity * 0.45 * progress;
+      }
 
-      // Convert spherical angles to target vector
-      const phi = THREE.MathUtils.degToRad(90 - targetLat);
-      const theta = THREE.MathUtils.degToRad(targetLon);
+      baseLon += 0.02 + edgePanVelocity;
+
+      // Calculate target spherical coordinates
+      const targetLatitudeBase = THREE.MathUtils.lerp(-88, 0, progress);
+      const targetLatitude = targetLatitudeBase - normMouseY * sensitivityPitch + dragLatOffset;
+      const clampedLat = Math.max(-89, Math.min(85, targetLatitude));
+
+      const targetLongitude = baseLon + normMouseX * sensitivityYaw + dragLonOffset;
+
+      // Smooth camera interpolation for buttery 60fps tracking
+      currentLat += (clampedLat - currentLat) * 0.1;
+      currentLon += (targetLongitude - currentLon) * 0.1;
+
+      // Convert spherical angles to 3D Cartesian coordinates
+      const phi = THREE.MathUtils.degToRad(90 - currentLat);
+      const theta = THREE.MathUtils.degToRad(currentLon);
 
       const target = new THREE.Vector3();
       target.x = 500 * Math.sin(phi) * Math.sin(theta);
@@ -137,6 +196,9 @@ export function TinyPlanetHero({
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
       resizeObserver.disconnect();
 
       geometry.dispose();
@@ -147,7 +209,12 @@ export function TinyPlanetHero({
   }, [src, smoothProgress]);
 
   return (
-    <div ref={containerRef} className="absolute inset-0 w-full h-full pointer-events-none z-0 overflow-hidden">
+    <div
+      ref={containerRef}
+      className={`absolute inset-0 w-full h-full z-0 overflow-hidden ${
+        isRegularView ? "pointer-events-auto cursor-grab active:cursor-grabbing" : "pointer-events-none"
+      }`}
+    >
       {/* 360 WebGL Canvas */}
       <canvas
         ref={canvasRef}
@@ -157,8 +224,8 @@ export function TinyPlanetHero({
       />
 
       {/* Atmospheric dark gradient overlays to keep text crisp and readable */}
-      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/35 pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,5,8,0.85)_100%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-background/30 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(5,5,8,0.8)_100%)] pointer-events-none" />
     </div>
   );
 }
