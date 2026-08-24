@@ -91,12 +91,16 @@ export function Hero() {
   });
 
   // Transform 0 -> 1 for Tiny Planet unrolling into full 360 showroom
-  const planetProgress = useTransform(scrollYProgress, [0, 0.45], [0, 1]);
-  // Fade writing out 100% (to 0 opacity) as background 360 reaches regular view
-  const heroContentOpacity = useTransform(scrollYProgress, [0, 0.3, 0.45], [1, 0.25, 0]);
-  const heroContentY = useTransform(scrollYProgress, [0, 0.45], [0, -45]);
-  const heroPointerEvents = useTransform(scrollYProgress, (v) => v >= 0.38 ? "none" : "auto");
-  const scrollCueOpacity = useTransform(scrollYProgress, [0, 0.18], [1, 0]);
+  const planetProgress = useTransform(scrollYProgress, [0, 0.4], [0, 1], { clamp: true });
+  
+  // Fade writing out 100% (to 0 opacity and display:none) as background 360 reaches regular view
+  const heroContentOpacity = useTransform(scrollYProgress, [0, 0.18, 0.35, 1], [1, 0.4, 0, 0], { clamp: true });
+  const heroContentY = useTransform(scrollYProgress, [0, 0.35, 1], [0, -45, -45], { clamp: true });
+  const heroPointerEvents = useTransform(scrollYProgress, (v) => v >= 0.3 ? "none" : "auto");
+  const heroDisplay = useTransform(scrollYProgress, (v) => v >= 0.35 ? "none" : "flex");
+  
+  const scrollCueOpacity = useTransform(scrollYProgress, [0, 0.15, 1], [1, 0, 0], { clamp: true });
+  const scrollCueDisplay = useTransform(scrollYProgress, (v) => v >= 0.15 ? "none" : "flex");
 
   return (
     <>
@@ -115,10 +119,15 @@ export function Hero() {
           {/* Background Subtle Kinetic Streak */}
           <SpeedStreak />
 
-          {/* Hero Content Container - Fades out 100% on scroll */}
+          {/* Hero Content Container - Strictly disappears (100% opacity 0 and display:none) on scroll */}
           <motion.div
-            style={{ opacity: heroContentOpacity, y: heroContentY, pointerEvents: heroPointerEvents as any }}
-            className="relative z-10 mx-auto max-w-7xl w-full text-left flex flex-col gap-6 md:gap-7 my-auto"
+            style={{
+              opacity: heroContentOpacity,
+              y: heroContentY,
+              pointerEvents: heroPointerEvents as any,
+              display: heroDisplay as any,
+            }}
+            className="relative z-10 mx-auto max-w-7xl w-full text-left flex-col gap-6 md:gap-7 my-auto"
           >
             {/* Studio Location Status Badge */}
             <motion.div
@@ -187,11 +196,14 @@ export function Hero() {
 
           {/* Interactive Scroll-to-Expand Indicator Cue - Fades out on scroll */}
           <motion.div
-            style={{ opacity: scrollCueOpacity }}
+            style={{
+              opacity: scrollCueOpacity,
+              display: scrollCueDisplay as any,
+            }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 0.8 }}
-            className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none z-20 text-neutral-400"
+            className="absolute bottom-6 left-1/2 -translate-x-1/2 flex-col items-center gap-2 pointer-events-none z-20 text-neutral-400"
           >
             <div className="flex items-center gap-2 px-3 py-1.5 bg-black/70 backdrop-blur-md rounded-full border border-white/10 text-[10px] font-mono tracking-widest uppercase text-white shadow-xl">
               <Compass className="w-3 h-3 text-mad-red animate-spin [animation-duration:6s]" />
