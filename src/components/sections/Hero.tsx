@@ -92,9 +92,10 @@ export function Hero() {
 
   // Transform 0 -> 1 for Tiny Planet unrolling into full 360 showroom
   const planetProgress = useTransform(scrollYProgress, [0, 0.6], [0, 1]);
-  // Fade out hero typography as space fully expands
-  const heroContentOpacity = useTransform(scrollYProgress, [0, 0.45, 0.75], [1, 1, 0]);
-  const heroContentY = useTransform(scrollYProgress, [0, 0.75], [0, -50]);
+  // Fade writing out 100% (to 0 opacity) as user scrolls down
+  const heroContentOpacity = useTransform(scrollYProgress, [0, 0.28], [1, 0]);
+  const heroContentY = useTransform(scrollYProgress, [0, 0.28], [0, -40]);
+  const scrollCueOpacity = useTransform(scrollYProgress, [0, 0.15], [1, 0]);
 
   return (
     <>
@@ -113,7 +114,7 @@ export function Hero() {
           {/* Background Subtle Kinetic Streak */}
           <SpeedStreak />
 
-          {/* Hero Content Container */}
+          {/* Hero Content Container - Fades out 100% on scroll */}
           <motion.div
             style={{ opacity: heroContentOpacity, y: heroContentY }}
             className="relative z-10 mx-auto max-w-7xl w-full text-left flex flex-col gap-6 md:gap-7 my-auto pointer-events-auto"
@@ -183,8 +184,9 @@ export function Hero() {
             </motion.div>
           </motion.div>
 
-          {/* Interactive Scroll-to-Expand Indicator Cue */}
+          {/* Interactive Scroll-to-Expand Indicator Cue - Fades out on scroll */}
           <motion.div
+            style={{ opacity: scrollCueOpacity }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 0.8 }}

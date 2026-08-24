@@ -50,10 +50,10 @@ export function ImpossibleHeadline({ className = "" }: ImpossibleHeadlineProps) 
               duration: 1.1,
               ease: [0.16, 1, 0.3, 1], // Ultra-luxurious, smooth easing
             }}
-            className="inline-block overflow-hidden align-baseline relative"
+            className="inline-block overflow-hidden align-baseline relative py-1 pr-3"
           >
             {/* Letter reveal container with individual staggered upward cascade */}
-            <span className="inline-flex items-baseline whitespace-nowrap relative text-stroke-red text-mad-red hover:text-white transition-colors duration-500">
+            <span className="inline-flex items-baseline whitespace-nowrap relative text-stroke-red text-mad-red hover:text-white transition-colors duration-500 pr-2">
               {LETTERS.map((letter, idx) => (
                 <motion.span
                   key={`${letter}-${idx}`}
@@ -68,7 +68,7 @@ export function ImpossibleHeadline({ className = "" }: ImpossibleHeadlineProps) 
                     delay: 0.15 + idx * 0.045,
                     ease: [0.16, 1, 0.3, 1],
                   }}
-                  className="inline-block relative"
+                  className={`inline-block relative ${idx === LETTERS.length - 1 ? "pr-1" : ""}`}
                 >
                   {letter}
                 </motion.span>
