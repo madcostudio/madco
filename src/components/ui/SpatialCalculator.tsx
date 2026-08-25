@@ -20,8 +20,9 @@ export function SpatialCalculator() {
 
   // Calculations
   const extraWalkIns = Math.round(monthlyViews * selectedCat.baseConversion * 0.12);
-  const monthlyRevenueUplift = Math.round(extraWalkIns * selectedCat.avgTicket * 0.4);
-  const paybackDays = Math.max(7, Math.round(35000 / (monthlyRevenueUplift / 30)));
+  const monthlyRevenueBase = Math.round(extraWalkIns * selectedCat.avgTicket * 0.4);
+  const revenueLow = Math.round(monthlyRevenueBase * 0.75);
+  const revenueHigh = Math.round(monthlyRevenueBase * 1.25);
 
   const whatsappMessage = encodeURIComponent(
     `Hi MAD.Co Studio, I calculated a potential +${extraWalkIns} walk-ins/month for my ${selectedCat.name} (with ~${monthlyViews.toLocaleString()} monthly views). I'd like to claim a spatial audit.`
@@ -139,24 +140,29 @@ export function SpatialCalculator() {
                 <span>Est. Revenue Uplift</span>
               </div>
               <motion.div
-                key={monthlyRevenueUplift}
+                key={revenueLow}
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 className="font-display text-3xl md:text-4xl text-championship-gold font-black"
               >
-                ₹{(monthlyRevenueUplift).toLocaleString()}
-                <span className="text-xs text-text-secondary font-mono ml-1.5 font-normal">/ mo</span>
+                ₹{(revenueLow).toLocaleString()}–{(revenueHigh).toLocaleString()}
+                <span className="text-xs text-text-secondary font-mono ml-1.5 font-normal">/ mo est.</span>
               </motion.div>
             </div>
           </div>
 
-          {/* Payback Speed */}
+          {/* Payback Estimate */}
           <div className="flex items-center gap-3 text-xs text-text-secondary">
             <Clock className="w-4 h-4 text-mad-azure shrink-0" />
             <span>
-              Estimated spatial setup payback time: <strong className="text-white font-mono">~{paybackDays} days</strong>
+              Many venues see payback within <strong className="text-white font-mono">a few months</strong> (varies by space and traffic).
             </span>
           </div>
+
+          {/* Disclaimer */}
+          <p className="text-[10px] font-mono text-text-secondary/60 leading-relaxed border-t border-white/5 pt-3">
+            Illustrative estimate based on industry averages — not a guarantee of results.
+          </p>
 
           {/* Action CTA */}
           <Magnetic>

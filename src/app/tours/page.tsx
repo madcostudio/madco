@@ -20,7 +20,7 @@ const packages = [
       "HDR capture & professional grading",
       "Google Maps Street View integration",
       "Website embed code",
-      "2-year hosting included",
+      "Hosting included, renewable annually",
     ],
     cta: "Request Starter Scan",
     accentColor: "border-white/5",
@@ -38,7 +38,7 @@ const packages = [
       "Street View verified listing",
       "Interactive player UI with your branding",
       "5 clickable hotspots (menu, booking, contact)",
-      "3-year hosting included",
+      "Hosting included, renewable annually",
     ],
     cta: "Request Immersive Pro",
     accentColor: "border-mad-red/40",
@@ -48,16 +48,16 @@ const packages = [
   {
     name: "Signature / Enterprise",
     anchorPrice: "₹69,999",
-    foundingPrice: "₹39,999",
+    foundingPrice: "From ₹39,999",
     target: "Hotels · Luxury · Multi-Location",
-    keyLine: "Unlimited points, 3D walkthrough",
+    keyLine: "Full multi-zone coverage — quoted to your space",
     features: [
-      "Unlimited capture points",
+      "Full multi-zone coverage — quoted to your space",
       "3D walkthrough experience",
       "Custom player UI & advanced hotspots",
       "Google Maps optimization",
       "Custom landing page included",
-      "5-year support & hosting",
+      "Support & hosting included, renewable annually",
     ],
     cta: "Connect for Consultation",
     accentColor: "border-mad-azure/40",
@@ -80,7 +80,7 @@ const faqs = [
   },
   {
     q: "Are there recurring hosting fees?",
-    a: "Your package includes hosting (2 to 5 years depending on tier). After this period, basic hosting is only ₹1,500/year to keep the interactive viewer online. Google Maps listings remain active forever with zero hosting fees.",
+    a: "Your package includes hosting, renewable annually at a low rate. After the included period, basic hosting is only ₹1,500/year to keep the interactive viewer online. Google Maps listings remain active forever with zero hosting fees.",
   },
 ];
 
@@ -211,7 +211,6 @@ export default function ToursPage() {
                       <span className="font-sans font-black text-4xl md:text-5xl tracking-tight text-white">
                         {pkg.foundingPrice}
                       </span>
-                      <span className="font-mono text-xs text-text-secondary uppercase">/ Setup</span>
                     </div>
                   </div>
 

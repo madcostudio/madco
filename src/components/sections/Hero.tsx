@@ -229,8 +229,8 @@ export function Hero() {
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2 px-3 py-1.5 bg-surface-2 border border-white/10 text-[11px] font-mono tracking-widest uppercase rounded-sm shadow-md">
-                <span className="h-2 w-2 rounded-full bg-mad-red animate-rec-pulse" />
-                <span className="text-mad-red font-bold">LIVE SHOWCASE</span>
+                <span className="h-2 w-2 rounded-full bg-mad-azure animate-pulse" />
+                <span className="text-mad-azure font-bold">CONCEPT SHOWCASE</span>
                 <span className="text-text-secondary">// {activeVenue.name.toUpperCase()}</span>
               </div>
               <span className="hidden sm:inline font-mono text-xs text-text-secondary">
@@ -252,7 +252,7 @@ export function Hero() {
                         : "text-text-secondary hover:text-white hover:bg-white/5"
                     }`}
                   >
-                    0{idx + 1} // {venue.name.split(" ")[0]}
+                    0{idx + 1} // {venue.name}
                   </button>
                 );
               })}

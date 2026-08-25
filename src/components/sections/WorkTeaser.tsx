@@ -20,8 +20,8 @@ const teaserTours = [
   },
   {
     id: "gym",
-    title: "Titan Athletic Club",
-    category: "High-Performance Fitness Arena",
+    title: "Titan Strength & Conditioning",
+    category: "High-Performance Athletic Arena",
     city: "Mangalore",
     src: "/gym_360.png",
     hotspots: [
@@ -104,8 +104,8 @@ export function WorkTeaser() {
                 {/* Top Status Header */}
                 <div className="absolute top-3 left-3 right-3 z-30 flex items-center justify-between pointer-events-none">
                   <div className="flex items-center gap-1.5 px-2.5 py-1 bg-black/70 backdrop-blur-md border border-white/15 rounded text-[9px] font-mono tracking-widest text-white uppercase font-bold shadow-md">
-                    <span className="h-1.5 w-1.5 rounded-full bg-mad-red animate-rec-pulse" />
-                    <span>LIVE 360°</span>
+                    <span className="h-1.5 w-1.5 rounded-full bg-mad-azure animate-pulse" />
+                    <span>CONCEPT TOUR</span>
                   </div>
 
                   <div className="flex items-center gap-1 px-2 py-1 bg-black/60 backdrop-blur-sm border border-white/10 rounded text-[9px] font-mono text-neutral-300">
@@ -129,6 +129,7 @@ export function WorkTeaser() {
                   0{index + 1} //
                 </span>
               </div>
+              <span className="font-mono text-[9px] text-text-secondary/50 px-1">Illustrative sample</span>
             </motion.div>
           ))}
         </div>
