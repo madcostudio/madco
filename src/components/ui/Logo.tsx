@@ -10,19 +10,58 @@ export function Logo() {
   const [progress, setProgress] = useState(0);
   const [isHolding, setIsHolding] = useState(false);
   const [isExploding, setIsExploding] = useState(false);
-  const [explosionOrigin, setExplosionOrigin] = useState({ x: '50%', y: '50%' });
+  const [isInitialLoad, setIsInitialLoad] = useState(true);
+  const [targetOrigin, setTargetOrigin] = useState({ x: 75, y: 40 });
+  const [windowSize, setWindowSize] = useState({ width: 1200, height: 800 });
   const holdIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const isLongHoldRef = useRef(false);
   const router = useRouter();
 
+  // Measure navbar logo center position and viewport dimensions
+  const updateMeasurements = useCallback(() => {
+    if (typeof window !== "undefined") {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+      if (logoRef.current) {
+        const rect = logoRef.current.getBoundingClientRect();
+        setTargetOrigin({
+          x: rect.left + rect.width / 2,
+          y: rect.top + rect.height / 2,
+        });
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    updateMeasurements();
+    window.addEventListener("resize", updateMeasurements);
+    return () => window.removeEventListener("resize", updateMeasurements);
+  }, [updateMeasurements]);
+
+  // Trigger smooth circular shrink animation to navbar logo on initial page load
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reducedMotion) {
+      setIsInitialLoad(false);
+      return;
+    }
+    updateMeasurements();
+    const timer = setTimeout(() => {
+      setIsInitialLoad(false);
+    }, 1450);
+    return () => clearTimeout(timer);
+  }, [updateMeasurements]);
+
   const startHold = (e: React.PointerEvent) => {
     // Only trigger on left click (button 0) or touch pointers
     if (e.button !== 0 && e.pointerType === "mouse") return;
-    
+
     isLongHoldRef.current = false;
     setIsHolding(true);
     setProgress(0);
-    
+
     const startTime = Date.now();
     const duration = 1000; // 1 second hold threshold
 
@@ -51,22 +90,22 @@ export function Logo() {
 
   const triggerLoungeReveal = () => {
     if (!dotRef.current) return;
-    
+
     const rect = dotRef.current.getBoundingClientRect();
     const x = rect.left + rect.width / 2;
     const y = rect.top + rect.height / 2;
-    
+
     // Dispatch custom window event containing coordinates of the dot
     const event = new CustomEvent("enter-priority-lounge", { detail: { x, y } });
     window.dispatchEvent(event);
   };
 
-  // Seamless epic page wipe transition on click
+  // Seamless circular transition on navbar logo click
   const handleLogoClick = useCallback((e: React.MouseEvent<HTMLAnchorElement>) => {
     e.preventDefault();
-    
+
     if (isLongHoldRef.current) return;
-    
+
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reducedMotion) {
       if (window.location.pathname === "/") {
@@ -77,30 +116,23 @@ export function Logo() {
       return;
     }
 
-    if (dotRef.current) {
-      const rect = dotRef.current.getBoundingClientRect();
-      setExplosionOrigin({ 
-        x: `${rect.left + rect.width / 2}px`, 
-        y: `${rect.top + rect.height / 2}px` 
-      });
-    }
-
+    updateMeasurements();
     setIsExploding(true);
 
-    // Trigger navigation while the screen is completely covered by the red mask
+    // Trigger navigation while the screen is fully masked
     setTimeout(() => {
       if (window.location.pathname === "/") {
         window.scrollTo({ top: 0, behavior: "smooth" });
       } else {
         router.push("/");
       }
-    }, 450);
+    }, 420);
 
-    // Unmount the transition overlay after the slide-up finishes
+    // Clean up after circular reveal finishes
     setTimeout(() => {
       setIsExploding(false);
-    }, 1300);
-  }, [router]);
+    }, 1550);
+  }, [router, updateMeasurements]);
 
   useEffect(() => {
     return () => {
@@ -113,9 +145,13 @@ export function Logo() {
   const circumference = 2 * Math.PI * radius;
   const strokeDashoffset = circumference - (progress / 100) * circumference;
 
+  // Offset vector from viewport center to the navbar logo center
+  const deltaX = targetOrigin.x - windowSize.width / 2;
+  const deltaY = targetOrigin.y - windowSize.height / 2;
+
   return (
     <div className="flex items-center gap-2 group select-none relative z-50">
-      <a 
+      <a
         ref={logoRef}
         href="/"
         onClick={handleLogoClick}
@@ -124,9 +160,9 @@ export function Logo() {
       >
         MAD.CO
       </a>
-      
+
       {/* Pulsing Red Dot Trigger */}
-      <span 
+      <span
         ref={dotRef}
         onPointerDown={startHold}
         onPointerUp={endHold}
@@ -153,39 +189,114 @@ export function Logo() {
         )}
       </span>
 
-      {/* Sleek Page Wipe Transition (Fixed to viewport) */}
+      {/* Clean, GPU-Accelerated Circular Iris Shrink Transition */}
       <AnimatePresence>
-        {isExploding && (
-          <div className="fixed inset-0 z-[9999] pointer-events-none">
-            {/* The container that slides up to reveal the new page */}
+        {(isExploding || isInitialLoad) && (
+          <motion.div
+            key="madco-circular-transition"
+            initial={{
+              clipPath: isExploding
+                ? `circle(0px at ${targetOrigin.x}px ${targetOrigin.y}px)`
+                : `circle(160vmax at ${targetOrigin.x}px ${targetOrigin.y}px)`,
+            }}
+            animate={
+              isExploding
+                ? {
+                    clipPath: [
+                      `circle(0px at ${targetOrigin.x}px ${targetOrigin.y}px)`,
+                      `circle(160vmax at ${targetOrigin.x}px ${targetOrigin.y}px)`,
+                      `circle(160vmax at ${targetOrigin.x}px ${targetOrigin.y}px)`,
+                      `circle(0px at ${targetOrigin.x}px ${targetOrigin.y}px)`,
+                    ],
+                  }
+                : {
+                    clipPath: `circle(0px at ${targetOrigin.x}px ${targetOrigin.y}px)`,
+                  }
+            }
+            exit={{ opacity: 0 }}
+            transition={{
+              duration: isExploding ? 1.45 : 0.9,
+              delay: isExploding ? 0 : 0.45,
+              times: isExploding ? [0, 0.32, 0.46, 1] : undefined,
+              ease: [0.76, 0, 0.24, 1], // Silky cinematic bezier curve
+            }}
+            className="fixed inset-0 z-[9999] bg-[#050508] pointer-events-none overflow-hidden flex items-center justify-center"
+          >
+            {/* Subtle atmospheric ambient glow in the center */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(245,37,15,0.07)_0%,transparent_65%)] pointer-events-none" />
+
+            {/* Centered Logo: Crisp in middle on hold, then glides & shrinks directly into navbar logo */}
             <motion.div
-              initial={{ y: "0%" }}
-              animate={{ y: "-100%" }}
-              transition={{ duration: 0.7, delay: 0.6, ease: [0.7, 0, 0.3, 1] }}
-              className="absolute inset-0 w-full h-full overflow-hidden"
+              initial={{
+                x: isExploding ? deltaX : 0,
+                y: isExploding ? deltaY : 0,
+                scale: isExploding ? 0.2 : 1,
+                opacity: isExploding ? 0 : 1,
+              }}
+              animate={
+                isExploding
+                  ? {
+                      x: [deltaX, 0, 0, deltaX],
+                      y: [deltaY, 0, 0, deltaY],
+                      scale: [0.2, 1, 1, 0.2],
+                      opacity: [0, 1, 1, 0],
+                    }
+                  : {
+                      x: [0, 0, deltaX],
+                      y: [0, 0, deltaY],
+                      scale: [1, 1, 0.2],
+                      opacity: [1, 1, 0],
+                    }
+              }
+              transition={{
+                duration: isExploding ? 1.45 : 0.9,
+                delay: isExploding ? 0 : 0.45,
+                times: isExploding ? [0, 0.32, 0.46, 1] : [0, 0.08, 1],
+                ease: [0.76, 0, 0.24, 1],
+              }}
+              className="flex items-baseline gap-3 sm:gap-4 select-none pointer-events-none"
             >
-              {/* The expanding red dot that fills the screen */}
-              <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 200 }}
-                transition={{ duration: 0.6, ease: [0.7, 0, 0.3, 1] }}
-                className="absolute w-8 h-8 bg-mad-red rounded-full"
-                style={{ top: explosionOrigin.y, left: explosionOrigin.x, x: "-50%", y: "-50%" }}
-              />
-              
-              {/* Brand mark that fades in over the red mask */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3, delay: 0.3 }}
-                className="absolute inset-0 flex items-center justify-center mix-blend-overlay"
-              >
-                <span className="font-display font-black text-[12vw] tracking-tighter text-white uppercase">
-                  MAD.CO
-                </span>
-              </motion.div>
+              <span className="font-display font-black text-6xl sm:text-8xl md:text-9xl tracking-tighter text-white uppercase drop-shadow-[0_0_35px_rgba(255,255,255,0.25)]">
+                MAD.CO
+              </span>
+              <span className="h-3.5 w-3.5 sm:h-5 sm:w-5 md:h-6 md:w-6 rounded-full bg-mad-red animate-breathe drop-shadow-[0_0_15px_rgba(245,37,15,0.9)]" />
             </motion.div>
-          </div>
+
+            {/* Glowing circular iris rim tracking the collapsing edge */}
+            <motion.div
+              initial={{
+                width: isExploding ? "0px" : "320vmax",
+                height: isExploding ? "0px" : "320vmax",
+                opacity: 0,
+              }}
+              animate={
+                isExploding
+                  ? {
+                      width: ["0px", "320vmax", "320vmax", "0px"],
+                      height: ["0px", "320vmax", "320vmax", "0px"],
+                      opacity: [0, 0.6, 0.6, 0],
+                    }
+                  : {
+                      width: "0px",
+                      height: "0px",
+                      opacity: [0.8, 0.8, 0],
+                    }
+              }
+              transition={{
+                duration: isExploding ? 1.45 : 0.9,
+                delay: isExploding ? 0 : 0.45,
+                times: isExploding ? [0, 0.32, 0.46, 1] : undefined,
+                ease: [0.76, 0, 0.24, 1],
+              }}
+              style={{
+                top: targetOrigin.y,
+                left: targetOrigin.x,
+                x: "-50%",
+                y: "-50%",
+              }}
+              className="absolute rounded-full border border-mad-red/40 shadow-[0_0_50px_rgba(245,37,15,0.5),inset_0_0_30px_rgba(245,37,15,0.25)] pointer-events-none"
+            />
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

@@ -53,7 +53,7 @@ export function ImpossibleHeadline({ className = "" }: ImpossibleHeadlineProps) 
             className="inline-block overflow-hidden align-baseline relative py-1 pr-3"
           >
             {/* Letter reveal container with individual staggered upward cascade */}
-            <span className="inline-flex items-baseline whitespace-nowrap relative text-mesh-red hover:text-white transition-colors duration-500 pr-2">
+            <span className="inline-flex items-baseline whitespace-nowrap relative text-impossible-fill pr-2">
               {LETTERS.map((letter, idx) => (
                 <motion.span
                   key={`${letter}-${idx}`}
