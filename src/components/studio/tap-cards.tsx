@@ -428,10 +428,26 @@ export function TapCards() {
                 <select 
                   required
                   value={assignModal.client_id}
-                  onChange={e => setAssignModal({...assignModal, client_id: e.target.value})}
+                  onChange={async e => {
+                    if (e.target.value === "NEW_CLIENT") {
+                      const name = prompt("Enter the business name for the new client:");
+                      if (!name) return;
+                      try {
+                        const { data, error } = await supabase.from("clients").insert({ business_name: name }).select();
+                        if (error) throw error;
+                        setClients([...clients, data[0]].sort((a, b) => a.business_name.localeCompare(b.business_name)));
+                        setAssignModal({...assignModal, client_id: data[0].id});
+                      } catch (err: any) {
+                        alert("Error creating client: " + err.message);
+                      }
+                    } else {
+                      setAssignModal({...assignModal, client_id: e.target.value});
+                    }
+                  }}
                   className="w-full bg-black/30 border border-white/10 text-white rounded p-2.5 font-sans text-sm focus:border-mad-red focus:outline-none"
                 >
                   <option value="" disabled>Select a client...</option>
+                  <option value="NEW_CLIENT" className="font-bold text-emerald-400">+ Add New Client</option>
                   {clients.map(c => <option key={c.id} value={c.id}>{c.business_name}</option>)}
                 </select>
               </div>

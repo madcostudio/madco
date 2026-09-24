@@ -100,6 +100,18 @@ export function TapClients() {
     }
   }
 
+  async function handleDeleteClient(id: string) {
+    if (!confirm("Are you sure you want to delete this client? This will remove them permanently and orphan any assigned cards.")) return;
+    try {
+      const { error } = await supabase.from("clients").delete().eq("id", id);
+      if (error) throw error;
+      setClients(prev => prev.filter(c => c.id !== id));
+      setActiveClient(null);
+    } catch (e: any) {
+      alert("Error deleting client: " + e.message);
+    }
+  }
+
   function openEdit(client: any) {
     setFormData({
       business_name: client.business_name || "",
@@ -235,7 +247,13 @@ export function TapClients() {
               </div>
             </div>
 
-            <div className="flex justify-end gap-3 pt-4">
+            <div className="flex justify-between items-center pt-4">
+              <button 
+                onClick={() => handleDeleteClient(activeClient.id)}
+                className="text-mad-red hover:text-red-400 font-mono text-xs uppercase transition-colors"
+              >
+                Delete Client
+              </button>
               <button 
                 onClick={() => setActiveClient({...activeClient, isEditing: true})}
                 className="bg-white/10 hover:bg-white/20 text-white font-mono text-xs uppercase px-4 py-2 rounded transition-colors"
