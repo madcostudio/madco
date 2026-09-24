@@ -21,6 +21,9 @@ import {
   Circle,
   Eye,
   Key,
+  BarChart2,
+  CreditCard,
+  Settings,
 } from "lucide-react";
 import {
   loginAction,
@@ -43,6 +46,10 @@ import {
 } from "./actions";
 import { SessionData } from "@/lib/auth";
 import { PKG_MAP, makeChecklist, progressOf, currentStep, ADD_ONS } from "@/lib/checklist";
+import { TapDashboard } from "@/components/studio/tap-dashboard";
+import { TapClients } from "@/components/studio/tap-clients";
+import { TapCards } from "@/components/studio/tap-cards";
+import { TapServices } from "@/components/studio/tap-services";
 
 /* ---------------- Progress Ring Component ---------------- */
 function ProgressRing({ pct = 0, size = 64, stroke = 5, label = true }) {
@@ -606,6 +613,10 @@ export default function StudioPage() {
         ["pricing", "Prices & Scope", Tag],
         ["guide", "Field SOP", BookOpen],
         ["checklist", "Master Checklist", ClipboardCheck],
+        ["tap-dashboard", "Tap Dashboard", BarChart2],
+        ["tap-clients", "Tap Clients", Users],
+        ["tap-cards", "Tap Cards", CreditCard],
+        ["tap-services", "Tap Services", Settings],
       ]
     : [
         ["jobs", "My Assigned Jobs", Camera],
@@ -865,6 +876,15 @@ export default function StudioPage() {
         ) : (
           /* STANDARD TAB VIEWS */
           <div>
+            {/* VIEW: Tap Dashboard */}
+            {view === "tap-dashboard" && isAdmin && <TapDashboard />}
+            {/* VIEW: Tap Clients */}
+            {view === "tap-clients" && isAdmin && <TapClients />}
+            {/* VIEW: Tap Cards */}
+            {view === "tap-cards" && isAdmin && <TapCards />}
+            {/* VIEW: Tap Services */}
+            {view === "tap-services" && isAdmin && <TapServices onNavigateToClients={() => setView("tap-clients")} />}
+
             {/* VIEW: ADMIN OVERVIEW */}
             {view === "overview" && isAdmin && (
               <div>
