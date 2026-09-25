@@ -11,6 +11,7 @@ import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
 import Link from "next/link";
 import NavigationWrapper from "@/components/ui/NavigationWrapper";
 import { MobileNav } from "@/components/ui/MobileNav";
+import { StudioGateway } from "@/components/ui/StudioGateway";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -215,7 +216,7 @@ export default function RootLayout({
               </div>
 
               <div className="max-w-7xl mx-auto w-full border-t border-white/5 mt-16 pt-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 font-mono text-[10px] text-text-secondary">
-                <div><Link href="/" className="hover:text-text-secondary cursor-default select-none">&copy;</Link> {new Date().getFullYear()} MAD.CO STUDIO. ALL RIGHTS RESERVED.</div>
+                <div><StudioGateway /></div>
                 <div className="flex gap-4">
                   <a href="https://instagram.com/madco.studio" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">INSTAGRAM</a>
                 </div>
