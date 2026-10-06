@@ -173,23 +173,14 @@ function SectionInvisibleImpossible() {
   const [hasFlashed, setHasFlashed] = useState(false);
 
   useEffect(() => {
-    // Hard safety timer: if the scroll driver hasn't initialized / something is broken, force final state after 1000ms.
-    const t = setTimeout(() => {
-      setForceFinal(true);
-      setHasFlashed(true);
-    }, 1000);
-    
+    // Track scroll to trigger the flash exactly when the user reaches the midpoint
     const unsubscribe = scrollYProgress.on("change", (latest) => {
-      clearTimeout(t);
       if (latest > 0.55 && !hasFlashed) {
         setHasFlashed(true);
       }
     });
     
-    return () => {
-      clearTimeout(t);
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, [scrollYProgress, hasFlashed]);
 
   // Start dim and blurry, fade out as we scroll
