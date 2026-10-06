@@ -12,8 +12,8 @@ export function ScrollSetup() {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (mediaQuery.matches) return;
 
-    // Disable Lenis smooth scrolling inside /studio route
-    if (pathname?.startsWith("/studio")) {
+    // Disable Lenis smooth scrolling inside /studio and /card routes
+    if (pathname?.startsWith("/studio") || pathname?.startsWith("/card")) {
       return;
     }
 

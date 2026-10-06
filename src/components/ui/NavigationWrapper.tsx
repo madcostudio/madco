@@ -14,8 +14,9 @@ export default function NavigationWrapper({
 }) {
   const pathname = usePathname();
   const isStudio = pathname?.startsWith("/studio");
+  const isCard = pathname?.startsWith("/card");
 
-  if (isStudio) {
+  if (isStudio || isCard) {
     return <>{children}</>;
   }
 

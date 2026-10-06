@@ -167,10 +167,11 @@ export function TapCards() {
     e.preventDefault();
     try {
       const updates = {
-        client_id: assignModal.client_id,
+        client_id: assignModal.client_id || null,
         destination_url: assignModal.destination_url,
         card_type: assignModal.card_type,
         notes: assignModal.notes,
+        location_label: assignModal.location_label || null,
         status: "Active",
         assigned_date: assignModal.card.status === "Blank" ? new Date().toISOString() : assignModal.card.assigned_date
       };
@@ -330,7 +331,7 @@ export function TapCards() {
               <tr>
                 <th className="px-6 py-4">Serial</th>
                 <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4">Client</th>
+                <th className="px-6 py-4">Client / Location</th>
                 <th className="px-6 py-4">Type</th>
                 <th className="px-6 py-4 text-center">Scans (NFC/QR)</th>
                 <th className="px-6 py-4 text-right">Actions</th>
@@ -358,9 +359,14 @@ export function TapCards() {
                     <td className="px-6 py-4">
                       {isBlank ? <span className="text-xs italic opacity-50">Unassigned</span> : 
                         <div>
-                          <span className="text-white font-bold">{card.clients?.business_name}</span>
+                          <span className="text-white font-bold">
+                            {card.clients?.business_name || (card.location_label ? `Location: ${card.location_label}` : 'No Client')}
+                          </span>
+                          {card.clients?.business_name && card.location_label && (
+                             <span className="block text-[10px] text-white/50">Location: {card.location_label}</span>
+                          )}
                           {card.destination_url && (
-                            <a href={card.destination_url.startsWith('http') ? card.destination_url : `https://${card.destination_url}`} target="_blank" rel="noreferrer" className="block text-[10px] text-blue-400 hover:underline mt-1 truncate max-w-[200px]" title={card.destination_url}>
+                            <a href={card.destination_url.startsWith('http') || card.destination_url.startsWith('/') ? card.destination_url : `https://${card.destination_url}`} target="_blank" rel="noreferrer" className="block text-[10px] text-blue-400 hover:underline mt-1 truncate max-w-[200px]" title={card.destination_url}>
                               {card.destination_url}
                             </a>
                           )}
@@ -379,7 +385,7 @@ export function TapCards() {
                       </div>
                     </td>
                     <td className="px-6 py-4 flex justify-end gap-2">
-                      <button onClick={() => setAssignModal({ card, client_id: card.client_id || "", destination_url: card.destination_url || "", card_type: card.card_type || "Tap-to-Review", notes: card.notes || "" })} className="p-1.5 text-text-secondary hover:text-white bg-white/5 rounded transition-colors" title={isBlank ? "Assign" : "Edit"}>
+                      <button onClick={() => setAssignModal({ card, client_id: card.client_id || "", destination_url: card.destination_url || "", card_type: card.card_type || "Tap-to-Review", notes: card.notes || "", location_label: card.location_label || "" })} className="p-1.5 text-text-secondary hover:text-white bg-white/5 rounded transition-colors" title={isBlank ? "Assign" : "Edit"}>
                         <Edit2 size={14} />
                       </button>
                       <button onClick={() => copyNfcUrl(card.token)} className="p-1.5 text-text-secondary hover:text-blue-400 bg-white/5 rounded transition-colors" title="Copy NFC URL">
@@ -424,9 +430,8 @@ export function TapCards() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-[10px] font-mono tracking-wider text-text-secondary uppercase mb-1">Client</label>
+                <label className="block text-[10px] font-mono tracking-wider text-text-secondary uppercase mb-1">Client (Optional for Internal Placements)</label>
                 <select 
-                  required
                   value={assignModal.client_id}
                   onChange={async e => {
                     if (e.target.value === "NEW_CLIENT") {
@@ -446,10 +451,21 @@ export function TapCards() {
                   }}
                   className="w-full bg-black/30 border border-white/10 text-white rounded p-2.5 font-sans text-sm focus:border-mad-red focus:outline-none"
                 >
-                  <option value="" disabled>Select a client...</option>
+                  <option value="">No Client (Internal)</option>
                   <option value="NEW_CLIENT" className="font-bold text-emerald-400">+ Add New Client</option>
                   {clients.map(c => <option key={c.id} value={c.id}>{c.business_name}</option>)}
                 </select>
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-mono tracking-wider text-text-secondary uppercase mb-1">Location Label (Optional)</label>
+                <input 
+                  type="text"
+                  placeholder="e.g. Café X counter or Event Handout"
+                  value={assignModal.location_label}
+                  onChange={e => setAssignModal({...assignModal, location_label: e.target.value})}
+                  className="w-full bg-black/30 border border-white/10 text-white rounded p-2.5 font-sans text-sm focus:border-mad-red focus:outline-none"
+                />
               </div>
               
               <div>
