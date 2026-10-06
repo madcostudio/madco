@@ -461,6 +461,20 @@ function Section3Tour() {
   const [hasError, setHasError] = useState(false);
   const viewerRef = useRef<HTMLDivElement>(null);
 
+  const handleStartTour = async () => {
+    if (typeof window !== 'undefined' && typeof (window as any).DeviceOrientationEvent !== 'undefined' && typeof (window as any).DeviceOrientationEvent.requestPermission === 'function') {
+      try {
+        const permissionState = await (window as any).DeviceOrientationEvent.requestPermission();
+        if (permissionState === 'granted') {
+          // Permission granted
+        }
+      } catch (err) {
+        console.warn("DeviceOrientationEvent permission error", err);
+      }
+    }
+    setTourActive(true);
+  };
+
   useEffect(() => {
     if (!tourActive || hasError || !viewerRef.current) return;
     
@@ -481,7 +495,8 @@ function Section3Tour() {
               autoRotate: -2,
               compass: false,
               showControls: false,
-              mouseZoom: false
+              mouseZoom: false,
+              orientationOnByDefault: true // Gyro Support
             });
           } else {
             setHasError(true);
@@ -523,7 +538,7 @@ function Section3Tour() {
       {!tourActive && !hasError && (
         <div 
           className="absolute inset-0 bg-[#050508]/40 flex flex-col items-center justify-center cursor-pointer z-10 transition-opacity duration-500"
-          onClick={() => setTourActive(true)}
+          onClick={handleStartTour}
         >
           <div className="absolute top-6 left-6 flex items-center space-x-2">
             <div className="w-3 h-3 bg-[#F5250F] rounded-full animate-pulse" />
@@ -556,6 +571,21 @@ function Section3Tour() {
             </Link>
           </div>
         </div>
+      )}
+
+      {/* Exit Tour Button */}
+      {(tourActive && !hasError) && (
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setTourActive(false);
+            window.scrollBy({ top: window.innerHeight * 0.5, behavior: 'smooth' });
+          }}
+          className="absolute top-6 right-6 z-50 bg-black/50 backdrop-blur-md border border-white/20 text-white rounded-full px-4 py-3 flex items-center space-x-2 hover:bg-black/80 transition-colors shadow-2xl"
+        >
+          <span className="text-[10px] font-mono tracking-widest uppercase font-bold">Close & Scroll</span>
+          <ChevronDown className="w-4 h-4" />
+        </button>
       )}
     </section>
   );
