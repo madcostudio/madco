@@ -170,33 +170,39 @@ function SectionInvisibleImpossible() {
   });
 
   const [forceFinal, setForceFinal] = useState(false);
+  const [hasFlashed, setHasFlashed] = useState(false);
+
   useEffect(() => {
     // Hard safety timer: if the scroll driver hasn't initialized / something is broken, force final state after 1000ms.
-    const t = setTimeout(() => setForceFinal(true), 1000);
+    const t = setTimeout(() => {
+      setForceFinal(true);
+      setHasFlashed(true);
+    }, 1000);
     
-    // If framer motion updates scrollYProgress, it means the driver is working. We can cancel the timer.
-    const unsubscribe = scrollYProgress.on("change", () => {
+    const unsubscribe = scrollYProgress.on("change", (latest) => {
       clearTimeout(t);
+      if (latest > 0.55 && !hasFlashed) {
+        setHasFlashed(true);
+      }
     });
     
     return () => {
       clearTimeout(t);
       unsubscribe();
     };
-  }, [scrollYProgress]);
+  }, [scrollYProgress, hasFlashed]);
 
   // Start dim and blurry, fade out as we scroll
   // Minimum opacity is 0.35 so it's always readable.
   const text1Opacity = useTransform(scrollYProgress, [0.1, 0.4, 0.5], [0.35, 0.4, 0]);
   const text1Blur = useTransform(scrollYProgress, [0.1, 0.4], ["blur(8px)", "blur(0px)"]);
   
-  // Fade in, scale up, turn white
+  // Fade in the container of text 2
   const text2Opacity = useTransform(scrollYProgress, [0.45, 0.65], [0, 1]);
-  const text2Scale = useTransform(scrollYProgress, [0.45, 0.8], [0.8, 1]);
-  const text2Y = useTransform(scrollYProgress, [0.45, 0.8], [40, 0]);
 
-  // Red dot lands at the end
-  const dotScale = useTransform(scrollYProgress, [0.75, 0.85], [0, 1]);
+  // The letters we will stagger-animate
+  const line1 = "THIS IS HOW".split("");
+  const line2 = "IT SHOULD LOOK".split("");
 
   return (
     <section ref={containerRef} className="relative w-full h-[150vh] bg-[#050508]">
@@ -211,6 +217,16 @@ function SectionInvisibleImpossible() {
 
       <div className="sticky top-0 h-[100vh] h-[100dvh] w-full flex flex-col items-center justify-center px-6 overflow-hidden">
         
+        {/* Massive Let There Be Light Flash */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={hasFlashed ? { opacity: [0, 1, 0], scale: [0.5, 2, 4] } : { opacity: 0, scale: 0.5 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="absolute inset-0 flex items-center justify-center pointer-events-none z-0"
+        >
+          <div className="w-[200px] h-[200px] md:w-[400px] md:h-[400px] bg-[#F5250F] blur-[100px] rounded-full mix-blend-screen" />
+        </motion.div>
+
         {/* Unanimated Eyebrow Label */}
         <div className="absolute top-12 left-6 z-20">
           <p className="font-mono text-[10px] tracking-widest text-[#F5250F] uppercase">
@@ -221,25 +237,60 @@ function SectionInvisibleImpossible() {
         {/* State 1: The current reality */}
         <motion.div 
           style={{ opacity: forceFinal ? 0 : text1Opacity, filter: forceFinal ? "none" : text1Blur }}
-          className="absolute inset-0 flex items-center justify-center px-6 pointer-events-none"
+          className="absolute inset-0 flex items-center justify-center px-6 pointer-events-none z-10"
         >
-          <p className="font-sans font-medium text-center text-white text-sm md:text-base uppercase tracking-[0.2em] max-w-sm">
+          {/* Apply a subtle CSS animation to make the 'bad' text feel uneasy */}
+          <p className="font-sans font-medium text-center text-white text-sm md:text-base uppercase tracking-[0.2em] max-w-sm animate-pulse">
             Right now, this is how your business looks online.
           </p>
         </motion.div>
         
         {/* State 2: The payoff */}
         <motion.div
-          style={{ 
-            opacity: forceFinal ? 1 : text2Opacity, 
-            scale: forceFinal ? 1 : text2Scale, 
-            y: forceFinal ? 0 : text2Y 
-          }}
-          className="absolute inset-0 flex flex-col items-center justify-center px-4 pointer-events-none"
+          style={{ opacity: forceFinal ? 1 : text2Opacity }}
+          className="absolute inset-0 flex flex-col items-center justify-center px-4 pointer-events-none z-20"
         >
-          <h2 className="font-display text-5xl sm:text-6xl md:text-7xl uppercase tracking-normal text-white text-center leading-[1.05]">
-            This is how<br/>it should look
-            <motion.span style={{ scale: forceFinal ? 1 : dotScale }} className="inline-block text-[#F5250F] ml-1">.</motion.span>
+          <h2 className="font-display text-5xl sm:text-6xl md:text-7xl uppercase tracking-normal text-white text-center leading-[1.05] flex flex-col items-center">
+            
+            {/* LINE 1 */}
+            <div className="flex overflow-hidden">
+              {line1.map((char, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ y: 100, opacity: 0, filter: "blur(10px)" }}
+                  animate={hasFlashed ? { y: 0, opacity: 1, filter: "blur(0px)" } : { y: 100, opacity: 0, filter: "blur(10px)" }}
+                  transition={{ type: "spring", stiffness: 150, damping: 10, delay: i * 0.03 }}
+                  className={char === " " ? "w-4" : "inline-block"}
+                >
+                  {char}
+                </motion.span>
+              ))}
+            </div>
+
+            {/* LINE 2 */}
+            <div className="flex overflow-hidden items-end">
+              {line2.map((char, i) => (
+                <motion.span
+                  key={i}
+                  initial={{ y: 100, opacity: 0, filter: "blur(10px)" }}
+                  animate={hasFlashed ? { y: 0, opacity: 1, filter: "blur(0px)" } : { y: 100, opacity: 0, filter: "blur(10px)" }}
+                  transition={{ type: "spring", stiffness: 150, damping: 10, delay: (line1.length * 0.03) + (i * 0.03) }}
+                  className={char === " " ? "w-4" : "inline-block"}
+                >
+                  {char}
+                </motion.span>
+              ))}
+              
+              <motion.span 
+                initial={{ scale: 0, opacity: 0, rotate: 180 }}
+                animate={hasFlashed ? { scale: [3, 1], opacity: 1, rotate: 0 } : { scale: 0, opacity: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 12, delay: 0.8 }}
+                className="inline-block text-[#F5250F] ml-1 origin-center shadow-[0_0_30px_rgba(245,37,15,0.8)]"
+              >
+                .
+              </motion.span>
+            </div>
+
           </h2>
         </motion.div>
 
