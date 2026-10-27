@@ -16,12 +16,12 @@ export default function WorkPage() {
     <div className="w-full min-h-screen pt-28 pb-16 flex flex-col font-sans">
       
       {/* 1. Hero Section */}
-      <section className="px-6 md:px-12 xl:px-24 py-16 relative">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-16 relative">
         <div className="max-w-4xl mx-auto text-center flex flex-col items-center">
           <span className="font-mono text-xs tracking-widest text-text-secondary uppercase mb-4">
             // DEMONSTRATION GALLERY
           </span>
-          <h1 className="font-display text-5xl md:text-7xl uppercase tracking-tight text-white mb-6">
+          <h1 className="font-display t-display-1 uppercase text-white mb-6">
             SEE THE DIFFERENCE.
           </h1>
           <p className="max-w-2xl text-base md:text-lg text-text-secondary leading-relaxed mb-10 border-l-2 border-championship-gold pl-6 text-left bg-white/5 p-6 rounded-r-lg">
@@ -43,7 +43,7 @@ export default function WorkPage() {
       <SpatialDemonstrations />
 
       {/* 3. The Google Business Profile Transformation */}
-      <section className="px-6 md:px-12 xl:px-24 py-24 bg-background border-t border-white/5">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-24 bg-background border-t border-white/5">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             
@@ -51,7 +51,7 @@ export default function WorkPage() {
               <span className="font-mono text-xs tracking-widest text-mad-red uppercase">
                 // THE REAL TRANSFORMATION
               </span>
-              <h2 className="font-display text-4xl md:text-5xl uppercase tracking-tight text-white leading-tight">
+              <h2 className="font-display t-display-2 uppercase text-white leading-tight">
                 MOST PROFILES ARE LEAKING CUSTOMERS.
               </h2>
               <p className="text-base text-text-secondary leading-relaxed font-sans">
@@ -82,7 +82,7 @@ export default function WorkPage() {
       </section>
 
       {/* Visual Component Section (Customer Decision & Hotspots) */}
-      <section className="px-6 md:px-12 xl:px-24 py-16 bg-surface-1 border-t border-white/5">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-16 bg-surface-1 border-t border-white/5">
          <div className="max-w-7xl mx-auto flex flex-col gap-12">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               <div className="flex flex-col gap-4">
@@ -108,13 +108,13 @@ export default function WorkPage() {
       </section>
 
       {/* 4. What a delivery looks like */}
-      <section className="px-6 md:px-12 xl:px-24 py-24 bg-background border-t border-white/5">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-24 bg-background border-t border-white/5">
         <div className="max-w-4xl mx-auto w-full flex flex-col gap-8">
           <div className="flex flex-col gap-2">
             <span className="font-mono text-xs tracking-widest text-text-secondary uppercase">
               // THE ARSENAL
             </span>
-            <h2 className="font-display text-3xl md:text-5xl uppercase tracking-tight text-white">
+            <h2 className="font-display t-display-3 uppercase text-white">
               WHAT YOU ACTUALLY GET.
             </h2>
             <p className="text-text-secondary text-sm">Everything included in a standard Immersive Pro delivery.</p>
@@ -124,11 +124,11 @@ export default function WorkPage() {
       </section>
 
       {/* 6. CTA Band */}
-      <section className="px-6 md:px-12 xl:px-24 py-20 bg-mad-red relative overflow-hidden">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-20 bg-mad-red relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/noise.png')] opacity-10 mix-blend-overlay"></div>
         <div className="max-w-4xl mx-auto w-full relative z-10 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
           <div>
-            <h2 className="font-display text-3xl md:text-4xl uppercase tracking-tight text-white mb-2">
+            <h2 className="font-display t-display-3 uppercase text-white mb-2">
               Ready to Upgrade Your Space?
             </h2>
             <p className="text-white/80 text-sm">Claim one of the founding slots before they close.</p>

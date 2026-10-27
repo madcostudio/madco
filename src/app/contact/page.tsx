@@ -351,7 +351,7 @@ function ContactForm() {
 
 export default function ContactPage() {
   return (
-    <div className="w-full min-h-screen pt-28 pb-16 px-6 md:px-12 xl:px-24 flex items-center justify-center font-sans">
+    <div className="w-full min-h-screen pt-28 pb-16 px-[clamp(1.25rem,5vw,6rem)] flex items-center justify-center font-sans">
       <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
         
         {/* Left Column: Direct Connect & Details */}
@@ -365,7 +365,7 @@ export default function ContactPage() {
             <span className="font-mono text-xs tracking-widest text-mad-red uppercase">
               // AUDIT SECURE SHEET
             </span>
-            <h1 className="font-display text-4xl md:text-5xl uppercase tracking-tight text-white leading-tight">
+            <h1 className="font-display t-display-2 uppercase text-white leading-tight">
               BOOK A 15-MINUTE SPATIAL AUDIT.
             </h1>
             <p className="text-sm md:text-base text-text-secondary leading-relaxed font-sans mt-2">

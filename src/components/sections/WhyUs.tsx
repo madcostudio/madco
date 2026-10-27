@@ -3,7 +3,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { BeforeAfter } from "@/components/ui/BeforeAfter";
-import { SpatialCalculator } from "@/components/ui/SpatialCalculator";
+import Link from "next/link";
+import { ArrowRight, TrendingUp } from "lucide-react";
 
 const metrics = [
   {
@@ -25,14 +26,14 @@ const metrics = [
 
 export function WhyUs() {
   return (
-    <section className="relative py-24 px-6 md:px-12 xl:px-24 border-t border-white/5 bg-background overflow-hidden">
+    <section className="relative section-pad px-[clamp(1.25rem,5vw,6rem)] border-t border-white/5 bg-background overflow-hidden">
       {/* Background ambient lighting */}
       <div className="absolute top-1/3 -left-32 w-80 h-80 bg-mad-azure/5 blur-[120px] pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto w-full flex flex-col gap-20">
+      <div className="max-w-7xl mx-auto w-full flex flex-col gap-12 md:gap-12 md:gap-20">
         
         {/* Core Layout Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 md:gap-12 items-center">
           
           {/* Left Column: Copy & Metrics */}
           <motion.div 
@@ -40,14 +41,14 @@ export function WhyUs() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7 }}
-            className="lg:col-span-5 flex flex-col gap-8"
+            className="lg:col-span-5 flex flex-col gap-6 md:gap-8"
           >
             <div className="flex flex-col gap-4">
               <span className="font-mono text-xs tracking-widest text-mad-red uppercase flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-mad-red animate-pulse" />
                 // CONVERSION SCIENCE
               </span>
-              <h2 className="font-display text-4xl md:text-5xl uppercase tracking-tight text-white">
+              <h2 className="font-display t-display-2 uppercase text-white">
                 WE CONVERT VIEWS INTO VISITORS.
               </h2>
               <p className="text-sm md:text-base text-text-secondary leading-relaxed font-sans mt-2">
@@ -56,7 +57,7 @@ export function WhyUs() {
             </div>
 
             {/* Metrics List with staggered scroll reveals */}
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-4 md:gap-6">
               {metrics.map((item, idx) => (
                 <motion.div 
                   key={item.label}
@@ -103,15 +104,39 @@ export function WhyUs() {
 
         </div>
 
-        {/* Interactive Spatial Footfall & ROI Calculator */}
+        {/* ROI calculator moved to /tours, where pricing gives it context.
+            Keeping the full tool here made the homepage three screens longer
+            on a phone. This band preserves the conversion path in one tap. */}
         <motion.div
-          initial={{ opacity: 0, y: 40 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="w-full"
         >
-          <SpatialCalculator />
+          <Link
+            href="/tours#roi"
+            className="group flex flex-col sm:flex-row sm:items-center justify-between gap-5 w-full rounded-2xl border border-white/10 hover:border-mad-red/50 bg-surface-2 p-6 md:p-8 transition-colors duration-300"
+          >
+            <div className="flex items-start gap-4 min-w-0">
+              <span className="shrink-0 p-3 rounded-xl bg-mad-red/10 border border-mad-red/25">
+                <TrendingUp className="w-5 h-5 text-mad-red" />
+              </span>
+              <span className="flex flex-col gap-1 min-w-0">
+                <span className="font-display text-xl sm:text-2xl uppercase tracking-tight text-white">
+                  What would a tour be worth to you?
+                </span>
+                <span className="text-sm text-text-secondary leading-relaxed">
+                  Pick your business type, set your monthly views, and see the
+                  walk-ins and revenue a tour could add.
+                </span>
+              </span>
+            </div>
+            <span className="flex items-center gap-2 shrink-0 font-mono text-xs tracking-widest uppercase text-mad-red group-hover:text-white transition-colors">
+              Open the calculator
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </span>
+          </Link>
         </motion.div>
 
       </div>

@@ -51,7 +51,7 @@ export function Process() {
   });
 
   return (
-    <section id="process" className="relative py-28 px-6 md:px-12 xl:px-24 border-t border-white/8 bg-surface-1 overflow-hidden">
+    <section id="process" className="relative section-pad px-[clamp(1.25rem,5vw,6rem)] border-t border-white/8 bg-surface-1 overflow-hidden">
       {/* Subtle Background Glows */}
       <div className="absolute top-1/2 -right-32 w-96 h-96 bg-mad-red/5 blur-[130px] pointer-events-none -translate-y-1/2" />
       <div className="absolute bottom-0 -left-32 w-96 h-96 bg-mad-azure/5 blur-[130px] pointer-events-none" />
@@ -59,7 +59,7 @@ export function Process() {
       <div className="max-w-7xl mx-auto w-full">
         
         {/* Header Block */}
-        <div className="flex flex-col gap-4 mb-20">
+        <div className="flex flex-col gap-4 mb-12 md:mb-20">
           <motion.span 
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -74,7 +74,7 @@ export function Process() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="font-display text-4xl md:text-6xl uppercase tracking-tight text-white"
+            className="font-display t-display-2 uppercase text-white"
           >
             ENGINEERED TO PERFECTION.
           </motion.h2>

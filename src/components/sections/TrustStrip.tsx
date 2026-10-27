@@ -32,7 +32,7 @@ export function TrustStrip() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.6 }}
-      className="w-full border-y border-white/8 bg-surface-1/80 backdrop-blur-md py-4 px-6 md:px-12 xl:px-24 relative overflow-hidden shadow-inner"
+      className="w-full border-y border-white/8 bg-surface-1/80 backdrop-blur-md py-4 px-[clamp(1.25rem,5vw,6rem)] relative overflow-hidden shadow-inner"
     >
       {/* Scroll-triggered laser sweep light beam */}
       <motion.div 

@@ -11,6 +11,8 @@ import { WhatsAppFloat } from "@/components/ui/WhatsAppFloat";
 import Link from "next/link";
 import NavigationWrapper from "@/components/ui/NavigationWrapper";
 import { MobileNav } from "@/components/ui/MobileNav";
+import { DesktopNav } from "@/components/ui/DesktopNav";
+import { PRIMARY_CTA } from "@/lib/nav";
 import { StudioGateway } from "@/components/ui/StudioGateway";
 
 const geistSans = Geist({
@@ -104,37 +106,21 @@ export default function RootLayout({
 
         <NavigationWrapper
           header={
-            <header className="fixed top-0 inset-x-0 z-40 h-20 glass-morphism border-b border-white/5 flex items-center justify-between px-6 md:px-12 xl:px-24">
+            <header className="fixed top-0 inset-x-0 z-40 h-20 glass-morphism border-b border-white/5 flex items-center justify-between gap-4 px-[clamp(1.25rem,5vw,6rem)]">
               <Logo />
 
-              {/* Navigation Links */}
-              <nav className="hidden md:flex items-center gap-8 font-mono text-xs tracking-widest uppercase text-text-secondary">
-                <Link href="/tours" className="hover:text-white transition-colors duration-300">
-                  360 Tours
-                </Link>
-                <Link href="/work" className="hover:text-white transition-colors duration-300">
-                  Work
-                </Link>
-                <Link href="/#services" className="hover:text-white transition-colors duration-300">
-                  Services
-                </Link>
-                <Link href="/process" className="hover:text-white transition-colors duration-300">
-                  Process
-                </Link>
-                <Link href="/about" className="hover:text-white transition-colors duration-300">
-                  Studio
-                </Link>
-              </nav>
+              {/* Navigation Links — driven by lib/nav so desktop and mobile agree */}
+              <DesktopNav />
 
               {/* Navigation Action */}
               <div className="flex items-center gap-4">
                 <div className="hidden md:block">
                   <Magnetic>
                     <Link 
-                      href="/contact" 
-                      className="px-4 py-2 border border-white/10 hover:border-mad-red bg-surface-2 hover:bg-mad-red text-white text-xs font-mono tracking-widest uppercase transition-all duration-300 rounded cursor-pointer"
+                      href={PRIMARY_CTA.href}
+                      className="px-4 py-2.5 border border-mad-red bg-mad-red hover:bg-dark-crimson text-white text-xs font-mono tracking-widest uppercase transition-all duration-300 rounded cursor-pointer whitespace-nowrap"
                     >
-                      Book Call
+                      {PRIMARY_CTA.label}
                     </Link>
                   </Magnetic>
                 </div>

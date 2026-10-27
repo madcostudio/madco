@@ -42,7 +42,7 @@ const teaserTours = [
 
 export function WorkTeaser() {
   return (
-    <section className="relative py-28 px-6 md:px-12 xl:px-24 border-t border-white/8 bg-surface-1 overflow-hidden">
+    <section className="relative section-pad px-[clamp(1.25rem,5vw,6rem)] border-t border-white/8 bg-surface-1 overflow-hidden">
       {/* Ambient background glow */}
       <div className="absolute top-0 left-1/3 w-96 h-96 bg-mad-azure/5 blur-[140px] pointer-events-none" />
 
@@ -60,7 +60,7 @@ export function WorkTeaser() {
               <span className="h-1.5 w-1.5 rounded-full bg-mad-red animate-pulse shadow-[0_0_8px_#F5250F]" />
               // RECENT SHOWCASES
             </span>
-            <h2 className="font-display text-4xl md:text-6xl uppercase tracking-tight text-white">
+            <h2 className="font-display t-display-2 uppercase text-white">
               VIRTUAL SPACES.
             </h2>
             <p className="text-text-secondary text-sm md:text-base font-sans max-w-lg">

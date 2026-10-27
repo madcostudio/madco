@@ -6,6 +6,7 @@ import { Check, HelpCircle, ArrowRight, MessageSquare, ShieldCheck, Map, Smartph
 import { Magnetic } from "@/components/ui/Magnetic";
 import Link from "next/link";
 import { config } from "@/lib/config";
+import { SpatialCalculator } from "@/components/ui/SpatialCalculator";
 import type { Metadata } from "next";
 
 const packages = [
@@ -91,7 +92,7 @@ export default function ToursPage() {
     <div className="w-full min-h-screen pt-28 pb-16 flex flex-col font-sans">
       
       {/* Hero Header */}
-      <section className="px-6 md:px-12 xl:px-24 py-12 relative overflow-hidden">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-12 relative overflow-hidden">
         <div className="max-w-7xl mx-auto w-full relative z-10">
           
           <div className="flex items-center gap-3 mb-4">
@@ -105,7 +106,7 @@ export default function ToursPage() {
             </span>
           </div>
 
-          <h1 className="font-display text-5xl md:text-7xl uppercase tracking-tight text-white mb-6 max-w-4xl leading-tight">
+          <h1 className="font-display t-display-1 uppercase text-white mb-6 max-w-4xl leading-tight">
             PHYSICAL EXPERIENCES,<br />
             <span className="text-mad-red">DIGITALLY STAGED.</span>
           </h1>
@@ -143,12 +144,20 @@ export default function ToursPage() {
       </section>
 
       {/* Pricing / Packages Grid — Bible Section 8.A */}
-      <section id="packages" className="px-6 md:px-12 xl:px-24 py-16 bg-surface-1 border-t border-white/5">
+      {/* ROI calculator — lives here, next to pricing, where a visitor is
+          actually weighing the spend. Moved off the homepage. */}
+      <section id="roi" className="section-pad px-[clamp(1.25rem,5vw,6rem)] border-t border-white/5 bg-background scroll-mt-24">
+        <div className="max-w-7xl mx-auto w-full">
+          <SpatialCalculator />
+        </div>
+      </section>
+
+      <section id="packages" className="px-[clamp(1.25rem,5vw,6rem)] py-16 bg-surface-1 border-t border-white/5">
         <div className="max-w-7xl mx-auto w-full">
           
           <div className="flex flex-col items-start gap-3 mb-12">
             <span className="font-mono text-xs tracking-widest text-mad-red uppercase">// TOUR CONFIGURATIONS</span>
-            <h2 className="font-display text-3xl md:text-5xl uppercase tracking-tight text-white">CHOOSE YOUR SCALE</h2>
+            <h2 className="font-display t-display-3 uppercase text-white">CHOOSE YOUR SCALE</h2>
             <div className="mt-4 flex flex-col w-full max-w-2xl bg-white/5 border-l-4 border-mad-red backdrop-blur-sm rounded-r-md p-4">
               <div className="flex items-center gap-3 mb-2">
                 <span className="h-2 w-2 rounded-full bg-mad-red animate-rec-pulse" />
@@ -298,12 +307,12 @@ export default function ToursPage() {
       </section>
 
       {/* FAQ Section */}
-      <section className="px-6 md:px-12 xl:px-24 py-20 border-t border-white/5 bg-background">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-20 border-t border-white/5 bg-background">
         <div className="max-w-4xl mx-auto w-full">
           
-          <div className="flex flex-col items-center text-center gap-3 mb-16">
+          <div className="flex flex-col items-center text-center gap-3 mb-10 md:mb-16">
             <span className="font-mono text-xs tracking-widest text-mad-red uppercase">// FREQUENTLY ASKED</span>
-            <h2 className="font-display text-3xl md:text-5xl uppercase tracking-tight text-white">QUESTIONS ANSWERED</h2>
+            <h2 className="font-display t-display-3 uppercase text-white">QUESTIONS ANSWERED</h2>
           </div>
 
           <div className="flex flex-col gap-4">
@@ -348,9 +357,9 @@ export default function ToursPage() {
       </section>
 
       {/* Page Ending CTA */}
-      <section className="px-6 md:px-12 xl:px-24 py-16 border-t border-white/5 bg-surface-1 text-center">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-16 border-t border-white/5 bg-surface-1 text-center">
         <div className="max-w-3xl mx-auto w-full flex flex-col items-center gap-6">
-          <h3 className="font-display text-3xl md:text-5xl uppercase tracking-tight text-white">
+          <h3 className="font-display t-display-3 uppercase text-white">
             YOUR SPACE, SELLING ITSELF — EVERY HOUR.
           </h3>
           <p className="text-sm text-text-secondary font-sans max-w-lg leading-relaxed">

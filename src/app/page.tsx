@@ -12,8 +12,10 @@ import { SpatialCursor } from "@/components/ui/SpatialCursor";
 export default function Home() {
   return (
     <div className="w-full flex flex-col relative">
-      {/* Interactive Spatial Cursor Spotlight */}
-      <SpatialCursor />
+      {/* Interactive Spatial Cursor Spotlight — desktop pointers only */}
+      <div className="desktop-only">
+        <SpatialCursor />
+      </div>
 
       {/* Scroll Progressive Indicator */}
       <ScrollProgress />
