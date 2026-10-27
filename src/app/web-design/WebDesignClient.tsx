@@ -65,7 +65,7 @@ export default function WebDesignClient() {
     <div className="w-full min-h-screen pt-28 pb-16 flex flex-col font-sans">
       
       {/* Hero */}
-      <section className="px-6 md:px-12 xl:px-24 py-16 relative overflow-hidden">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-16 relative overflow-hidden">
         <div className="max-w-7xl mx-auto w-full relative z-10">
           <div className="flex items-center gap-3 mb-4">
             <span className="h-2 w-2 rounded-full bg-mad-azure" />
@@ -74,7 +74,7 @@ export default function WebDesignClient() {
             </span>
           </div>
 
-          <h1 className="font-display text-5xl md:text-7xl uppercase tracking-tight text-white mb-6 max-w-4xl leading-tight">
+          <h1 className="font-display t-display-1 uppercase text-white mb-6 max-w-4xl leading-tight">
             SPEED IS TRUST.<br />
             <span className="text-mad-azure">WEBSITES THAT CONVERT.</span>
           </h1>
@@ -111,12 +111,12 @@ export default function WebDesignClient() {
       </section>
 
       {/* Pricing — the decoy ladder (Section 8.B) */}
-      <section className="px-6 md:px-12 xl:px-24 py-16 bg-surface-1 border-t border-white/5">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-16 bg-surface-1 border-t border-white/5">
         <div className="max-w-7xl mx-auto w-full">
           
           <div className="flex flex-col items-start gap-3 mb-12">
             <span className="font-mono text-xs tracking-widest text-mad-red uppercase">// WEB CONFIGURATIONS</span>
-            <h2 className="font-display text-3xl md:text-5xl uppercase tracking-tight text-white">
+            <h2 className="font-display t-display-3 uppercase text-white">
               CHOOSE YOUR BUILD
             </h2>
           </div>
@@ -230,9 +230,9 @@ export default function WebDesignClient() {
       </section>
 
       {/* CTA Band */}
-      <section className="px-6 md:px-12 xl:px-24 py-16 border-t border-white/5 bg-background text-center">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-16 border-t border-white/5 bg-background text-center">
         <div className="max-w-3xl mx-auto w-full flex flex-col items-center gap-6">
-          <h3 className="font-display text-3xl md:text-5xl uppercase tracking-tight text-white">
+          <h3 className="font-display t-display-3 uppercase text-white">
             SPEED IS TRUST.
           </h3>
           <p className="text-sm text-text-secondary font-sans max-w-lg leading-relaxed">

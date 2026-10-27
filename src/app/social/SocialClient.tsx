@@ -40,7 +40,7 @@ export default function SocialClient() {
   return (
     <div className="w-full min-h-screen pt-28 pb-16 flex flex-col font-sans">
       
-      <section className="px-6 md:px-12 xl:px-24 flex-1 flex items-center justify-center py-24">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] flex-1 flex items-center justify-center py-24">
         <div className="max-w-2xl mx-auto w-full text-center flex flex-col items-center gap-8">
           
           {/* Icon */}
@@ -63,7 +63,7 @@ export default function SocialClient() {
             <span className="font-mono text-xs tracking-widest text-mad-red uppercase">
               // SERVICE 05 — SOCIAL MEDIA
             </span>
-            <h1 className="font-display text-5xl md:text-7xl uppercase tracking-tight text-white leading-[0.9]">
+            <h1 className="font-display t-display-1 uppercase text-white leading-[0.9]">
               COMING SOON.
             </h1>
             <p className="text-base md:text-lg text-text-secondary leading-relaxed max-w-lg">

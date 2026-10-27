@@ -102,7 +102,7 @@ export function Portfolio() {
   const [activeScene, setActiveScene] = useState(scenes[0]);
 
   return (
-    <section id="work" className="relative py-24 px-6 md:px-12 xl:px-24 border-t border-white/5 bg-background">
+    <section id="work" className="relative section-pad px-[clamp(1.25rem,5vw,6rem)] border-t border-white/5 bg-background">
       <div className="max-w-7xl mx-auto w-full">
         
         {/* Header Block */}

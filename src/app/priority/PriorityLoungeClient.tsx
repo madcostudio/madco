@@ -158,7 +158,7 @@ export function PriorityLoungeClient() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#050505] pt-28 pb-16 px-6 md:px-12 xl:px-24 relative overflow-hidden font-sans">
+    <div className="w-full min-h-screen bg-[#050505] pt-28 pb-16 px-[clamp(1.25rem,5vw,6rem)] relative overflow-hidden font-sans">
       
       {/* Background soft gold radial glow */}
       <div className="pointer-events-none absolute inset-0 z-0 overflow-hidden" aria-hidden="true">

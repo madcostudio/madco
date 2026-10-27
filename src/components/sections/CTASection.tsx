@@ -107,7 +107,7 @@ export function CTASection() {
   };
 
   return (
-    <section id="contact" className="relative py-24 px-6 md:px-12 xl:px-24 border-t border-white/5 bg-surface-1 overflow-hidden">
+    <section id="contact" className="relative section-pad px-[clamp(1.25rem,5vw,6rem)] border-t border-white/5 bg-surface-1 overflow-hidden">
       <div className="max-w-7xl mx-auto w-full">
         
         {/* Accent lighting */}
@@ -128,7 +128,7 @@ export function CTASection() {
                 <span className="h-1.5 w-1.5 rounded-full bg-mad-red animate-pulse" />
                 // START THE TRANSFORMATION
               </span>
-              <h2 className="font-display text-4xl md:text-5xl uppercase tracking-tight text-white">
+              <h2 className="font-display t-display-2 uppercase text-white">
                 LET&apos;S SCALE YOUR ATTENTION.
               </h2>
               <p className="text-sm md:text-base text-text-secondary leading-relaxed font-sans mt-2">

@@ -107,8 +107,8 @@ export function Hero() {
       {/* ═══════════════════════════════════════════════════════════════
           PINNED SCROLL-PROGRESSIVE HERO (TINY PLANET -> 360 SHOWROOM)
           ═══════════════════════════════════════════════════════════════ */}
-      <div ref={containerRef} className="relative h-[220vh] w-full">
-        <section className="sticky top-0 h-screen w-full flex flex-col justify-center items-start px-6 pt-24 pb-16 overflow-hidden md:px-12 xl:px-24">
+      <div ref={containerRef} className="relative h-[150vh] w-full">
+        <section className="sticky top-0 h-[100svh] w-full flex flex-col justify-center items-start px-[clamp(1.25rem,5vw,6rem)] pt-24 pb-16 overflow-hidden">
           
           {/* Background 360 Tiny Planet WebGL Canvas (VIP Motors Dubai luxury supercar showroom) */}
           <TinyPlanetHero
@@ -203,7 +203,7 @@ export function Hero() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1.2, duration: 0.8 }}
-            className="absolute bottom-6 left-1/2 -translate-x-1/2 flex-col items-center gap-2 pointer-events-none z-20 text-neutral-400"
+            className="desktop-only absolute bottom-6 left-1/2 -translate-x-1/2 flex-col items-center gap-2 pointer-events-none z-20 text-neutral-400"
           >
             <div className="flex items-center gap-2 px-3 py-1.5 bg-black/70 backdrop-blur-md rounded-full border border-white/10 text-[10px] font-mono tracking-widest uppercase text-white shadow-xl">
               <Compass className="w-3 h-3 text-mad-red animate-spin [animation-duration:6s]" />
@@ -217,7 +217,7 @@ export function Hero() {
       {/* ═══════════════════════════════════════════════════════════════
           INTERACTIVE 360° PANORAMA SHOWCASE (Revealed on Scroll)
           ═══════════════════════════════════════════════════════════════ */}
-      <section className="relative w-full px-6 py-16 md:py-24 overflow-hidden md:px-12 xl:px-24 bg-background border-t border-white/8">
+      <section className="relative w-full section-pad px-[clamp(1.25rem,5vw,6rem)] overflow-hidden bg-background border-t border-white/8">
         <motion.div
           initial={{ opacity: 0, y: 50, scale: 0.97 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}

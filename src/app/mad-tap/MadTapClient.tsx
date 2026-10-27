@@ -67,7 +67,7 @@ export default function MadTapClient() {
     <div className="w-full min-h-screen pt-28 pb-16 flex flex-col font-sans">
       
       {/* Hero */}
-      <section className="px-6 md:px-12 xl:px-24 py-16 relative overflow-hidden">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-16 relative overflow-hidden">
         <div className="max-w-7xl mx-auto w-full relative z-10">
           <div className="flex items-center gap-3 mb-4">
             <Smartphone className="h-4 w-4 text-white" />
@@ -97,11 +97,11 @@ export default function MadTapClient() {
       </section>
 
       {/* The Three Plays */}
-      <section className="px-6 md:px-12 xl:px-24 py-16 bg-surface-1 border-t border-white/5">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-16 bg-surface-1 border-t border-white/5">
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex flex-col gap-3 mb-12">
             <span className="font-mono text-xs tracking-widest text-mad-red uppercase">// THE THREE PLAYS</span>
-            <h2 className="font-display text-3xl md:text-5xl uppercase tracking-tight text-white">
+            <h2 className="font-display t-display-3 uppercase text-white">
               ONE TAP. THREE OUTCOMES.
             </h2>
           </div>
@@ -161,11 +161,11 @@ export default function MadTapClient() {
       </section>
 
       {/* Pricing — Section 8.C */}
-      <section className="px-6 md:px-12 xl:px-24 py-16 bg-background border-t border-white/5">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-16 bg-background border-t border-white/5">
         <div className="max-w-5xl mx-auto w-full">
           <div className="flex flex-col gap-3 mb-12">
             <span className="font-mono text-xs tracking-widest text-mad-red uppercase">// PRICING</span>
-            <h2 className="font-display text-3xl md:text-5xl uppercase tracking-tight text-white">
+            <h2 className="font-display t-display-3 uppercase text-white">
               SIMPLE SETUP.
             </h2>
           </div>
@@ -208,9 +208,9 @@ export default function MadTapClient() {
       </section>
 
       {/* CTA Band */}
-      <section className="px-6 md:px-12 xl:px-24 py-16 border-t border-white/5 bg-surface-1 text-center">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-16 border-t border-white/5 bg-surface-1 text-center">
         <div className="max-w-3xl mx-auto w-full flex flex-col items-center gap-6">
-          <h3 className="font-display text-3xl md:text-5xl uppercase tracking-tight text-white">
+          <h3 className="font-display t-display-3 uppercase text-white">
             NO FLASHLIGHT. NO QUEUE. JUST TAP.
           </h3>
           <div className="flex flex-wrap items-center justify-center gap-4 mt-2">

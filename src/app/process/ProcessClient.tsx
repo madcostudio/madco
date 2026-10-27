@@ -39,7 +39,7 @@ export default function ProcessClient() {
     <div className="w-full min-h-screen pt-28 pb-16 flex flex-col font-sans">
       
       {/* Hero */}
-      <section className="px-6 md:px-12 xl:px-24 py-16 relative">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-16 relative">
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex items-center gap-3 mb-4">
             <span className="h-2 w-2 rounded-full bg-mad-red animate-rec-pulse" />
@@ -48,7 +48,7 @@ export default function ProcessClient() {
             </span>
           </div>
 
-          <h1 className="font-display text-5xl md:text-7xl uppercase tracking-tight text-white mb-6 max-w-4xl leading-tight">
+          <h1 className="font-display t-display-1 uppercase text-white mb-6 max-w-4xl leading-tight">
             ENGINEERED<br />
             <span className="text-mad-red">TO PERFECTION.</span>
           </h1>
@@ -60,9 +60,9 @@ export default function ProcessClient() {
       </section>
 
       {/* Phases — cinematic timeline */}
-      <section className="px-6 md:px-12 xl:px-24 py-16 bg-surface-1 border-t border-white/5">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-16 bg-surface-1 border-t border-white/5">
         <div className="max-w-5xl mx-auto w-full">
-          <div className="relative border-l-2 border-white/10 pl-8 md:pl-16 flex flex-col gap-20 ml-4">
+          <div className="relative border-l-2 border-white/10 pl-8 md:pl-16 flex flex-col gap-12 md:gap-20 ml-4">
             {phases.map((phase, index) => (
               <motion.div
                 key={phase.phase}
@@ -86,7 +86,7 @@ export default function ProcessClient() {
                 </div>
 
                 {/* Content */}
-                <h2 className="font-display text-3xl md:text-4xl uppercase tracking-tight text-white mb-4">
+                <h2 className="font-display t-display-3 uppercase text-white mb-4">
                   {phase.title}
                 </h2>
                 <p className="text-base text-text-secondary leading-relaxed font-sans max-w-2xl mb-6">
@@ -111,9 +111,9 @@ export default function ProcessClient() {
       </section>
 
       {/* CTA */}
-      <section className="px-6 md:px-12 xl:px-24 py-16 border-t border-white/5 bg-background text-center">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-16 border-t border-white/5 bg-background text-center">
         <div className="max-w-3xl mx-auto w-full flex flex-col items-center gap-6">
-          <h3 className="font-display text-3xl md:text-5xl uppercase tracking-tight text-white">
+          <h3 className="font-display t-display-3 uppercase text-white">
             YOUR SPACE, SELLING ITSELF.
           </h3>
           <p className="text-sm text-text-secondary font-sans max-w-lg leading-relaxed">

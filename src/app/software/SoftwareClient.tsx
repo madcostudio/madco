@@ -35,7 +35,7 @@ export default function SoftwareClient() {
     <div className="w-full min-h-screen pt-28 pb-16 flex flex-col font-sans">
       
       {/* Hero */}
-      <section className="px-6 md:px-12 xl:px-24 py-16 relative overflow-hidden">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-16 relative overflow-hidden">
         <div className="max-w-7xl mx-auto w-full relative z-10">
           <div className="flex items-center gap-3 mb-4">
             <span className="h-2 w-2 rounded-full bg-mad-azure" />
@@ -56,11 +56,11 @@ export default function SoftwareClient() {
       </section>
 
       {/* Examples */}
-      <section className="px-6 md:px-12 xl:px-24 py-16 bg-surface-1 border-t border-white/5">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-16 bg-surface-1 border-t border-white/5">
         <div className="max-w-7xl mx-auto w-full">
           <div className="flex flex-col gap-3 mb-12">
             <span className="font-mono text-xs tracking-widest text-mad-red uppercase">// WHAT WE BUILD</span>
-            <h2 className="font-display text-3xl md:text-5xl uppercase tracking-tight text-white">
+            <h2 className="font-display t-display-3 uppercase text-white">
               SYSTEMS THAT SCALE.
             </h2>
           </div>
@@ -96,11 +96,11 @@ export default function SoftwareClient() {
       </section>
 
       {/* Pricing — consultation-based */}
-      <section className="px-6 md:px-12 xl:px-24 py-20 bg-background border-t border-white/5">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-20 bg-background border-t border-white/5">
         <div className="max-w-4xl mx-auto w-full text-center flex flex-col items-center gap-8">
           <div className="flex flex-col gap-3 items-center">
             <span className="font-mono text-xs tracking-widest text-mad-red uppercase">// PRICING</span>
-            <h2 className="font-display text-3xl md:text-5xl uppercase tracking-tight text-white">
+            <h2 className="font-display t-display-3 uppercase text-white">
               FROM ₹24,999
             </h2>
             <p className="text-lg text-text-secondary font-sans">

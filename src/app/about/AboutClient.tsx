@@ -138,7 +138,7 @@ function OriginStorySection() {
 
   if (reducedMotion) {
     return (
-      <section className="relative min-h-screen w-full flex items-center px-6 md:px-12 xl:px-24 py-24 overflow-hidden bg-mad-black border-y border-white/5">
+      <section className="relative min-h-screen w-full flex items-center px-[clamp(1.25rem,5vw,6rem)] py-24 overflow-hidden bg-mad-black border-y border-white/5">
         <FloatingObject type="chrome-cube" size={260} top="10%" right="5%" opacity={0.3} />
         <div className="max-w-5xl mx-auto w-full relative z-10">
           <span className="font-mono text-xs tracking-widest text-mad-red uppercase block mb-6">
@@ -148,7 +148,7 @@ function OriginStorySection() {
             MAD = MAKE A<br />
             <span className="text-mad-red">DIFFERENCE.</span>
           </h2>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-12 md:gap-20">
             <div className="flex flex-col gap-6">
               <p className="text-base md:text-lg text-text-secondary leading-relaxed font-sans">
                 MAD.Co started with one conviction: local businesses with great spaces deserve better than blurry photos and broken Google listings.
@@ -200,8 +200,8 @@ function OriginStorySection() {
       </div>
 
       {/* The actual text content is revealed at the bottom of the scroll */}
-      <div className="absolute bottom-0 w-full min-h-screen flex items-center justify-center px-6 md:px-12 xl:px-24 pb-32 pt-24 z-30 pointer-events-none">
-        <div className="max-w-5xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 pointer-events-auto">
+      <div className="absolute bottom-0 w-full min-h-screen flex items-center justify-center px-[clamp(1.25rem,5vw,6rem)] pb-32 pt-24 z-30 pointer-events-none">
+        <div className="max-w-5xl mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-12 md:gap-20 pointer-events-auto">
           <ScrollReveal delay={0.2}>
             <div className="flex flex-col gap-6 bg-mad-black/60 p-8 rounded-2xl backdrop-blur-md border border-white/5">
               <p className="text-xl md:text-2xl text-white leading-relaxed font-sans font-light">
@@ -251,7 +251,7 @@ function BeliefPanel({ statement, supporting, index, objectType, objectPosition 
   return (
     <div
       ref={ref}
-      className="relative h-screen w-full flex items-center justify-center px-6 md:px-12 xl:px-24 overflow-hidden snap-start bg-mad-black border-b border-white/5"
+      className="relative h-screen w-full flex items-center justify-center px-[clamp(1.25rem,5vw,6rem)] overflow-hidden snap-start bg-mad-black border-b border-white/5"
     >
       {/* Intense Background Marquee */}
       {!reducedMotion && (
@@ -394,7 +394,7 @@ export default function AboutClient() {
       {/* ═══════════════════════════════════════════════════════════
           1. HERO MOMENT
           ═══════════════════════════════════════════════════════════ */}
-      <section className="relative h-screen w-full flex items-center justify-center px-6 md:px-12 xl:px-24 overflow-hidden">
+      <section className="relative h-screen w-full flex items-center justify-center px-[clamp(1.25rem,5vw,6rem)] overflow-hidden">
         {/* Film grain overlay */}
         <div
           className="absolute inset-0 z-10 pointer-events-none opacity-[0.05] mix-blend-overlay"
@@ -499,7 +499,7 @@ export default function AboutClient() {
       {/* ═══════════════════════════════════════════════════════════
           5. DATA STRIP
           ═══════════════════════════════════════════════════════════ */}
-      <section className="px-6 md:px-12 xl:px-24 py-20 bg-[#0a0a0f] border-b border-white/5 relative overflow-hidden">
+      <section className="px-[clamp(1.25rem,5vw,6rem)] py-20 bg-[#0a0a0f] border-b border-white/5 relative overflow-hidden">
         {/* Subtle grid background */}
         <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,1) 1px, transparent 1px)', backgroundSize: '40px 40px' }} />
         
@@ -527,7 +527,7 @@ export default function AboutClient() {
       {/* ═══════════════════════════════════════════════════════════
           6. CLOSING CTA
           ═══════════════════════════════════════════════════════════ */}
-      <section className="relative px-6 md:px-12 xl:px-24 py-32 text-center overflow-hidden">
+      <section className="relative px-[clamp(1.25rem,5vw,6rem)] py-32 text-center overflow-hidden">
         <FloatingObject
           type="glass-lens"
           size={140}
