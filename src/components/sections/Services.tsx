@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { Camera, Globe, Smartphone, Cpu, Share2, ArrowRight } from "lucide-react";
 import { TiltCard } from "@/components/ui/TiltCard";
 import Link from "next/link";
-import Image from "next/image";
+import { ServiceGlyph, type GlyphVariant } from "@/components/ui/ServiceGlyph";
 
 const serviceList = [
   {
@@ -15,8 +15,7 @@ const serviceList = [
     promise: "Let customers walk inside before they walk in.",
     href: "/tours",
     accent: "text-mad-red",
-    image: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1000&q=85",
-    alt: "Immersive 360 architectural interior walkthrough",
+    glyph: "tours" as GlyphVariant,
   },
   {
     num: "02",
@@ -25,8 +24,7 @@ const serviceList = [
     promise: "Ultra-fast React sites that convert browsers into buyers.",
     href: "/web-design",
     accent: "text-mad-azure",
-    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1000&q=85",
-    alt: "Modern responsive web design and UI engineering",
+    glyph: "web" as GlyphVariant,
   },
   {
     num: "03",
@@ -35,8 +33,7 @@ const serviceList = [
     promise: "NFC + QR points that trigger action from every surface.",
     href: "/mad-tap",
     accent: "text-white",
-    image: "https://images.unsplash.com/photo-1556740738-b6a63e27c4df?auto=format&fit=crop&w=1000&q=85",
-    alt: "Contactless smartphone NFC tap interaction",
+    glyph: "tap" as GlyphVariant,
   },
   {
     num: "04",
@@ -45,8 +42,7 @@ const serviceList = [
     promise: "Custom systems that run while you sleep.",
     href: "/software",
     accent: "text-mad-azure",
-    image: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1000&q=85",
-    alt: "Illuminated hardware circuitry and automated systems",
+    glyph: "automation" as GlyphVariant,
   },
   {
     num: "05",
@@ -56,8 +52,7 @@ const serviceList = [
     href: "/social",
     accent: "text-text-secondary",
     badge: "COMING SOON",
-    image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=1000&q=85",
-    alt: "Social media content creation and digital brand management",
+    glyph: "social" as GlyphVariant,
   },
 ];
 
@@ -105,15 +100,12 @@ export function Services() {
                       
                       {/* Background Open-Source Photography with Clean Light Shade */}
                       <div className="absolute inset-0 z-0 overflow-hidden">
-                        <Image
-                          src={service.image}
-                          alt={service.alt}
-                          fill
-                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                          className="object-cover object-center opacity-70 group-hover:opacity-85 group-hover:scale-106 transition-all duration-700 ease-out saturate-[1.1]"
+<ServiceGlyph
+                          variant={service.glyph}
+                          className="absolute inset-0 h-full w-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-[1.06] transition-all duration-700 ease-out"
                         />
                         {/* Light gradient shade at bottom for clean text legibility */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/45 to-black/20 group-hover:from-black/85 group-hover:via-black/35 group-hover:to-black/10 transition-colors duration-500" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#07070c] via-[#07070c]/55 to-transparent transition-colors duration-500" />
                       </div>
 
                       {/* Top Accent Rim Light */}
